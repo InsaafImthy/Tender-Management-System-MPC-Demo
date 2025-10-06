@@ -13,7 +13,7 @@ export const getAllBomsAsync = async (filter: IFilterDto): Promise<IBomListRespo
         Authorization: `Bearer ${getUserToken()}`
       }
     })
-    return response.data;
+    return {data:response?.data || [], count:response?.data?.length || 0};
   } catch (e) {
     console.log(e);
     throw e;

@@ -56,8 +56,7 @@ const BomManagment: React.FC = () => {
       const response = await getAllBomsAsync({ ...filterData, globalSearch: searchQuery });
       const mapped = (response?.data || []).map((b: IBom) => ({
         ...b,
-        itemsCount: b.items?.length || 0,
-        totalAmount: (b.totalAmount ?? (b.items?.reduce((sum, it) => sum + (it.quantity * it.unitPrice), 0) ?? 0)),
+        categoryName:b?.category?.name,
         dot: true,
       }));
       setBoms(mapped);
@@ -110,7 +109,7 @@ const BomManagment: React.FC = () => {
       )}
 
       <Modal
-        content={<BomUpsertForm type='create' bom={{ name: '', description: '', items: [] }} closeModal={() => setIsCreateModalOpen(false)} trigger={() => setupBoms()} />}
+        content={<BomUpsertForm type='create' bom={{ bomName: '', description: '', bomItemDtos: [] }} closeModal={() => setIsCreateModalOpen(false)} trigger={() => setupBoms()} />}
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         modalPosition="end"

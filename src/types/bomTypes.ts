@@ -5,17 +5,18 @@ export interface IBomItem {
   categoryId?: number;
   quantity: number;
   unit: string;
-  unitPrice: number;
+  price: number;
   description?: string;
   supplier?: string;
 }
 
 export interface IBom {
   id?: string;
-  name: string;
+  bomName: string;
   categoryId?: number;
+  category?: any;
   description?: string;
-  items: IBomItem[];
+  bomItemDtos: IBomItem[];
   totalAmount?: number;
   createdAt?: string;
   updatedAt?: string;
