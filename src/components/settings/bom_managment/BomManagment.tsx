@@ -10,6 +10,7 @@ import SettingsSortModal from '../settings_components/SettingsSortModal';
 import { getAllBomsAsync, deleteBomAsync } from '../../../services/bomService';
 import { IBom } from '../../../types/bomTypes';
 import BomUpsertForm from './BomUpsertForm.tsx';
+import BomDetailModal from './BomDetailModal';
 
 const columns = [
   { key: 'bomName', label: 'BOM Name' },
@@ -26,6 +27,7 @@ const BomManagment: React.FC = () => {
   const [confirmAction, setConfirmAction] = useState<{ type: 'delete'; bom: IBom } | null>(null);
   const [boms, setBoms] = useState<IBom[]>([]);
   const [filter, setFilter] = useState<IFilterDto>(defaultFilter);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const handleThreeDots = (type: 'edit' | 'delete', bom: IBom) => {
     setSelectedBom(bom);
@@ -98,6 +100,7 @@ const BomManagment: React.FC = () => {
           totalCount={boms.length}
           setSearchQuery={setSearchQuery}
           dots
+          onRowClick={(item: any) => { setSelectedBom(item); setDetailOpen(true); }}
           setEditOption={(bom) => handleThreeDots('edit', bom)}
           setDeleteOption={(bom) => handleThreeDots('delete', bom)}
           setFilter={() => { }}
@@ -137,6 +140,8 @@ const BomManagment: React.FC = () => {
       >
         <p>Are you sure you want to delete this BOM?</p>
       </AntdModal>
+
+      <BomDetailModal open={detailOpen} onClose={() => setDetailOpen(false)} bom={selectedBom as any} />
     </div>
   );
 };
