@@ -8,6 +8,7 @@ import CommonTitleCard from '../../components/basic_components/CommonTitleCard';
 import CategoryManagment from '../../components/settings/category_managment/CategoryManagment';
 import CriteriaManagment from '../../components/settings/criteria_managment/CriteriaManagment';
 import QuestionnaireManagment from '../../components/settings/questionnaire_managment/QuestionnaireManagment';
+import BomManagment from '../../components/settings/bom_managment/BomManagment';
 
 type SettingsSection =
   | 'User management'
@@ -18,6 +19,7 @@ type SettingsSection =
   | 'Budget allocation'
   | 'Criteria management'
   | 'Questionnaire management'
+  | 'BOM management'
 
 interface SettingsRoute {
   name: SettingsSection;
@@ -38,6 +40,7 @@ const SettingsPage = () => {
     { name: 'Approval workflow', path: '/settings/workflow-managment' },
     { name: 'Criteria management', path: '/settings/criteria-managment' },
     { name: 'Questionnaire management', path: '/settings/questionnaire-managment' },
+    { name: 'BOM management', path: '/settings/bom-managment' },
   ];
 
   const getIcon = (section: SettingsSection) => {
@@ -50,6 +53,7 @@ const SettingsPage = () => {
       case 'Criteria management': return '📋';
       case 'Budget allocation': return '💰';
       case 'Questionnaire management': return '📝';
+      case 'BOM management': return '📦';
       default: return '⚙️';
     }
   };
@@ -101,6 +105,8 @@ const SettingsPage = () => {
         return <CriteriaManagment />;
       case 'Questionnaire management':
         return <QuestionnaireManagment />;
+      case 'BOM management':
+        return <BomManagment />;
       default:
         return <UserManagement />;
     }
