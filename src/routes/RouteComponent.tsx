@@ -209,6 +209,7 @@ const RouteComponent: React.FC = () => {
                       <Route path="/settings/workflow-managment" element={<SettingsPage />} />
                       <Route path="/settings/roles-managment" element={<SettingsPage />} />
                       <Route path="/settings/criteria-managment" element={<SettingsPage />} />
+                      <Route path="/settings/questionnaire-managment" element={<SettingsPage />} />
                       <Route path="/profile" element={<UserProfilePage />} />
                       <Route path="/upcoming-tenders" element={<UpcomingTendors />} />
                     </Routes>

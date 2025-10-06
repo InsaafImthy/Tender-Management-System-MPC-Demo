@@ -7,6 +7,7 @@ import RolesPermissions from '../../components/settings/roles_and_permissions/Ro
 import CommonTitleCard from '../../components/basic_components/CommonTitleCard';
 import CategoryManagment from '../../components/settings/category_managment/CategoryManagment';
 import CriteriaManagment from '../../components/settings/criteria_managment/CriteriaManagment';
+import QuestionnaireManagment from '../../components/settings/questionnaire_managment/QuestionnaireManagment';
 
 type SettingsSection =
   | 'User management'
@@ -16,6 +17,7 @@ type SettingsSection =
   | 'Approval workflow'
   | 'Budget allocation'
   | 'Criteria management'
+  | 'Questionnaire management'
 
 interface SettingsRoute {
   name: SettingsSection;
@@ -35,6 +37,7 @@ const SettingsPage = () => {
     { name: 'Roles & permissions', path: '/settings/roles-managment' },
     { name: 'Approval workflow', path: '/settings/workflow-managment' },
     { name: 'Criteria management', path: '/settings/criteria-managment' },
+    { name: 'Questionnaire management', path: '/settings/questionnaire-managment' },
   ];
 
   const getIcon = (section: SettingsSection) => {
@@ -46,6 +49,7 @@ const SettingsPage = () => {
       case 'Approval workflow': return '⚡';
       case 'Criteria management': return '📋';
       case 'Budget allocation': return '💰';
+      case 'Questionnaire management': return '📝';
       default: return '⚙️';
     }
   };
@@ -95,6 +99,8 @@ const SettingsPage = () => {
         return <ApprovalWorkflow />;
       case 'Criteria management':
         return <CriteriaManagment />;
+      case 'Questionnaire management':
+        return <QuestionnaireManagment />;
       default:
         return <UserManagement />;
     }
