@@ -16,6 +16,12 @@ export const commonUnits = [
     {label: "Hours", value: 7},
 ]
 
+export const questionTypesList = [
+  {label: "Text", value: 0},
+  {label: "TextArea", value: 1},
+  {label: "Boolean", value: 2}
+]
+
 export const currenciesWithLabel = [
   { label: "$ (USD)", value: "USD" },
   { label: "€ (EUR)", value: "EUR" },

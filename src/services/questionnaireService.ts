@@ -1,94 +1,46 @@
 import { Urls } from './ApiConfig';
-import { IQuestionnaire, IQuestionnaireResponse, ICreateQuestionnaireRequest, IUpdateQuestionnaireRequest, IQuestion } from '../types/questionnaireTypes';
+import { IQuestionnaire, IQuestionnaireResponse} from '../types/questionnaireTypes';
 import { IFilterDto } from '../types/commonTypes';
-
-const API_BASE_URL = Urls.defaultUrl;
+import axios from 'axios';
+import { getUserToken } from '../utils/common';
 
 export const getAllQuestionnairesAsync = async (filter: IFilterDto): Promise<IQuestionnaireResponse> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/questionnaires`, {
-      method: 'POST',
+    const response = await axios.post(`${Urls.defaultUrl}/api/Questionnaires/filter`, filter, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(filter),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching questionnaires:', error);
-    throw error;
+        Authorization: `Bearer ${getUserToken()}`
+      }
+    })
+    return {data:response.data || [], count:response.data?.length || 0};
+  } catch (err) {
+    throw err;
   }
 };
 
-export const getQuestionnaireByIdAsync = async (id: string): Promise<IQuestionnaire> => {
+
+export const createQuestionnaireAsync = async (questionnaire: IQuestionnaire): Promise<IQuestionnaire> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/questionnaires/${id}`, {
-      method: 'GET',
+    const response = await axios.post(`${Urls.defaultUrl}/api/Questionnaires`, questionnaire, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching questionnaire:', error);
-    throw error;
-  }
-};
-
-export const createQuestionnaireAsync = async (questionnaire: ICreateQuestionnaireRequest): Promise<IQuestionnaire> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/questionnaires`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(questionnaire),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
+        Authorization: `Bearer ${getUserToken()}`
+      }
+    })
+    return response.data;
   } catch (error) {
     console.error('Error creating questionnaire:', error);
     throw error;
   }
 };
 
-export const updateQuestionnaireAsync = async (id: string, questionnaire: IUpdateQuestionnaireRequest): Promise<IQuestionnaire> => {
+export const updateQuestionnaireAsync = async (id: string, questionnaire: IQuestionnaire): Promise<IQuestionnaire> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/questionnaires/${id}`, {
-      method: 'PUT',
+    questionnaire.id = id;
+    const response = await axios.post(`${Urls.defaultUrl}/api/Questionnaires`, questionnaire, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(questionnaire),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
+        Authorization: `Bearer ${getUserToken()}`
+      }
+    })
+    return response.data;
   } catch (error) {
     console.error('Error updating questionnaire:', error);
     throw error;
@@ -97,17 +49,12 @@ export const updateQuestionnaireAsync = async (id: string, questionnaire: IUpdat
 
 export const deleteQuestionnaireAsync = async (id: string): Promise<void> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/questionnaires/${id}`, {
-      method: 'DELETE',
+    const response = await axios.delete(`${Urls.defaultUrl}/api/Questionnaires/${id}`, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+        Authorization: `Bearer ${getUserToken()}`
+      }
+    })
+    return response.data;
   } catch (error) {
     console.error('Error deleting questionnaire:', error);
     throw error;

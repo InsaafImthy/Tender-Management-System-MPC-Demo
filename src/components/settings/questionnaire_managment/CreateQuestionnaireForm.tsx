@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import TextField from '../../basic_components/TextField';
 import { IModalProps } from '../../../types/commonTypes';
-import { IQuestionnaire, IQuestion, QuestionType } from '../../../types/questionnaireTypes';
+import { IQuestionnaire, IQuestion } from '../../../types/questionnaireTypes';
 import { createQuestionnaireAsync, updateQuestionnaireAsync } from '../../../services/questionnaireService';
 import { notification } from 'antd';
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import SelectField from '../../basic_components/SelectField';
+import { questionTypesList } from '../../../utils/constants';
 
 interface FormErrors {
   name?: string;
@@ -18,77 +19,49 @@ interface ICreateQuestionnaireForm extends IModalProps {
   trigger: () => void
 }
 
-const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({ 
-  type = "create", 
-  questionnaire, 
-  trigger, 
-  closeModal 
+const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
+  type = "create",
+  questionnaire,
+  trigger,
+  closeModal
 }) => {
   const [formData, setFormData] = useState<IQuestionnaire>(
     type === "create"
       ? ({
-          name: "",
-          description: "",
-          questions: []
-        })
+        questionnaireName: "",
+        description: "",
+        questionnaireItemDtos: []
+      })
       : questionnaire
   );
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<IQuestion>({
-    questionText: "",
-    questionType: QuestionType.TEXT_INPUT,
-    helpText: "",
+    question: "",
+    questionType: 0,
+    questionHelpText: "",
     isRequired: false,
-    options: []
   });
 
-  const questionTypeOptions = [
-    { value: QuestionType.TEXT_INPUT, label: "Text Input" },
-    { value: QuestionType.TEXTAREA, label: "Textarea" },
-    { value: QuestionType.MULTIPLE_CHOICE, label: "Multiple Choice" },
-    { value: QuestionType.SINGLE_CHOICE, label: "Single Choice" },
-    { value: QuestionType.YES_NO, label: "Yes/No" },
-    { value: QuestionType.DATE, label: "Date" },
-    { value: QuestionType.NUMBER, label: "Number" },
-    { value: QuestionType.EMAIL, label: "Email" },
-    { value: QuestionType.PHONE, label: "Phone" },
-    { value: QuestionType.FILE_UPLOAD, label: "File Upload" }
-  ];
-
   const addQuestion = () => {
-    if (!currentQuestion.questionText.trim()) {
-      notification.error({
-        message: "Question text is required"
-      });
-      return;
-    }
-
-    const newQuestion: IQuestion = {
-      ...currentQuestion,
-      id: Date.now().toString()
-    };
-
     setFormData(prev => ({
       ...prev,
-      questions: [...prev.questions, newQuestion]
+      questionnaireItemDtos: [...prev.questionnaireItemDtos, { ...currentQuestion, id: Date.now().toString() }]
     }));
-
-    // Reset current question
     setCurrentQuestion({
-      questionText: "",
-      questionType: QuestionType.TEXT_INPUT,
-      helpText: "",
+      question: "",
+      questionType: 0,
+      questionHelpText: "",
       isRequired: false,
-      options: []
+      questionnaireId: ""
     });
   };
 
   const removeQuestion = (questionId: string) => {
     setFormData(prev => ({
       ...prev,
-      questions: prev.questions.filter(q => q.id !== questionId)
+      questions: prev.questionnaireItemDtos.filter(q => q.id !== questionId)
     }));
   };
 
@@ -97,7 +70,7 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
       e.preventDefault();
       setIsLoading(true);
 
-      if (!formData.name.trim()) {
+      if (!formData.questionnaireName.trim()) {
         setErrors(prev => ({
           ...prev,
           name: "Questionnaire name is required"
@@ -105,7 +78,7 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
         return;
       }
 
-      if (formData.questions.length === 0) {
+      if (formData.questionnaireItemDtos.length === 0) {
         setErrors(prev => ({
           ...prev,
           questions: "At least one question is required"
@@ -113,23 +86,20 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
         return;
       }
 
-      const questionnaireData = {
-        name: formData.name,
+      const questionnaireData:IQuestionnaire = {
+        ...questionnaire,
+        questionnaireName: formData.questionnaireName,
         description: formData.description,
-        questions: formData.questions.map(q => ({
-          questionText: q.questionText,
+        questionnaireItemDtos: formData.questionnaireItemDtos.map(q => ({
+          question: q.question,
           questionType: q.questionType,
-          helpText: q.helpText,
-          isRequired: q.isRequired,
-          options: q.options
+          questionHelpText: q.questionHelpText,
+          isRequired: q.isRequired
         }))
       };
 
       if (type === "edit") {
-        await updateQuestionnaireAsync(formData.id as string, {
-          id: formData.id as string,
-          ...questionnaireData
-        });
+        await updateQuestionnaireAsync((questionnaire as IQuestionnaire)?.id as string, questionnaireData);
         notification.success({
           message: "Questionnaire updated successfully"
         });
@@ -165,7 +135,7 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
         {/* Questionnaire Details */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800">Questionnaire Details</h3>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">
               Questionnaire Name <span className="text-red-500">*</span>
@@ -173,13 +143,13 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
             <TextField
               id="questionnaireName"
               field="Questionnaire Name"
-              value={formData.name}
-              setValue={(value) => setFormData(prev => ({ ...prev, name: value }))}
+              value={formData?.questionnaireName}
+              setValue={(value) => setFormData(prev => ({ ...prev, questionnaireName: value }))}
               placeholder="e.g., Standard Supplier Onboarding"
               style=""
               type="text"
               width="w-full"
-              onFocus={() => setErrors(prev => ({ ...prev, name: "" }))}
+              onFocus={() => setErrors(prev => ({ ...prev, questionnaireName: "" }))}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
@@ -199,16 +169,16 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
         {/* Add New Question */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800">Add New Question</h3>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">
               Question Text <span className="text-red-500">*</span>
             </label>
             <TextField
-              id="questionText"
+              id="question"
               field="Question Text"
-              value={currentQuestion.questionText}
-              setValue={(value) => setCurrentQuestion(prev => ({ ...prev, questionText: value }))}
+              value={currentQuestion.question}
+              setValue={(value) => setCurrentQuestion(prev => ({ ...prev, question: value }))}
               placeholder="Enter your question..."
               style=""
               type="text"
@@ -222,9 +192,9 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
             </label>
             <SelectField
               id="questionType"
-              value={currentQuestion.questionType}
-              onChange={(value) => setCurrentQuestion(prev => ({ ...prev, questionType: value as QuestionType }))}
-              options={questionTypeOptions}
+              value={questionTypesList.find(x=>x.value == currentQuestion.questionType)?.label || ""}
+              onChange={(value) => setCurrentQuestion(prev => ({ ...prev, questionType: Number(value)}))}
+              options={questionTypesList.map(x=>({label:x.label, value:x.value.toString()}))}
               style="w-full"
             />
           </div>
@@ -234,8 +204,8 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
             <TextField
               id="helpText"
               field="Help Text"
-              value={currentQuestion.helpText || ""}
-              setValue={(value) => setCurrentQuestion(prev => ({ ...prev, helpText: value }))}
+              value={currentQuestion.questionHelpText || ""}
+              setValue={(value) => setCurrentQuestion(prev => ({ ...prev, questionHelpText: value }))}
               placeholder="Additional guidance for this question..."
               style=""
               type="text"
@@ -267,26 +237,26 @@ const CreateQuestionnaireForm: React.FC<ICreateQuestionnaireForm> = ({
         </div>
 
         {/* Questions List */}
-        {formData.questions.length > 0 && (
+        {formData.questionnaireItemDtos.length > 0 && (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">
-              Questions ({formData.questions.length})
+              Questions ({formData.questionnaireItemDtos.length})
             </h3>
             <div className="space-y-3">
-              {formData.questions.map((question, index) => (
+              {formData.questionnaireItemDtos.map((question, index) => (
                 <div key={question.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <span className="text-sm font-medium text-gray-600">Q{index + 1}:</span>
-                        <span className="text-sm font-medium text-gray-800">{question.questionText}</span>
+                        <span className="text-sm font-medium text-gray-800">{question.question}</span>
                         {question.isRequired && (
                           <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Required</span>
                         )}
                       </div>
                       <div className="text-xs text-gray-500 mb-1">Type: {question.questionType}</div>
-                      {question.helpText && (
-                        <div className="text-xs text-gray-600 italic">{question.helpText}</div>
+                      {question.questionHelpText && (
+                        <div className="text-xs text-gray-600 italic">{question.questionHelpText}</div>
                       )}
                     </div>
                     <button
