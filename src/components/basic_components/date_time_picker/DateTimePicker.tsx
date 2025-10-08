@@ -8,6 +8,7 @@ interface IDateTimePicker {
     setValue: (val: string) => void;
     required?:boolean;
     format?:string;
+    disabled?: boolean;
 }
 
 export default function DateTimePicker({id, label, value, setValue ,required = false, format}: IDateTimePicker) {

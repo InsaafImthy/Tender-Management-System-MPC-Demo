@@ -4,6 +4,7 @@ interface IDot {
   setEditOption?: (data: any) => void;
   setBlockOption?: (data: any) => void;
   setDeleteOption?: (data: any) => void;
+  onView?: (data: any) => void;
 }
 
 const DropdownMenu: React.FC<
@@ -19,6 +20,7 @@ const DropdownMenu: React.FC<
   setEditOption,
   setBlockOption,
   setDeleteOption,
+   onView,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -49,6 +51,14 @@ const DropdownMenu: React.FC<
           onClick={() => setEditOption(data)}
         >
           Edit
+        </button>
+      )}
+      {onView && (
+        <button
+          className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+          onClick={() => onView(data)}
+        >
+          View
         </button>
       )}
       {setBlockOption && (
