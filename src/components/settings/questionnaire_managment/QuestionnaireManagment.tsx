@@ -13,7 +13,7 @@ import { defaultFilter } from '../../../utils/constants';
 import { QuestionnaireManagementIcon } from '../../../utils/Icons';
 
 const columns = [
-  { key: 'name', label: 'Questionnaire Name' },
+  { key: 'questionnaireName', label: 'Questionnaire Name' },
   { key: 'description', label: 'Description' },
   { key: 'questionsCount', label: 'Questions Count' }
 ];
@@ -71,7 +71,7 @@ const QuestionnaireManagment: React.FC = () => {
       // Transform data to include questions count for display
       const transformedData = response.data.map(q => ({
         ...q,
-        questionsCount: q.questions?.length || 0
+        questionsCount: q.questionnaireItemDtos?.length || 0
       }));
       setQuestionnaires({ ...response, data: transformedData });
     } catch (err: any) {

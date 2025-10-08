@@ -1,8 +1,8 @@
 export interface IQuestionnaire {
   id?: string;
-  name: string;
+  questionnaireName: string;
   description?: string;
-  questions: IQuestion[];
+  questionnaireItemDtos: IQuestion[];
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
@@ -13,26 +13,17 @@ export interface IQuestionnaire {
 
 export interface IQuestion {
   id?: string;
-  questionText: string;
-  questionType: QuestionType;
-  helpText?: string;
+  question: string;
+  questionType: number;
+  questionHelpText?: string;
   isRequired: boolean;
-  options?: string[]; // For multiple choice questions
-  order?: number;
+  questionnaireId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: string;
+  updatedBy?: string;
 }
 
-export enum QuestionType {
-  TEXT_INPUT = "Text Input",
-  TEXTAREA = "Textarea",
-  MULTIPLE_CHOICE = "Multiple Choice",
-  SINGLE_CHOICE = "Single Choice",
-  YES_NO = "Yes/No",
-  DATE = "Date",
-  NUMBER = "Number",
-  EMAIL = "Email",
-  PHONE = "Phone",
-  FILE_UPLOAD = "File Upload"
-}
 
 export interface IQuestionnaireResponse {
   data: IQuestionnaire[];

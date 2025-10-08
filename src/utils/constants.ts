@@ -5,6 +5,23 @@ export const currencies = [
   { label: "₹", value: "INR" },
 ];
 
+export const commonUnits = [
+    {label: "Each", value: 0},
+    {label: "Feet", value: 1},
+    {label: "Meters", value: 2},
+    {label: "Pounds", value: 3},
+    {label: "Kilograms", value: 4},
+    {label: "Square Feet", value: 5},
+    {label: "Cubic Yards", value: 6},
+    {label: "Hours", value: 7},
+]
+
+export const questionTypesList = [
+  {label: "Text", value: 0},
+  {label: "TextArea", value: 1},
+  {label: "Boolean", value: 2}
+]
+
 export const currenciesWithLabel = [
   { label: "$ (USD)", value: "USD" },
   { label: "€ (EUR)", value: "EUR" },

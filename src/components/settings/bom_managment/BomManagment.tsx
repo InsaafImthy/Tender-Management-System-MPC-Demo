@@ -10,6 +10,7 @@ import SettingsSortModal from '../settings_components/SettingsSortModal';
 import { getAllBomsAsync, deleteBomAsync } from '../../../services/bomService';
 import { IBom } from '../../../types/bomTypes';
 import BomUpsertForm from './BomUpsertForm.tsx';
+import BomDetailModal from './BomDetailModal';
 
 const columns = [
   { key: 'bomName', label: 'BOM Name' },
@@ -26,6 +27,7 @@ const BomManagment: React.FC = () => {
   const [confirmAction, setConfirmAction] = useState<{ type: 'delete'; bom: IBom } | null>(null);
   const [boms, setBoms] = useState<IBom[]>([]);
   const [filter, setFilter] = useState<IFilterDto>(defaultFilter);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const handleThreeDots = (type: 'edit' | 'delete', bom: IBom) => {
     setSelectedBom(bom);
@@ -56,8 +58,7 @@ const BomManagment: React.FC = () => {
       const response = await getAllBomsAsync({ ...filterData, globalSearch: searchQuery });
       const mapped = (response?.data || []).map((b: IBom) => ({
         ...b,
-        itemsCount: b.items?.length || 0,
-        totalAmount: (b.totalAmount ?? (b.items?.reduce((sum, it) => sum + (it.quantity * it.unitPrice), 0) ?? 0)),
+        categoryName:b?.category?.name,
         dot: true,
       }));
       setBoms(mapped);
@@ -99,6 +100,7 @@ const BomManagment: React.FC = () => {
           totalCount={boms.length}
           setSearchQuery={setSearchQuery}
           dots
+          onRowClick={(item: any) => { setSelectedBom(item); setDetailOpen(true); }}
           setEditOption={(bom) => handleThreeDots('edit', bom)}
           setDeleteOption={(bom) => handleThreeDots('delete', bom)}
           setFilter={() => { }}
@@ -110,7 +112,7 @@ const BomManagment: React.FC = () => {
       )}
 
       <Modal
-        content={<BomUpsertForm type='create' bom={{ name: '', description: '', items: [] }} closeModal={() => setIsCreateModalOpen(false)} trigger={() => setupBoms()} />}
+        content={<BomUpsertForm type='create' bom={{ bomName: '', description: '', bomItemDtos: [] }} closeModal={() => setIsCreateModalOpen(false)} trigger={() => setupBoms()} />}
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         modalPosition="end"
@@ -138,6 +140,8 @@ const BomManagment: React.FC = () => {
       >
         <p>Are you sure you want to delete this BOM?</p>
       </AntdModal>
+
+      <BomDetailModal open={detailOpen} onClose={() => setDetailOpen(false)} bom={selectedBom as any} />
     </div>
   );
 };
