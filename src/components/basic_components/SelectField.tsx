@@ -16,6 +16,7 @@ interface SelectFieldProps {
   onClick?: () => void;
   style?: string;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 const SelectField = ({

@@ -1447,7 +1447,6 @@ export const LoginPageLeftSide: React.FC<IconProps> = ({ className }) => (
 
 export const IbVogtLogo: React.FC<IconProps> = ({
   className = "",
-  strokeColor = "#002056",
 }) => (
   <div
     className={`group relative flex items-center justify-flex-start px-8 ${className}`}
@@ -1489,7 +1488,6 @@ export const IbVogtLogo: React.FC<IconProps> = ({
 
 export const IbVogtDashboardLogo: React.FC<IconProps> = ({
   className = "",
-  strokeColor = "#002056",
 }) => (
   <div
     className={`group relative flex items-center justify-flex-start px-8 ${className}`}

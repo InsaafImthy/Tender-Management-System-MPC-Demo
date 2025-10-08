@@ -121,6 +121,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Suppliers</label>
             <SelectField
+            id="supplier"
               options={supplierOptions}
               value={filters.suppliers?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, suppliers: value ? [value] : [] })}
@@ -130,6 +131,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Items</label>
             <SelectField
+            id="item"
               options={itemOptions}
               value={filters.items?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, items: value ? [value] : [] })}
@@ -139,6 +141,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
             <SelectField
+            id="category"
               options={categoryOptions}
               value={filters.categories?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, categories: value ? [value] : [] })}
@@ -148,6 +151,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
             <SelectField
+            id="status"
               options={[
                 { label: 'All Status', value: '' },
                 { label: 'Active', value: 'Active' },

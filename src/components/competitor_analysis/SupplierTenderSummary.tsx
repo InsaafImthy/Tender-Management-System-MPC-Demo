@@ -106,6 +106,7 @@ const SupplierTenderSummary: React.FC<SupplierTenderSummaryProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Item</label>
             <SelectField
+            id="itemOptions"
               options={itemOptions}
               value={selectedItem}
               onChange={setSelectedItem}
@@ -115,6 +116,7 @@ const SupplierTenderSummary: React.FC<SupplierTenderSummaryProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
             <SelectField
+            id="supplimentryTender"
               options={categoryOptions}
               value={selectedCategory}
               onChange={setSelectedCategory}

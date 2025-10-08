@@ -178,6 +178,7 @@ const TenderAnalyticsDashboard: React.FC<TenderAnalyticsDashboardProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Suppliers</label>
             <SelectField
+            id="supplierOptions"
               options={supplierOptions}
               value={filters.suppliers?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, suppliers: value ? [value] : [] })}
@@ -187,6 +188,7 @@ const TenderAnalyticsDashboard: React.FC<TenderAnalyticsDashboardProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
             <SelectField
+            id="categoryOptions"
               options={categoryOptions}
               value={filters.categories?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, categories: value ? [value] : [] })}
