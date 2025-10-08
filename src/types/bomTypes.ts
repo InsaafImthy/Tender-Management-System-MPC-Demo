@@ -1,17 +1,17 @@
 export interface IBomItem {
-  id?: string;
+  id?: number;
   itemCode: string;
   itemName: string;
   categoryId?: number;
   quantity: number;
-  unit: string;
+  unit: number;
   price: number;
   description?: string;
   supplier?: string;
 }
 
 export interface IBom {
-  id?: string;
+  id?: number;
   bomName: string;
   categoryId?: number;
   category?: any;
