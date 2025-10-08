@@ -15,6 +15,7 @@ interface IDot {
   setEditOption?: (data: any) => void;
   setBlockOption?: (data: any) => void;
   setDeleteOption?: (data: any) => void;
+  onView?: (data: any) => void;
 }
 
 interface TableProps extends Partial<IDot> {
@@ -62,6 +63,7 @@ const Table: React.FC<TableProps> = ({
   NoDataDescription,
   IsIcon,
   type,
+  onView,
 }) => {
   const [pages, _] = useState<number[]>([]);
   const navigate = useNavigate();
@@ -365,6 +367,7 @@ const Table: React.FC<TableProps> = ({
           setEditOption={setEditOption}
           setBlockOption={setBlockOption}
           setDeleteOption={setDeleteOption}
+          onView={onView}
         />
       )}
 

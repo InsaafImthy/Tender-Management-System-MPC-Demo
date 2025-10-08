@@ -5,6 +5,7 @@ import procurementLogo from "../../assets/procurement_logo/procurement-logo.png"
 import {
   BellIcon,
   ClipboardIcon,
+  DeliveryDetailsIcon,
   DocumentTextIcon,
   HomeIcon,
   SettingsIcon,
@@ -33,6 +34,7 @@ const Sidebar = ({ notifications,trigger }: SidebarProp) => {
     { to: "/rfps", title: "Requests", icon: ClipboardIcon },
     { to: "/vendors", title: "Vendors", icon: DocumentTextIcon },
     { to: "/upcoming-tenders", title: "UpcomingVendors", icon: UpcomingTendorsIcon },
+    { to: "/delivery-details", title: "DeliveryDetails", icon: DeliveryDetailsIcon },
     { to: "/settings/user-managment", title: "Settings", icon: SettingsIcon },
   ];
 

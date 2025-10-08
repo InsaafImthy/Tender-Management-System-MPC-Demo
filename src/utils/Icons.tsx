@@ -4,6 +4,7 @@ import React from "react";
 interface IconProps {
   className?: string;
   strokeColor?: string;
+  onClick?: () => void;
 }
 
 const DEFAULT_STROKE = "#1365AA";
@@ -1256,4 +1257,85 @@ export const QuestionnaireManagementIcon: React.FC<IconProps> = ({
     </svg>
   </div>
 );
+
+export const DeliveryDetailsIcon: React.FC<IconProps> = ({
+  className,
+  strokeColor = DEFAULT_STROKE,
+}) => (
+  <div className="group relative w-5 h-5 flex items-center justify-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={strokeColor}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`lucide lucide-shopping-cart ${className ?? ""}`}
+    >
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+    <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+      Delivery <br />
+      Details
+    </div>
+  </div>
+);
+
+export const DeliveryDetailsIconMain: React.FC<IconProps> = ({
+  className,
+  strokeColor = MAIN_STROKE,
+}) => (
+  <div className="group relative w-5 h-5 flex items-center justify-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={MAIN_ICON_SIZE}
+      height={MAIN_ICON_SIZE}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={strokeColor}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`transition-transform duration-300 transform-gpu origin-center group-hover:scale-110 ${className}`}
+    >
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+  </div>
+);
+
+export const EditIconMain: React.FC<IconProps> = ({
+  className,
+  strokeColor = "black",
+  onClick
+}) => (
+  <div
+    className={`group relative w-5 h-5 flex items-center justify-center ${className}`}
+    onClick={onClick}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={strokeColor}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`transition-transform duration-300 transform-gpu origin-center group-hover:scale-110 ${className}`} // ✅ Added this
+    >
+      <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+      <path d="m15 5 4 4" />
+    </svg>
+  </div>
+);
+
+
 

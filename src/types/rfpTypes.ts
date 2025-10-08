@@ -5,6 +5,19 @@ export interface IProcurementItem {
     quantity: number
 }
 
+export interface IDeliveryItem {
+    id?: number
+    itemName: string
+    itemCode: string
+    quantityOrdered: number
+    quantityReceived: number
+    unit: string
+    unitPrice: number
+    totalPrice: number
+    condition: number
+    verify:boolean
+}
+
 export interface IRfp {
     id?: number
     createdBy?:number

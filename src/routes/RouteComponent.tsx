@@ -28,6 +28,8 @@ import {
 import { Urls } from '../services/ApiConfig';
 import { getAllNotificationsAsync } from '../services/notificationService';
 import { ensureNotificationPermission, showNotification } from '../utils/common';
+import DeliveryDetails from '../pages/delivery_details/DeliveryDetails';
+import DeliveryPage from '../pages/delivery_details/DetailsModal';
 
 interface procurementContextProp {
   countryCodes: ICountryCode[] | null;
@@ -213,6 +215,9 @@ const RouteComponent: React.FC = () => {
                       <Route path="/settings/bom-managment" element={<SettingsPage />} />
                       <Route path="/profile" element={<UserProfilePage />} />
                       <Route path="/upcoming-tenders" element={<UpcomingTendors />} />
+                      <Route path="/delivery-details" element={<DeliveryDetails />} />
+                      <Route path="/create-delivery-details" element={<DeliveryPage />} />
+                      <Route path="/create-delivery-details/:id" element={<DeliveryPage type="edit"/>} />
                     </Routes>
                   ) : (
                     <div className="flex items-center justify-center h-full">
