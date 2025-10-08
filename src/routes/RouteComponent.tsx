@@ -30,6 +30,7 @@ import { getAllNotificationsAsync } from '../services/notificationService';
 import { ensureNotificationPermission, showNotification } from '../utils/common';
 import DeliveryDetails from '../pages/delivery_details/DeliveryDetails';
 import DeliveryPage from '../pages/delivery_details/DetailsModal';
+import CompetitorAnalysisPage from '../pages/competitor_analysis/CompetitorAnalysisPage';
 
 interface procurementContextProp {
   countryCodes: ICountryCode[] | null;
@@ -218,6 +219,7 @@ const RouteComponent: React.FC = () => {
                       <Route path="/delivery-details" element={<DeliveryDetails />} />
                       <Route path="/create-delivery-details" element={<DeliveryPage />} />
                       <Route path="/create-delivery-details/:id" element={<DeliveryPage type="edit"/>} />
+                      <Route path="/competitor-analysis" element={<CompetitorAnalysisPage />} />
                     </Routes>
                   ) : (
                     <div className="flex items-center justify-center h-full">
