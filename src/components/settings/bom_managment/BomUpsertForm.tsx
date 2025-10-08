@@ -44,7 +44,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
       notification.error({ message: 'Item code and name are required' });
       return;
     }
-    setFormData(prev => ({ ...prev, bomItemDtos: [...(prev.bomItemDtos || []), { ...currentItem, id: Date.now().toString() }] }));
+    setFormData(prev => ({ ...prev, bomItemDtos: [...(prev.bomItemDtos || []), { ...currentItem, id:0 }] }));
     setCurrentItem(emptyItem);
   };
 

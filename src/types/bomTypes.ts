@@ -36,6 +36,6 @@ export interface ICreateBomRequest {
 }
 
 export interface IUpdateBomRequest extends ICreateBomRequest {
-  id: string;
+  id: number;
 }
 

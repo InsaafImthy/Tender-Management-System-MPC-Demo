@@ -47,7 +47,7 @@ export const createBomAsync = async (payload: ICreateBomRequest): Promise<IBom> 
   }
 };
 
-export const updateBomAsync = async (id: string, payload: IUpdateBomRequest): Promise<IBom> => {
+export const updateBomAsync = async (id: number, payload: IUpdateBomRequest): Promise<IBom> => {
   try {
     payload.id = id
     const response = await axios.post(`${Urls.defaultUrl}/api/Boms`, payload, {
@@ -63,7 +63,7 @@ export const updateBomAsync = async (id: string, payload: IUpdateBomRequest): Pr
   }
 };
 
-export const deleteBomAsync = async (id: string): Promise<void> => {
+export const deleteBomAsync = async (id: number): Promise<void> => {
   try {
     const response = await axios.delete(`${Urls.defaultUrl}/api/Boms/${id}`, {
       headers: {
