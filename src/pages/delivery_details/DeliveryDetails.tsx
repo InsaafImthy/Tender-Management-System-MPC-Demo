@@ -6,7 +6,11 @@ import Table from "../../components/basic_components/Table";
 import { defaultFilter } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { IFilterDto } from "../../types/commonTypes";
-import { getDeliveryDataAsync } from "../../services/categoryService";
+import {
+  deleteDeliveryDetailsAsync,
+  getDeliveryDataAsync,
+} from "../../services/categoryService";
+import { notification } from "antd";
 
 export interface IUDeliveryData {
   Id: number;
@@ -57,17 +61,21 @@ const DeliveryDetails = () => {
   const [filter, setFilter] = useState<any>(defaultFilter);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   const [deliveryList, setDeliveryList] = useState<IUDeliveryData[]>([]);
-  
-  const handleDeleteTender = (item:any) => {
- 
-  }
+
+  const handleDeleteDeliveryData = async (item: any) => {
+    if (item) {
+      await deleteDeliveryDetailsAsync(item.id);
+      notification.success({ message: "data deleted successfully" });
+      fetchDeliveryData();
+    }
+  };
 
   const handleAddDelivery = () => {
     // setIsDeliveryModalOpen(true);
-    navigate('/create-delivery-details')
+    navigate("/create-delivery-details");
   };
 
-  const fetchDeliveryData = async(filterData: IFilterDto = defaultFilter) => {
+  const fetchDeliveryData = async (filterData: IFilterDto = defaultFilter) => {
     const Data = await getDeliveryDataAsync(filterData);
 
     const DeliveryValuesData = Data.items.map((data: any) => ({
@@ -83,11 +91,11 @@ const DeliveryDetails = () => {
     console.log("Mapped tenders for table:", DeliveryValuesData);
 
     setDeliveryList(DeliveryValuesData);
-  }
+  };
 
-    useEffect(() => {
-      fetchDeliveryData();
-    }, []);
+  useEffect(() => {
+    fetchDeliveryData();
+  }, []);
 
   const handleSubmit = () => {
     // Assign unique ID to each new delivery
@@ -116,7 +124,6 @@ const DeliveryDetails = () => {
       status: 0,
     });
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -150,7 +157,7 @@ const DeliveryDetails = () => {
       </div>
 
       {/* Table Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mx-8">
         <Table
           title={""}
           columns={columns}
@@ -164,13 +171,15 @@ const DeliveryDetails = () => {
           type="tendors"
           rowNavigationPath="tendors"
           NoDataTitle={"No Delivery Details Available"}
-          NoDataDescription={
-            "No delivery detils are available yet."
-          }
+          NoDataDescription={"No delivery detils are available yet."}
           IsIcon={false}
           dots={true}
-          setDeleteOption={(item: IUDeliveryData) => handleDeleteTender(item)}
-          onView={(item: IUDeliveryData) => navigate(`/create-delivery-details/${item.Id}`)}
+          setDeleteOption={(item: IUDeliveryData) =>
+            handleDeleteDeliveryData(item)
+          }
+          onView={(item: IUDeliveryData) =>
+            navigate(`/create-delivery-details/${item.Id}`)
+          }
         />
       </div>
     </div>
@@ -178,5 +187,3 @@ const DeliveryDetails = () => {
 };
 
 export default DeliveryDetails;
-
-
