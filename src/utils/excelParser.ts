@@ -8,8 +8,8 @@ export interface ParsedProcurementItem {
 }
 
 export interface ParsedDeliveryItem {
-  itemName: string;
   itemCode: string;
+  itemName: string;
   quantityOrdered: number;
   quantityReceived: number;
   unit: string;
@@ -152,8 +152,8 @@ export const parseExcelFileForDeliveryItems = async (file: File): Promise<Parsed
           const row = jsonData[i] as any[];
           if (!row || row.length === 0) continue;
 
-          const itemName = String(row[0] || "").trim();
-          const itemCode = String(row[1] || "").trim();
+          const itemCode = String(row[0] || "").trim();
+          const itemName = String(row[1] || "").trim();
           const quantityOrdered = parseFloat(row[2]) || 0;
           const quantityReceived = parseFloat(row[3]) || 0;
           const unit = String(row[4] || "").trim();
@@ -164,8 +164,8 @@ export const parseExcelFileForDeliveryItems = async (file: File): Promise<Parsed
 
           if (itemName) {
             items.push({
-              itemName,
               itemCode,
+              itemName,
               quantityOrdered,
               quantityReceived,
               unit,

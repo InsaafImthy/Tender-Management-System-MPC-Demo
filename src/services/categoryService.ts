@@ -154,3 +154,14 @@ export const getDeliveryDataByIDAsync = async(id:number)=>{
         console.log(err);
     }
 }
+
+export const deleteDeliveryDetailsAsync = async (id: any) => {
+  try {
+    let response = await axios.delete(`${Urls.defaultUrl}/api/DeliveryConfirmation/${id}`, {
+      headers: {
+        Authorization: `Bearer ${getUserToken()}`,
+      },
+    });
+    return response.data;
+  } catch (err) {}
+};

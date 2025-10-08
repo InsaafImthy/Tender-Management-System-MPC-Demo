@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NavItem } from "../../types/Types";
-import procurementLogo from "../../assets/procurement_logo/procurement-logo.png";
+import procurementLogo from "../../assets/procurement_logo/ib vogt.png";
 import {
+  AnalysisIcon,
   BellIcon,
   ClipboardIcon,
   DeliveryDetailsIcon,
@@ -35,6 +36,7 @@ const Sidebar = ({ notifications,trigger }: SidebarProp) => {
     { to: "/vendors", title: "Vendors", icon: DocumentTextIcon },
     { to: "/upcoming-tenders", title: "UpcomingVendors", icon: UpcomingTendorsIcon },
     { to: "/delivery-details", title: "DeliveryDetails", icon: DeliveryDetailsIcon },
+    { to: "/competitor-analysis", title: "CompetitiveAnalysis", icon: AnalysisIcon },
     { to: "/settings/user-managment", title: "Settings", icon: SettingsIcon },
   ];
 

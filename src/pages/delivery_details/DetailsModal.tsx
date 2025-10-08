@@ -121,8 +121,8 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
 
       const newItems: IDeliveryItem[] = parsedItems.map((item) => ({
         id: 0,
-        itemName: item.itemName,
         itemCode: item.itemCode,
+        itemName: item.itemName,
         quantityOrdered: item.quantityOrdered,
         quantityReceived: item.quantityReceived,
         unit: item.unit.toString(),
@@ -214,9 +214,15 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
     }
   };
 
-  const handleEditclick= () => {
+  const handleEditclick = () => {
     setIsIdavailable(false);
-  }
+  };
+
+  const handleVerifyItem = (index: number) => {
+    const updatedItems = [...checklistItems];
+    updatedItems[index].verify = !updatedItems[index].verify;
+    setchecklistItems(updatedItems);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -235,7 +241,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <div className="flex justify-between">
           <h3 className="text-base font-semibold mb-4">Delivery Information</h3>
-          {isIdavailable && <EditIconMain onClick={handleEditclick}/>}
+          {isIdavailable && <EditIconMain onClick={handleEditclick} />}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -392,8 +398,14 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                 </td>
 
                 <td className="px-4 py-3 text-center">
-                  {item.verify ? "✅" : "❌"}
+                  {/* Checkbox to mark verified */}
+                  <input
+                    type="checkbox"
+                    checked={item.verify}
+                    onChange={() => handleVerifyItem(index)}
+                  />
                 </td>
+
                 <td className="px-4 py-3 text-center">
                   {!isIdavailable && (
                     <>
@@ -416,138 +428,140 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
             ))}
 
             {/* Add/Edit Row */}
-            {!isIdavailable && <tr className="bg-gray-50">
-              <td className="px-4 py-3">
-                <input
-                  type="text"
-                  value={editForm.itemCode}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, itemCode: e.target.value })
-                  }
-                  placeholder="Code"
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <input
-                  type="text"
-                  value={editForm.itemName}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, itemName: e.target.value })
-                  }
-                  placeholder="Name"
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <input
-                  type="number"
-                  value={editForm.quantityOrdered}
-                  onChange={(e) =>
-                    setEditForm({
-                      ...editForm,
-                      quantityOrdered: +e.target.value,
-                    })
-                  }
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <input
-                  type="number"
-                  value={editForm.quantityReceived}
-                  onChange={(e) =>
-                    setEditForm({
-                      ...editForm,
-                      quantityReceived: +e.target.value,
-                    })
-                  }
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <input
-                  type="number"
-                  value={editForm.unit}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, unit: e.target.value })
-                  }
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <input
-                  type="number"
-                  value={editForm.unitPrice}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, unitPrice: +e.target.value })
-                  }
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <input
-                  type="number"
-                  value={editForm.totalPrice}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, totalPrice: +e.target.value })
-                  }
-                  className="border rounded p-2 w-full"
-                />
-              </td>
-              <td className="px-4 py-3">
-                <select
-                  value={editForm.condition}
-                  onChange={(e) =>
-                    setEditForm({
-                      ...editForm,
-                      condition: Number(e.target.value),
-                    })
-                  }
-                  className="border rounded p-2 w-full"
-                >
-                  <option value="">Select</option>
-                  <option value={1}>Ok</option>
-                  <option value={2}>Damaged</option>
-                  <option value={0}>Rejected</option>
-                </select>
-              </td>
-
-              <td className="px-4 py-3 text-center">
-                <input
-                  type="checkbox"
-                  checked={editForm.verify}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, verify: e.target.checked })
-                  }
-                />
-              </td>
-              <td className="px-4 py-3 text-center">
-                {editingIndex === null ? (
-                  <button
-                    onClick={handleAddItem}
-                    className="bg-blue-500 text-white px-3 py-1 rounded"
+            {!isIdavailable && (
+              <tr className="bg-gray-50">
+                <td className="px-4 py-3">
+                  <input
+                    type="text"
+                    value={editForm.itemCode}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, itemCode: e.target.value })
+                    }
+                    placeholder="Code"
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="text"
+                    value={editForm.itemName}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, itemName: e.target.value })
+                    }
+                    placeholder="Name"
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={editForm.quantityOrdered}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        quantityOrdered: +e.target.value,
+                      })
+                    }
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={editForm.quantityReceived}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        quantityReceived: +e.target.value,
+                      })
+                    }
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={editForm.unit}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, unit: e.target.value })
+                    }
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={editForm.unitPrice}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, unitPrice: +e.target.value })
+                    }
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={editForm.totalPrice}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, totalPrice: +e.target.value })
+                    }
+                    className="border rounded p-2 w-full"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <select
+                    value={editForm.condition}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        condition: Number(e.target.value),
+                      })
+                    }
+                    className="border rounded p-2 w-full"
                   >
-                    Add
-                  </button>
-                ) : (
-                  <>
+                    <option value="">Select</option>
+                    <option value={1}>Ok</option>
+                    <option value={2}>Damaged</option>
+                    <option value={0}>Rejected</option>
+                  </select>
+                </td>
+
+                <td className="px-4 py-3 text-center">
+                  <input
+                    type="checkbox"
+                    checked={editForm.verify}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, verify: e.target.checked })
+                    }
+                  />
+                </td>
+                <td className="px-4 py-3 text-center">
+                  {editingIndex === null ? (
                     <button
-                      onClick={handleSaveItem}
-                      className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+                      onClick={handleAddItem}
+                      className="bg-blue-500 text-white px-3 py-1 rounded"
                     >
-                      Save
+                      Add
                     </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="bg-gray-400 text-white px-3 py-1 rounded"
-                    >
-                      Cancel
-                    </button>
-                  </>
-                )}
-              </td>
-            </tr>}
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleSaveItem}
+                        className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -559,12 +573,14 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
         >
           {type === "create" ? "Cancel" : "Back"}
         </button>
-        {!isIdavailable && <button
-          className="px-4 py-2 rounded-md bg-[#1365AA] text-white"
-          onClick={handleSave}
-        >
-          {type === "create" ? "Submit" : "Update"}
-        </button>}
+        {!isIdavailable && (
+          <button
+            className="px-4 py-2 rounded-md bg-[#1365AA] text-white"
+            onClick={handleSave}
+          >
+            {type === "create" ? "Submit" : "Update"}
+          </button>
+        )}
       </div>
     </div>
   );
