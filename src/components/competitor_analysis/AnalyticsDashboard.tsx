@@ -150,6 +150,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Suppliers</label>
             <SelectField
+              id="supplier"
               options={supplierOptions}
               value={filters.supplierIds?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, supplierIds: value ? [value] : [] })}
@@ -159,6 +160,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
             <SelectField
+              id="category"
               options={categoryOptions}
               value={filters.itemCategories?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, itemCategories: value ? [value] : [] })}

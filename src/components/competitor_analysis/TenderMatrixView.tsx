@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ITenderMatrix, ITenderFilters } from '../../types/competitorAnalysisTypes';
 import SelectField from '../basic_components/SelectField';
-import { TickIcon, CrossIcon, CautionIcon } from '../../utils/Icons';
 
 interface TenderMatrixViewProps {
   tenderMatrix: ITenderMatrix;
@@ -130,6 +129,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Suppliers</label>
             <SelectField
+              id="supplierOptions"
               options={supplierOptions}
               value={filters.suppliers?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, suppliers: value ? [value] : [] })}
@@ -139,6 +139,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Items</label>
             <SelectField
+            id="itemOptions"
               options={itemOptions}
               value={filters.items?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, items: value ? [value] : [] })}
@@ -148,6 +149,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
             <SelectField
+            id="categoryOptions"
               options={categoryOptions}
               value={filters.categories?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, categories: value ? [value] : [] })}

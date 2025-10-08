@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "../../components/basic_components/TextField";
 import { DeliveryDetailsIconMain, EditIconMain } from "../../utils/Icons";
 import DateTimePicker from "../../components/basic_components/date_time_picker/DateTimePicker";
-import { message, Select } from "antd";
+import { message} from "antd";
 import {
   parseExcelFileForDeliveryItems,
   validateParsedDeliveryItems,
@@ -32,7 +32,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
   const [checklistItems, setchecklistItems] = useState<IDeliveryItem[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [isIdavailable, setIsIdavailable] = useState(false);
-  const [upload, setUpload] = useState<{ files: FileList | null }>({
+  const [upload,] = useState<{ files: FileList | null }>({
     files: null,
   });
 
@@ -61,6 +61,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
   useEffect(() => {
     fetchdeliveryDatawithID();
   }, []);
+  
 
   const fetchdeliveryDatawithID = async () => {
     if (id && !isNaN(Number(id))) {
@@ -256,7 +257,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
               setValue={(val: number) =>
                 setDeliveryData({ ...deliveryData, id: val })
               }
-              disabled={isIdavailable}
+              disabled={true}
               placeholder="Enter delivery ID"
               type="number"
             />

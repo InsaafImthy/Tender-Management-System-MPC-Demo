@@ -113,6 +113,7 @@ const SupplierRankingView: React.FC<SupplierRankingViewProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Item</label>
             <SelectField
+             id="itemOptions"
               options={itemOptions}
               value={selectedItem}
               onChange={setSelectedItem}
@@ -122,6 +123,7 @@ const SupplierRankingView: React.FC<SupplierRankingViewProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
             <SelectField
+            id="categoryOptions"
               options={categoryOptions}
               value={selectedCategory}
               onChange={setSelectedCategory}
