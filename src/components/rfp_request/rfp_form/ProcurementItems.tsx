@@ -5,7 +5,9 @@ import { IProcurementItem } from "../../../types/rfpTypes";
 import { parseExcelFile, validateParsedItems } from "../../../utils/excelParser";
 import { BoxIcon } from "../../../utils/Icons";
 import BomSelectModal from "./BomSelectModal";
+import BomEditModal from "./BomEditModal";
 import { commonUnits } from "../../../utils/constants";
+import { createBomAsync } from "../../../services/bomService";
 
 interface ProcurementItemsProps {
   items?: IProcurementItem[];
@@ -18,7 +20,9 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<IProcurementItem>({ itemName: "", itemCode: "", quantity: 0 });
   const [bomModalOpen, setBomModalOpen] = useState(false);
-  const [mode, setMode] = useState<"items" | "bom">("items");
+  const [bomEditModalOpen, setBomEditModalOpen] = useState(false);
+  const [editingBom, setEditingBom] = useState<any>(null);
+  const [mode, setMode] = useState<"items" | "bom">("bom");
   const [expandedBomIds, setExpandedBomIds] = useState<Record<string | number, boolean>>({});
 
   const getUnitLabel = (unitValue: number) => {
@@ -128,6 +132,47 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
     }
   };
 
+  const handleEditBom = (bom: any) => {
+    setEditingBom(bom);
+    setBomEditModalOpen(true);
+  };
+
+  const handleSaveEditedBom = async (editedBom: any) => {
+    try {
+      // Create new BOM with updated data
+      const bomData = {
+        id:0,
+        bomName: editedBom.bomName,
+        categoryId: editedBom.categoryId,
+        description: editedBom.description,
+        bomItemDtos: editedBom.bomItemDtos.map((item: any) => ({
+          itemCode: item.itemCode,
+          itemName: item.itemName,
+          categoryId: item.categoryId,
+          quantity: item.quantity,
+          unit: item.unit || 0,
+          price: item.price,
+          description: item.description,
+          supplier: item.supplier
+        }))
+      };
+
+      const newBom = await createBomAsync(bomData as any);
+      
+      // Update selectedBoms by replacing the old BOM with the new one
+      setSelectedBoms(prev => 
+        prev.map(bom => bom.id === editingBom.id ? newBom : bom)
+      );
+      
+      setBomEditModalOpen(false);
+      setEditingBom(null);
+      message.success('BOM updated successfully!');
+    } catch (error) {
+      console.error('Error updating BOM:', error);
+      message.error('Failed to update BOM. Please try again.');
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
       {/* Header */}
@@ -144,13 +189,13 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
       <div className="p-8">
         {/* Mode Switch */}
         <div className="mb-6 flex items-center gap-3">
-          <button
+          {/* <button
             type="button"
             onClick={() => setMode("items")}
             className={`px-4 py-2 rounded border ${mode === "items" ? "bg-[#7C3AED] text-white border-[#7C3AED]" : "bg-white text-gray-700 border-gray-300"}`}
           >
             Add Items
-          </button>
+          </button> */}
           <button
             type="button"
             onClick={() => setMode("bom")}
@@ -445,13 +490,22 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                           {b.category && <span>Category: {b.category?.name}</span>}
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        className="text-red-600 text-sm"
-                        onClick={() => setSelectedBoms(prev => prev.filter(x => x.id !== b.id))}
-                      >
-                        Remove
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          className="text-blue-600 text-sm hover:text-blue-800"
+                          onClick={() => handleEditBom(b)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="text-red-600 text-sm hover:text-red-800"
+                          onClick={() => setSelectedBoms(prev => prev.filter(x => x.id !== b.id))}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
 
                     {isOpen && items.length > 0 && (
@@ -509,6 +563,15 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
           setSelectedBoms((prev) => [...prev, bom]);
           setBomModalOpen(false);
         }}
+      />
+      <BomEditModal
+        open={bomEditModalOpen}
+        onClose={() => {
+          setBomEditModalOpen(false);
+          setEditingBom(null);
+        }}
+        onSave={handleSaveEditedBom}
+        bom={editingBom}
       />
     </div>
   );

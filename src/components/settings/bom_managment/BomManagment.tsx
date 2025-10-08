@@ -42,7 +42,7 @@ const BomManagment: React.FC = () => {
   const handleConfirmAction = async () => {
     try {
       if (confirmAction?.type === 'delete') {
-        await deleteBomAsync(confirmAction.bom.id as string);
+        await deleteBomAsync(confirmAction.bom.id ?? 0);
         notification.success({ message: 'BOM deleted successfully' });
         setupBoms();
         setIsConfirmModalOpen(false);

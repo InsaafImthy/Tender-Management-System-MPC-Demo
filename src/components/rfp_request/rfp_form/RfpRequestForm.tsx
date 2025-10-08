@@ -199,10 +199,10 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
       }
     });
 
-    if (!procurementItems || procurementItems.length === 0) {
-      alert("Please add at least one Procurement Item");
-      throw new Error("Validation failed");
-    }
+    // if (!procurementItems || procurementItems.length === 0) {
+    //   alert("Please add at least one Procurement Item");
+    //   throw new Error("Validation failed");
+    // }
 
     if (!attachments || attachments.length === 0) {
       alert("Please upload at least one Attachment");
@@ -228,6 +228,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
       formDataTemp.estimatedContractValue = Number(
         requestData.estimatedContractValue
       );
+      console.log(formDataTemp,"formDataTemp------------")
       for (var key in formDataTemp) {
         if (formDataTemp.hasOwnProperty(key)) {
           const value = formDataTemp[key];
@@ -286,6 +287,17 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
             }
           }
         }
+      }
+
+      [{itemName:"asghdas", itemCode:"RDYG",quantity:"10"}].forEach((x,i)=>{
+        formData.append(`rfpItems[${i}].ItemName`, x?.itemName);
+        formData.append(`rfpItems[${i}].ItemCode`, x?.itemCode);
+        formData.append(`rfpItems[${i}].Quantity`, x?.quantity);
+        formData.append(`rfpItems[${i}].RfpId`, formDataTemp?.id);
+      })
+
+      if(selectedBoms.length > 0){
+        formData.append("bomId", selectedBoms[0]?.id);
       }
 
       const isCreatedOrUpdated = await createOrUpdateRfpAsync(formData);
