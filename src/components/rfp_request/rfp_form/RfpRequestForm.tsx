@@ -71,6 +71,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
   const { id } = useParams();
   const [requestData, setRequestData] = useState<IRfp>(defaultRfpState);
   const [attachments, setAttachments] = useState<any[]>([]);
+  const [selectedBoms, setSelectedBoms] = useState<any[]>([]);
   const [masterData, setMasterData] = useState<any>({
     users: [],
     departments: [],
@@ -407,6 +408,8 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
               setOwners={setOwners}
             />
             <ProcurementItems
+              selectedBoms={selectedBoms}
+              setSelectedBoms={setSelectedBoms}
               items={procurementItems}
               setItems={setProcurementItems}
             />

@@ -10,13 +10,14 @@ import { commonUnits } from "../../../utils/constants";
 interface ProcurementItemsProps {
   items?: IProcurementItem[];
   setItems: React.Dispatch<React.SetStateAction<IProcurementItem[]>>;
+  selectedBoms: any[]
+  setSelectedBoms:React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItems }) => {
+const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItems, selectedBoms, setSelectedBoms }) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<IProcurementItem>({ itemName: "", itemCode: "", quantity: 0 });
   const [bomModalOpen, setBomModalOpen] = useState(false);
-  const [selectedBoms, setSelectedBoms] = useState<any[]>([]);
   const [mode, setMode] = useState<"items" | "bom">("items");
   const [expandedBomIds, setExpandedBomIds] = useState<Record<string | number, boolean>>({});
 
