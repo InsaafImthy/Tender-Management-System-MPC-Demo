@@ -102,3 +102,55 @@ export const deleteUpcomingTendersAsync = async (id: any) => {
     return response.data;
   } catch (err) {}
 };
+
+export const createDeliveryDetails = async (PostDeliveryData: any) => {
+  try {
+    const response = await axios.post(
+      `${Urls.defaultUrl}/api/DeliveryConfirmation`,
+      PostDeliveryData,
+      {
+        headers: {
+          Authorization: `Bearer ${getUserToken()}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (err: any) {
+    throw err.response?.data || err;
+  }
+};
+
+export const getDeliveryDataAsync = async (
+  filter: IFilterDto = {
+    fields: [],
+    pageNo: 0,
+    pageSize: 0,
+  }
+) => {
+  try {
+    let response = await axios.post(
+      `${Urls.defaultUrl}/api/DeliveryConfirmation/GetDeliveryConfirmations`,
+      filter,
+      {
+        headers: {
+          Authorization: `Bearer ${getUserToken()}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {}
+};
+
+export const getDeliveryDataByIDAsync = async(id:number)=>{
+    try{
+        const response = await axios.get(`${Urls.defaultUrl}/api/DeliveryConfirmation/${id}`,{
+            headers:{
+                Authorization:`Bearer ${getUserToken()}`
+            }
+        })
+        return response.data;
+    }catch(err){
+        console.log(err);
+    }
+}
