@@ -103,6 +103,14 @@ export const upcoming_tendor_sorting_fields = {
   publishingDate: "Tender Publishing Date",
 };
 
+export const  delivery_details_sorting_fields = {
+  poNumber: "PO Number",
+  supplierName: "Supplier Name",
+  deliveryDate: "Delivery Date",
+  deliveryLocation: "Delivery Location",
+  projectSite: "Project Site"
+};
+
 export const project_sorting_fields = {
   projectId: "ID",
   projectName: "Project Name",

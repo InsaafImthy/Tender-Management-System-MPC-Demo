@@ -3,7 +3,7 @@ import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
 import CreateButton from "../../components/buttons/CreateButton";
 import { DeliveryDetailsIconMain } from "../../utils/Icons";
 import Table from "../../components/basic_components/Table";
-import { defaultFilter } from "../../utils/constants";
+import { defaultFilter, delivery_details_sorting_fields } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { IFilterDto } from "../../types/commonTypes";
 import {
@@ -11,6 +11,7 @@ import {
   getDeliveryDataAsync,
 } from "../../services/categoryService";
 import { notification } from "antd";
+import SortModal from "../../components/basic_components/SortModal";
 
 export interface IUDeliveryData {
   Id: number;
@@ -43,18 +44,6 @@ const column_details = {
 
 const DeliveryDetails = () => {
   const navigate = useNavigate();
-  const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
-
-  const [deliveryData, setdeliveryData] = useState<IUDeliveryData>({
-    Id: 0,
-    poNumber: "",
-    supplierName: "",
-    deliveryDate: "",
-    deliveryTime: "",
-    deliveryLocation: "",
-    projectSite: "",
-    status: 0,
-  });
 
   const [totalCount, setTotalCount] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -64,7 +53,7 @@ const DeliveryDetails = () => {
 
   const handleDeleteDeliveryData = async (item: any) => {
     if (item) {
-      await deleteDeliveryDetailsAsync(item.id);
+      await deleteDeliveryDetailsAsync(item.Id);
       notification.success({ message: "data deleted successfully" });
       fetchDeliveryData();
     }
@@ -91,37 +80,22 @@ const DeliveryDetails = () => {
     console.log("Mapped tenders for table:", DeliveryValuesData);
 
     setDeliveryList(DeliveryValuesData);
+    setTotalCount(DeliveryValuesData.length);
   };
 
   useEffect(() => {
     fetchDeliveryData();
   }, []);
 
-  const handleSubmit = () => {
-    // Assign unique ID to each new delivery
-    const newDelivery: IUDeliveryData = {
-      ...deliveryData,
-      Id: deliveryList.length + 1, // auto-increment ID
-    };
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery, filter]);
 
-    // Add new delivery to list
-    const updatedList = [...deliveryList, newDelivery];
-    setDeliveryList(updatedList);
-    setTotalCount(updatedList.length);
-
-    // Close modal
-    setIsDeliveryModalOpen(false);
-
-    // Reset form data
-    setdeliveryData({
-      Id: 0,
-      poNumber: "",
-      supplierName: "",
-      deliveryDate: "",
-      deliveryTime: "",
-      deliveryLocation: "",
-      projectSite: "",
-      status: 0,
+  const handleSearch = async () => {
+    console.log(searchQuery, "searchquery after fetch");
+    fetchDeliveryData({
+      ...filter,
+      globalSearch: searchQuery,
     });
   };
 
@@ -182,6 +156,15 @@ const DeliveryDetails = () => {
           }
         />
       </div>
+      {/* Sort Modal */}
+        {isSortModalOpen && (
+          <SortModal
+            filter={filter}
+            columns={delivery_details_sorting_fields}
+            setFilter={setFilter}
+            setIsSortModalOpen={setIsSortModalOpen}
+          />
+        )}
     </div>
   );
 };

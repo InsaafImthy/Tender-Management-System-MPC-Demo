@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { LoginComponent } from "../../components/login/LoginComponent";
-import ProcurementLogo from "../../assets/procurement_logo/procurement-logo.png";
 import EnergyTransitionBg from "../../assets/login/ibvogt.png";
 import { IbVogtLogo } from "../../utils/Icons";
 
