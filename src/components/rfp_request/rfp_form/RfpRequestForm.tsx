@@ -23,6 +23,7 @@ import RfpAttachments from "./RfpAttachments";
 import ProcurementItems from "./ProcurementItems";
 import { getAllDocumentTypesAsync } from "../../../services/commonService";
 import { ClipboardMainIcon } from "../../../utils/Icons";
+import { IBom } from "../../../types/bomTypes";
 
 type RfpType = "create" | "edit";
 
@@ -223,12 +224,12 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
     // }
     try {
       const formData = new FormData();
-      const formDataTemp: Record<string, any> = requestData;
+      const formDataTemp: Record<string, any> = { ...requestData, rfpItems: [] };
       formDataTemp.bidValue = Number(requestData.bidValue) || undefined;
       formDataTemp.estimatedContractValue = Number(
         requestData.estimatedContractValue
       );
-      console.log(formDataTemp,"formDataTemp------------")
+      console.log(formDataTemp, "formDataTemp------------")
       for (var key in formDataTemp) {
         if (formDataTemp.hasOwnProperty(key)) {
           const value = formDataTemp[key];
@@ -282,6 +283,18 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
                 formData.append(`rfpItems[${i}].rfpId`, formDataTemp.id);
                 i++;
               });
+              selectedBoms.forEach((item: IBom) => {
+                item.bomItemDtos.forEach((item: any) => {
+                  formData.append(`rfpItems[${i}].id`, item?.id || "0");
+                  formData.append(`rfpItems[${i}].itemName`, item.itemName);
+                  formData.append(`rfpItems[${i}].itemCode`, item.itemCode);
+                  formData.append(`rfpItems[${i}].quantity`, item.quantity);
+                  formData.append(`rfpItems[${i}].unit`, item?.unit || 0);
+                  formData.append(`rfpItems[${i}].price`, item?.price || 0);
+                  formData.append(`rfpItems[${i}].rfpId`, formDataTemp.id);
+                  i++;
+                });
+              });
             } else {
               formData.append(key, value);
             }
@@ -289,14 +302,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
         }
       }
 
-      [{itemName:"asghdas", itemCode:"RDYG",quantity:"10"}].forEach((x,i)=>{
-        formData.append(`rfpItems[${i}].ItemName`, x?.itemName);
-        formData.append(`rfpItems[${i}].ItemCode`, x?.itemCode);
-        formData.append(`rfpItems[${i}].Quantity`, x?.quantity);
-        formData.append(`rfpItems[${i}].RfpId`, formDataTemp?.id);
-      })
-
-      if(selectedBoms.length > 0){
+      if (selectedBoms.length > 0) {
         formData.append("bomId", selectedBoms[0]?.id);
       }
 
@@ -428,7 +434,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
             <RfpAttachments
               attachments={attachments}
               setAttachments={setAttachments}
-              setAttachmentsToDelete={() => {}}
+              setAttachmentsToDelete={() => { }}
               documentTypes={masterData.documentTypes}
             />
           </div>
@@ -477,7 +483,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
           </div>
         </form>
       </div>
-      
+
     </div>
   );
 }

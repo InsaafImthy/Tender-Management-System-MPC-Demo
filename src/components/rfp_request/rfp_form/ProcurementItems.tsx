@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { message } from "antd";
-import { EditOutlined, DeleteOutlined, UploadOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { IProcurementItem } from "../../../types/rfpTypes";
-import { parseExcelFile, validateParsedItems } from "../../../utils/excelParser";
+// import { parseExcelFile, validateParsedItems } from "../../../utils/excelParser";
 import { BoxIcon } from "../../../utils/Icons";
 import BomSelectModal from "./BomSelectModal";
 import BomEditModal from "./BomEditModal";
@@ -22,7 +22,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
   const [bomModalOpen, setBomModalOpen] = useState(false);
   const [bomEditModalOpen, setBomEditModalOpen] = useState(false);
   const [editingBom, setEditingBom] = useState<any>(null);
-  const [mode, setMode] = useState<"items" | "bom">("bom");
+  const [mode, ] = useState<"items" | "bom">("bom");
   const [expandedBomIds, setExpandedBomIds] = useState<Record<string | number, boolean>>({});
 
   const getUnitLabel = (unitValue: number) => {
@@ -76,61 +76,61 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
     return items.reduce((total, item) => total + (item.quantity || 0), 0);
   };
 
-  const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  // const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (!file) return;
 
-    // Validate file type
-    const allowedTypes = [
-      'text/csv',
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ];
+  //   // Validate file type
+  //   const allowedTypes = [
+  //     'text/csv',
+  //     'application/vnd.ms-excel',
+  //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  //   ];
 
-    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(csv|xls|xlsx)$/i)) {
-      message.error('Please upload a CSV or Excel file (.csv, .xls, .xlsx)');
-      return;
-    }
+  //   if (!allowedTypes.includes(file.type) && !file.name.match(/\.(csv|xls|xlsx)$/i)) {
+  //     message.error('Please upload a CSV or Excel file (.csv, .xls, .xlsx)');
+  //     return;
+  //   }
 
-    // Show confirmation if there are existing items
-    if ((items || []).length > 0) {
-      const confirmed = window.confirm(
-        `This will replace all ${(items || []).length} existing items with the items from the uploaded file. Are you sure you want to continue?`
-      );
-      if (!confirmed) {
-        event.target.value = '';
-        return;
-      }
-    }
+  //   // Show confirmation if there are existing items
+  //   if ((items || []).length > 0) {
+  //     const confirmed = window.confirm(
+  //       `This will replace all ${(items || []).length} existing items with the items from the uploaded file. Are you sure you want to continue?`
+  //     );
+  //     if (!confirmed) {
+  //       event.target.value = '';
+  //       return;
+  //     }
+  //   }
 
-    try {
-      const parsedItems = await parseExcelFile(file);
-      const validation = validateParsedItems(parsedItems);
+  //   try {
+  //     const parsedItems = await parseExcelFile(file);
+  //     const validation = validateParsedItems(parsedItems);
 
-      if (!validation.valid) {
-        message.error(`File validation failed: ${validation.errors.join(', ')}`);
-        return;
-      }
+  //     if (!validation.valid) {
+  //       message.error(`File validation failed: ${validation.errors.join(', ')}`);
+  //       return;
+  //     }
 
-      // Convert parsed items to IProcurementItem format
-      const newItems: IProcurementItem[] = parsedItems.map((item) => ({
-        id: 0,
-        itemName: item.itemName,
-        itemCode: item.itemCode,
-        quantity: item.quantity
-      }));
+  //     // Convert parsed items to IProcurementItem format
+  //     const newItems: IProcurementItem[] = parsedItems.map((item) => ({
+  //       id: 0,
+  //       itemName: item.itemName,
+  //       itemCode: item.itemCode,
+  //       quantity: item.quantity
+  //     }));
 
-      // Replace existing items with imported items
-      setItems(newItems);
-      message.success(`Successfully imported ${newItems.length} items from ${file.name}. Previous items have been replaced.`);
+  //     // Replace existing items with imported items
+  //     setItems(newItems);
+  //     message.success(`Successfully imported ${newItems.length} items from ${file.name}. Previous items have been replaced.`);
 
-      // Clear the file input
-      event.target.value = '';
-    } catch (error) {
-      console.error('Error parsing file:', error);
-      message.error('Failed to parse the uploaded file. Please check the format.');
-    }
-  };
+  //     // Clear the file input
+  //     event.target.value = '';
+  //   } catch (error) {
+  //     console.error('Error parsing file:', error);
+  //     message.error('Failed to parse the uploaded file. Please check the format.');
+  //   }
+  // };
 
   const handleEditBom = (bom: any) => {
     setEditingBom(bom);
@@ -173,6 +173,21 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
     }
   };
 
+  const handleSaveEditedBomLocally = (editedBom: any) => {
+    try {
+      setSelectedBoms(prev => prev.map(b => b.id === editingBom.id ? {
+        ...editedBom,
+        id: editingBom.id
+      } : b));
+      setBomEditModalOpen(false);
+      setEditingBom(null);
+      message.success('BOM changes saved locally.');
+    } catch (error) {
+      console.error('Error saving BOM locally:', error);
+      message.error('Failed to save changes locally.');
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
       {/* Header */}
@@ -188,14 +203,14 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
       {/* Content */}
       <div className="p-8">
         {/* Mode Switch */}
-        <div className="mb-6 flex items-center gap-3">
-          {/* <button
+        {/* <div className="mb-6 flex items-center gap-3">
+          <button
             type="button"
             onClick={() => setMode("items")}
             className={`px-4 py-2 rounded border ${mode === "items" ? "bg-[#7C3AED] text-white border-[#7C3AED]" : "bg-white text-gray-700 border-gray-300"}`}
           >
             Add Items
-          </button> */}
+          </button>
           <button
             type="button"
             onClick={() => setMode("bom")}
@@ -203,9 +218,9 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
           >
             Add BOM
           </button>
-        </div>
+        </div> */}
         {/* Excel Upload Section */}
-        {mode === "items" && (
+        {/* {mode === "items" && (
           <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -234,7 +249,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Items Table */}
         {mode === "items" && (
@@ -571,6 +586,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
           setEditingBom(null);
         }}
         onSave={handleSaveEditedBom}
+        onSaveLocal={handleSaveEditedBomLocally}
         bom={editingBom}
       />
     </div>

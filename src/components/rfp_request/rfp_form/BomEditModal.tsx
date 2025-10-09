@@ -7,11 +7,12 @@ import { commonUnits } from '../../../utils/constants';
 interface BomEditModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (editedBom: any) => void;
+  onSave: (editedBom: any) => void; // create as new BOM
+  onSaveLocal?: (editedBom: any) => void; // save changes locally only
   bom: any;
 }
 
-const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, bom }) => {
+const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSaveLocal, bom }) => {
   const [formData, setFormData] = useState({
     bomName: '',
     description: '',
@@ -40,7 +41,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, bom 
     }
   }, [bom, open]);
 
-  const handleSave = () => {
+  const buildEditedBom = () => {
     if (!formData.bomName.trim()) {
       message.error('Please enter BOM name');
       return;
@@ -58,7 +59,48 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, bom 
       categoryId: formData.categoryId,
       bomItemDtos: items
     };
+    return editedBom;
+  };
 
+  const handleSaveLocal = () => {
+    const editedBom = buildEditedBom();
+    if (!editedBom) return;
+    if (onSaveLocal) {
+      onSaveLocal(editedBom);
+    }
+  };
+
+  const hasChanges = () => {
+    if (!bom) return false;
+    if ((bom.bomName || '') !== formData.bomName) return true;
+    if ((bom.description || '') !== (formData.description || '')) return true;
+    if ((bom.categoryId ?? undefined) !== (formData.categoryId ?? undefined)) return true;
+
+    const originalItems = Array.isArray(bom.bomItemDtos) ? bom.bomItemDtos : [];
+    if (originalItems.length !== items.length) return true;
+
+    for (let i = 0; i < items.length; i++) {
+      const a: any = items[i];
+      const b: any = originalItems[i] || {};
+      if ((a.itemCode || '') !== (b.itemCode || '')) return true;
+      if ((a.itemName || '') !== (b.itemName || '')) return true;
+      if (Number(a.quantity || 0) !== Number(b.quantity || 0)) return true;
+      if (Number(a.unit || 0) !== Number(b.unit || 0)) return true;
+      if (Number(a.price || 0) !== Number(b.price || 0)) return true;
+      if ((a.description || '') !== (b.description || '')) return true;
+      if ((a.supplier || '') !== (b.supplier || '')) return true;
+    }
+
+    return false;
+  };
+
+  const handleCreateAsNew = () => {
+    if (!hasChanges()) {
+      message.info('No changes detected to create a new BOM.');
+      return;
+    }
+    const editedBom = buildEditedBom();
+    if (!editedBom) return;
     onSave(editedBom);
   };
 
@@ -160,10 +202,34 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, bom 
       title="Edit BOM"
       open={open}
       onCancel={onClose}
-      onOk={handleSave}
       width={800}
-      okText="Save Changes"
-      cancelText="Cancel"
+      footer={[
+        <button
+          key="cancel"
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+        >
+          Cancel
+        </button>,
+        <button
+          key="save-local"
+          type="button"
+          onClick={handleSaveLocal}
+          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          Save
+        </button>,
+        <button
+          key="create-new"
+          type="button"
+          onClick={handleCreateAsNew}
+          disabled={!hasChanges()}
+          className={`ml-2 px-4 py-2 text-white rounded-md ${hasChanges() ? 'bg-green-600 hover:bg-green-700' : 'bg-green-600 opacity-50 cursor-not-allowed'}`}
+        >
+          Create as new BOM
+        </button>
+      ]}
     >
       <div className="space-y-6">
         {/* BOM Details */}
