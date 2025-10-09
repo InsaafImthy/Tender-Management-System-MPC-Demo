@@ -148,7 +148,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
               </select>
             </div>
             <div>
-              <label className="text-xs text-gray-600">Price</label>
+              <label className="text-xs text-gray-600">Expected Price</label>
               <input type="number" className="w-full border rounded px-3 py-2" value={currentItem.price} onChange={e => setCurrentItem({ ...currentItem, price: Number(e.target.value) })} />
             </div>
             <div className="md:col-span-3 col-span-2">

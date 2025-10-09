@@ -379,7 +379,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
                 />
               </div>
               
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Supplier
                 </label>
@@ -390,7 +390,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter supplier"
                 />
-              </div>
+              </div> */}
             </div>
             
             <div className="mt-3">

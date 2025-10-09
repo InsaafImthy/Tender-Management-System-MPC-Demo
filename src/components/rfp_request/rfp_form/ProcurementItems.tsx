@@ -470,7 +470,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
               <h3 className="text-lg font-semibold text-gray-800">Bill of Materials</h3>
               <button
                 type="button"
-                className="px-3 py-2 bg-[#7C3AED] text-white rounded"
+                className="px-3 py-2 bg-customBlue text-white rounded"
                 onClick={() => setBomModalOpen(true)}
               >
                 + Add BOM

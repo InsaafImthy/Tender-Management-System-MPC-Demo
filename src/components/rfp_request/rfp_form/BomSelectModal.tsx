@@ -105,7 +105,7 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
             ))}
           </select>
         </div>
-        <button className="px-3 py-2 bg-[#7C3AED] text-white rounded" onClick={() => navigate('/settings/bom-managment')}>+ Create New BOM</button>
+        <button className="px-3 py-2 bg-customBlue text-white rounded" onClick={() => navigate('/settings/bom-managment')}>+ Create New BOM</button>
       </div>
 
       <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
@@ -134,7 +134,7 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
                     {bom.createdAt && <span>Created: {fmtDate((bom as any).createdAt)}</span>}
                   </div>
                 </div>
-                <button className="px-3 py-2 bg-[#7C3AED] text-white rounded self-start" onClick={() => onSelect(bom)}>SELECT BOM</button>
+                <button className="px-2 py-1 bg-customBlue text-white rounded self-start" onClick={() => onSelect(bom)}>Select</button>
               </div>
 
               {isOpen && items.length > 0 && (
