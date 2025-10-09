@@ -142,7 +142,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
       // Create new BOM with updated data
       const bomData = {
         id:0,
-        bomName: editedBom.bomName,
+        bomName: `${editedBom.bomName}-${Date.now()}`, // Append timestamp to ensure uniqueness
         categoryId: editedBom.categoryId,
         description: editedBom.description,
         bomItemDtos: editedBom.bomItemDtos.map((item: any) => ({

@@ -136,7 +136,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
               <input type="number" className="w-full border rounded px-3 py-2" value={currentItem.quantity} onChange={e => setCurrentItem({ ...currentItem, quantity: Number(e.target.value) })} />
             </div>
             <div>
-              <label className="text-xs text-gray-600">Unit</label>
+              <label className="text-xs text-gray-600">Units of Measure</label>
               <select
                 className="w-full border rounded px-3 py-2 bg-white"
                 value={Number(currentItem.unit as any) || 0}

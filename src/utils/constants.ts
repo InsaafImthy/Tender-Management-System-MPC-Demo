@@ -6,7 +6,7 @@ export const currencies = [
 ];
 
 export const commonUnits = [
-    {label: "Each", value: 0},
+    {label: "Pcs", value: 0},
     {label: "Feet", value: 1},
     {label: "Meters", value: 2},
     {label: "Pounds", value: 3},
