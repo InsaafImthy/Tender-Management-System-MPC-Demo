@@ -205,6 +205,11 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
     //   throw new Error("Validation failed");
     // }
 
+    if (!requestData?.departmentId) {
+      alert("Please select department");
+      throw new Error("Validation failed");
+    }
+    
     if (!attachments || attachments.length === 0) {
       alert("Please upload at least one Attachment");
       throw new Error("Validation failed");
