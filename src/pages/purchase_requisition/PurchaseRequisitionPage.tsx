@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
+// import { message } from "antd";
 import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
 import Table from "../../components/basic_components/Table";
 import CreateButton from "../../components/buttons/CreateButton";
@@ -12,7 +12,7 @@ const PurchaseRequisitionPage: React.FC = () => {
   const navigate = useNavigate();
   const [requisitions, setRequisitions] = useState<IPurchaseRequisition[]>([]);
   const [, setIsLoading] = useState<boolean>(false);
-  const [currentPage,] = useState<number>(1);
+  const [currentPage] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(0);
   const pageSize = 10;
 
@@ -33,10 +33,10 @@ const PurchaseRequisitionPage: React.FC = () => {
       setTotalCount(response.count);
     } catch (err) {
       console.error("Error loading purchase requisitions:", err);
-      message.error("Failed to load purchase requisitions");
+      // message.error("Failed to load purchase requisitions");
     } finally {
       setIsLoading(false);
-      console.log(columns)
+      console.log(columns);
     }
   };
 
@@ -180,29 +180,31 @@ const PurchaseRequisitionPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
+    <div>
       <CommonTitleCard />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
+        
 
-      {/* Header */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Purchase Requisitions
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Manage and track all purchase requisitions
-            </p>
+        {/* Header */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Purchase Requisitions
+              </h1>
+              <p className="text-gray-600 mt-2">
+                Manage and track all purchase requisitions
+              </p>
+            </div>
+            <CreateButton
+              name="Create Requisition"
+              onClick={() => navigate("/purchase-requistition/create")}
+            />
           </div>
-          <CreateButton
-            name="Create Requisition"
-            onClick={() => navigate("/purchase-requisitions/create")}
-          />
         </div>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        {/* Stats Cards */}
+        {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -258,43 +260,44 @@ const PurchaseRequisitionPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-        <Table
-          columns={[
-            "requisitionNumber",
-            "requisitionTitle",
-            "department",
-            "requestedBy",
-            "priority",
-            "requiredDate",
-            "status",
-            "createdAt",
-          ]}
-          columnLabels={{
-            requisitionNumber: "Requisition",
-            requisitionTitle: "Title",
-            department: "Department",
-            requestedBy: "Requested By",
-            priority: "Priority",
-            requiredDate: "Required Date",
-            status: "Status",
-            createdAt: "Created At",
-          }}
-          type={"vendors"}
-          items={requisitions}
-          totalCount={totalCount}
-          onView={(item) => navigate(`/purchase-requisitions/${item.id}`)}
-          NoDataTitle="No Purchase Requisitions Found"
-          NoDataDescription={
-            "There are currently no purchase requisitions to display"
-          }
-          title="Purchase Requisitions"
-          subtitle="Manage and track purchase requisitions"
-          IsIcon={true}
-        />
+        {/* Table */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+          <Table
+            columns={[
+              "requisitionNumber",
+              "requisitionTitle",
+              "department",
+              "requestedBy",
+              "priority",
+              "requiredDate",
+              "status",
+              "createdAt",
+            ]}
+            columnLabels={{
+              requisitionNumber: "Requisition",
+              requisitionTitle: "Title",
+              department: "Department",
+              requestedBy: "Requested By",
+              priority: "Priority",
+              requiredDate: "Required Date",
+              status: "Status",
+              createdAt: "Created At",
+            }}
+            type={"vendors"}
+            items={requisitions}
+            totalCount={totalCount}
+            onView={(item) => navigate(`/purchase-requisitions/${item.id}`)}
+            NoDataTitle="No Purchase Requisitions Found"
+            NoDataDescription={
+              "There are currently no purchase requisitions to display"
+            }
+            title="Purchase Requisitions"
+            subtitle="Manage and track purchase requisitions"
+            IsIcon={true}
+          />
+        </div>
       </div>
     </div>
   );

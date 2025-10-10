@@ -1,6 +1,7 @@
 import React, { SetStateAction } from "react";
 import TextField from "../../basic_components/TextField";
 import SelectField from "../../basic_components/SelectField";
+import DateTimePicker from "../../basic_components/date_time_picker/DateTimePicker";
 // import DateTimePicker from "../../basic_components/date_time_picker/DateTimePicker";
 
 interface PRGeneralInformationProps {
@@ -10,12 +11,12 @@ interface PRGeneralInformationProps {
   currentUserName: string;
 }
 
-// const priorityOptions = [
-//   { label: "Low", value: 0 },
-//   { label: "Medium", value: 1 },
-//   { label: "High", value: 2 },
-//   { label: "Urgent", value: 3 },
-// ];
+const priorityOptions = [
+  { label: "Low", value: "0" },
+  { label: "Medium", value: "1" },
+  { label: "High", value: "2" },
+  { label: "Urgent", value:" 3" },
+];
 
 const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
   formData,
@@ -53,14 +54,17 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
               id="requisitionTitle"
               field="requisitionTitle"
               value={formData?.requisitionTitle || ""}
-              setValue={(value) => setFormData((prev: any) => ({
-                ...prev,
-                requisitionTitle: value,
-              }))}
+              setValue={(value) =>
+                setFormData((prev: any) => ({
+                  ...prev,
+                  requisitionTitle: value,
+                }))
+              }
               placeholder="Enter requisition title"
               style="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               type="text"
-              width="w-full" />
+              width="w-full"
+            />
           </div>
 
           {/* Department */}
@@ -73,12 +77,16 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
               id="departmentId"
               label=""
               style="w-full"
-              value={masterData?.departments?.find(
-                (x: any) => Number(x?.id) === Number(formData?.departmentId)
-              )?.departmentName || "Select department"}
+              value={
+                masterData?.departments?.find(
+                  (x: any) => Number(x?.id) === Number(formData?.departmentId)
+                )?.departmentName || "Select department"
+              }
               options={(masterData?.departments || []).map((x: any) => ({
                 label: (
-                  <span className="text-md font-medium">{x.departmentName}</span>
+                  <span className="text-md font-medium">
+                    {x.departmentName}
+                  </span>
                 ),
                 value: x.id,
               }))}
@@ -87,7 +95,8 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
                   ...prev,
                   departmentId: Number(selectedValue),
                 }));
-              } } />
+              }}
+            />
           </div>
 
           {/* Requested By */}
@@ -99,12 +108,13 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
               id="requestedBy"
               field="requestedBy"
               value={currentUserName}
-              setValue={() => { } }
+              setValue={() => {}}
               disabled={true}
               placeholder="Requested by"
               style="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
               type="text"
-              width="w-full" />
+              width="w-full"
+            />
             <p className="text-xs text-gray-500 mt-2">
               Auto-filled with your name
             </p>
@@ -118,7 +128,7 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               Priority <span className="text-red-500">*</span>
             </label>
-            {/* <SelectField
+            <SelectField
               search={false}
               id="priority"
               label=""
@@ -136,24 +146,21 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
                   ...prev,
                   priority: Number(selectedValue),
                 }));
-              } } /> */}
+              } } />
           </div>
 
           {/* Required Date */}
           <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Required Date <span className="text-red-500">*</span>
-            </label>
-            {/* <DateTimePicker
-              value={formData?.requiredDate || ""}
-              onChange={(value) => {
+            <DateTimePicker
+              label="Required date"
+              value={formData?.requiredDate}
+              setValue={(val) =>
                 setFormData((prev: any) => ({
                   ...prev,
-                  requiredDate: value,
-                }));
-              } }
-              minDate={new Date().toISOString().split("T")[0]}
-              placeholder="Select required date" /> */}
+                  requiredDate: val,
+                }))
+              }
+            />
           </div>
 
           {/* Notes / Justification */}
@@ -165,14 +172,17 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
               id="notes"
               field="notes"
               value={formData?.notes || ""}
-              setValue={(value) => setFormData((prev: any) => ({
-                ...prev,
-                notes: value,
-              }))}
+              setValue={(value) =>
+                setFormData((prev: any) => ({
+                  ...prev,
+                  notes: value,
+                }))
+              }
               placeholder="Enter notes or justification for this requisition"
               style="min-h-[100px]"
               type="textarea"
-              width="w-full" />
+              width="w-full"
+            />
           </div>
         </div>
       </div>
@@ -181,4 +191,3 @@ const PRGeneralInformation: React.FC<PRGeneralInformationProps> = ({
 );
 
 export default PRGeneralInformation;
-
