@@ -32,8 +32,8 @@ const TitleCard = ({ trigger }: { trigger: () => void }) => {
                         </div>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <CreateButton name="Create RFP" onClick={onCreateRequest} />
-                        <PublishButton name="Publish RFPs" onClick={onPublishRfps} />
+                        <CreateButton name="Create Tender" onClick={onCreateRequest} />
+                        <PublishButton name="Publish Tenders" onClick={onPublishRfps} />
                     </div>
                 </div>
             </div>

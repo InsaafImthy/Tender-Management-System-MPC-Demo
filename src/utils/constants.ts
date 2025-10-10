@@ -52,7 +52,7 @@ export const tenderFilter = {
 // rfp column labels for table
 export const rfp_column_labels = {
   tenderNumber: "ID",
-  rfpTitle: "RFP Title",
+  rfpTitle: "Tender Title",
   buyerName: "Buyer",
   estimatedContractValueLabel: "Estd. Con Value",
   status: "Status",
