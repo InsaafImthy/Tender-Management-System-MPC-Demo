@@ -107,7 +107,7 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
 
     // Validate that at least one BOM with items is selected
     if (!selectedBoms || selectedBoms.length === 0) {
-      message.error("Please add at least one BOM item");
+      message.error("Please add at least one item");
       return false;
     }
 
@@ -172,13 +172,13 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
           id: Number(id),
         });
         message.success("Purchase requisition updated successfully!");
-        navigate(`/purchase-requisitions/${id}`);
+        navigate(`/purchase-requistition/${id}`);
       } else {
         const result = await createPurchaseRequisitionAsync(payload);
         message.success(
           `Purchase requisition created successfully! Requisition Number: ${result.requisitionNumber || ""}`
         );
-        navigate("/purchase-requisitions");
+        navigate("/purchase-requistition");
       }
     } catch (err: any) {
       console.error("Error submitting purchase requisition:", err);
@@ -202,12 +202,13 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
   };
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <CommonTitleCard />
 
       {/* Header Section */}
-      <div className="bg-white shadow-lg border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="bg-white shadow-lg border-b border-gray-200 mx-8 rounded-lg">
+        <div className="max-w-7xl mx-auto px-6 py-8 mt-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">

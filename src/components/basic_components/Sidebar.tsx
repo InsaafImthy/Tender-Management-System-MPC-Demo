@@ -38,7 +38,7 @@ const Sidebar = ({ notifications,trigger }: SidebarProp) => {
     { to: "/upcoming-tenders", title: "UpcomingVendors", icon: UpcomingTendorsIcon },
     { to: "/delivery-details", title: "DeliveryDetails", icon: DeliveryDetailsIcon },
     { to: "/competitor-analysis", title: "CompetitiveAnalysis", icon: AnalysisIcon },
-    { to: "/purchase-requistition/create", title: "PurchaseRequistition", icon: PurchaseIcon },
+    { to: "/purchase-requistition", title: "PurchaseRequistition", icon: PurchaseIcon },
     { to: "/settings/user-managment", title: "Settings", icon: SettingsIcon },
   ];
 

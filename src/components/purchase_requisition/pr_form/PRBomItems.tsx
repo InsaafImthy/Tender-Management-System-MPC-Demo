@@ -101,7 +101,7 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
         <div className="flex items-center space-x-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              BOM Item Selection
+              Item Selection
             </h2>
             <p className="text-gray-600 mt-1">
               Select Bill of Materials and specify quantities for requisition
@@ -115,14 +115,14 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-800">
-              Selected BOMs
+              Selected Items
             </h3>
             <button
               type="button"
               className="px-4 py-2 bg-[#7C3AED] text-white rounded-lg hover:bg-[#6D28D9] transition-all duration-200 shadow-md"
               onClick={() => setBomModalOpen(true)}
             >
-              + Add BOM
+              + Add
             </button>
           </div>
 
