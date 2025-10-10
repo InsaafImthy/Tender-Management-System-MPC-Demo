@@ -121,7 +121,7 @@ export const ClipboardIcon: React.FC<IconProps> = ({
       <path d="M6 12v6" />
     </svg>
     <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
-      RFP Requests
+      Tender <br/> Requests
     </div>
   </div>
 );
@@ -1445,9 +1445,7 @@ export const LoginPageLeftSide: React.FC<IconProps> = ({ className }) => (
   </div>
 );
 
-export const IbVogtLogo: React.FC<IconProps> = ({
-  className = "",
-}) => (
+export const IbVogtLogo: React.FC<IconProps> = ({ className = "" }) => (
   <div
     className={`group relative flex items-center justify-flex-start px-8 ${className}`}
   >
@@ -1542,7 +1540,9 @@ export const AnalysisIcon: React.FC<IconProps> = ({
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`lucide lucide-chart-bar-big transition-colors duration-300 group-hover:stroke-white ${className ?? ""}`}
+      className={`lucide lucide-chart-bar-big transition-colors duration-300 group-hover:stroke-white ${
+        className ?? ""
+      }`}
     >
       <path d="M3 3v16a2 2 0 0 0 2 2h16" />
       <rect x="7" y="13" width="9" height="4" rx="1" />
@@ -1562,7 +1562,7 @@ export const AnalysisIconMain: React.FC<IconProps> = ({
   strokeColor = MAIN_STROKE,
 }) => (
   <div className="group relative w-5 h-5 flex items-center justify-center">
-     <svg
+    <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -1581,4 +1581,34 @@ export const AnalysisIconMain: React.FC<IconProps> = ({
   </div>
 );
 
+export const PurchaseIcon: React.FC<IconProps> = ({
+  className,
+  strokeColor = MAIN_STROKE,
+}) => (
+  <div className="group relative w-5 h-5 flex items-center justify-center">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={strokeColor}
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      className={`lucide lucide-chart-bar-big transition-colors duration-300 group-hover:stroke-white ${
+        className ?? ""
+      }`}
+    >
+      <path d="M16 10a4 4 0 0 1-8 0" />
+      <path d="M3.103 6.034h17.794" />
+      <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" />
+    </svg>
 
+    <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+      Purchase
+      <br />
+      Requistition
+    </div>
+  </div>
+);

@@ -75,7 +75,7 @@ function Dashboard() {
           <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
         </svg>
       ),
-      label: "Total RFPs",
+      label: "Total Tenders",
       value: 0,
       color: "bg-blue-500/30",
       textColor: "text-blue-900",
@@ -102,7 +102,7 @@ function Dashboard() {
           </svg>
         </div>
       ),
-      label: "Closed RFPs",
+      label: "Closed Tenders",
       value: 0,
       color: "bg-blue-500/30",
       textColor: "text-blue-900",
@@ -127,7 +127,7 @@ function Dashboard() {
           <path d="m9 15 3 3 3-3" />
         </svg>
       ),
-      label: "Open RFPs",
+      label: "Open Tenders",
       value: 0,
       color: "bg-blue-500/30",
       textColor: "text-blue-900",
@@ -213,7 +213,7 @@ function Dashboard() {
               <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
             </svg>
           ),
-          label: "Total RFPs",
+          label: "Total Tenders",
           value: statusCounts[0] + statusCounts[1] + statusCounts[2],
           color: "bg-blue-500/30",
           textColor: "text-blue-900",
@@ -240,7 +240,7 @@ function Dashboard() {
               </svg>
             </div>
           ),
-          label: "Closed RFPs",
+          label: "Closed Tenders",
           value: statusCounts[0],
           color: "bg-blue-500/30",
           textColor: "text-blue-900",
@@ -265,7 +265,7 @@ function Dashboard() {
               <path d="m9 15 3 3 3-3" />
             </svg>
           ),
-          label: "Open RFPs",
+          label: "Open Tenders",
           value: statusCounts[1],
           color: "bg-blue-500/30",
           textColor: "text-blue-900",
@@ -347,7 +347,7 @@ function Dashboard() {
               <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
             </svg>
           ),
-          label: "Total RFPs",
+          label: "Total Tenders",
           value: statusCounts[0] + statusCounts[1] + statusCounts[2],
           color: "bg-blue-500/30",
           textColor: "text-blue-900",
@@ -374,7 +374,7 @@ function Dashboard() {
               </svg>
             </div>
           ),
-          label: "Closed RFPs",
+          label: "Closed Tenders",
           value: statusCounts[0] || 0,
           color: "bg-blue-500/30",
           textColor: "text-blue-900",
@@ -399,7 +399,7 @@ function Dashboard() {
               <path d="m9 15 3 3 3-3" />
             </svg>
           ),
-          label: "Open RFPs",
+          label: "Open Tenders",
           value: statusCounts[1] || 0,
           color: "bg-blue-500/30",
           textColor: "text-blue-900",
@@ -462,7 +462,7 @@ function Dashboard() {
         rfpRequests: filtered_requests,
       }));
     } catch (error) {
-      console.error("Error fetching filtered RFPs", error);
+      console.error("Error fetching filtered Tenders", error);
     }
   }, []);
 
@@ -534,9 +534,9 @@ function Dashboard() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <div>
-                            <h3 className="text-heading-3">Published RFPs</h3>
+                            <h3 className="text-heading-3">Published Tenders</h3>
                             <p className="text-body-small text-muted">
-                              Manage and view your RFP requests
+                              Manage and view your Tender requests
                             </p>
                           </div>
                         </div>
@@ -582,7 +582,7 @@ function Dashboard() {
                           <div className="w-3 h-3 bg-blue-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-900">
-                              New RFP created
+                              New Tender created
                             </p>
                             <p className="text-xs text-slate-500 mt-1 font-normal">
                               2 hours ago
@@ -593,7 +593,7 @@ function Dashboard() {
                           <div className="w-3 h-3 bg-emerald-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-900">
-                              RFP approved
+                              Tender approved
                             </p>
                             <p className="text-xs text-slate-500 mt-1 font-normal">
                               5 hours ago
@@ -604,7 +604,7 @@ function Dashboard() {
                           <div className="w-3 h-3 bg-amber-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-900">
-                              RFP under review
+                              Tender under review
                             </p>
                             <p className="text-xs text-slate-500 mt-1 font-normal">
                               1 day ago
@@ -646,7 +646,7 @@ function Dashboard() {
                               <path d="M12 8v8" />
                             </svg>
                           </span>
-                          Create New RFP
+                          Create New Tender
                         </button>
                         <button className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-slate-100 to-gray-100 text-slate-700 rounded-xl hover:from-slate-200 hover:to-gray-200 transition-all duration-300 font-semibold">
                           <span className="mr-3 text-base">
