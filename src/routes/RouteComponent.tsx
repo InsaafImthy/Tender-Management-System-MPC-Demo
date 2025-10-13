@@ -31,6 +31,8 @@ import { ensureNotificationPermission, showNotification } from '../utils/common'
 import DeliveryDetails from '../pages/delivery_details/DeliveryDetails';
 import DeliveryPage from '../pages/delivery_details/DetailsModal';
 import CompetitorAnalysisPage from '../pages/competitor_analysis/CompetitorAnalysisPage';
+import PurchaseRequisitionPage from '../pages/purchase_requisition/PurchaseRequisitionPage';
+import PurchaseRequisitionForm from '../components/purchase_requisition/pr_form/PurchaseRequisitionForm';
 
 interface procurementContextProp {
   countryCodes: ICountryCode[] | null;
@@ -220,6 +222,8 @@ const RouteComponent: React.FC = () => {
                       <Route path="/create-delivery-details" element={<DeliveryPage />} />
                       <Route path="/create-delivery-details/:id" element={<DeliveryPage type="edit"/>} />
                       <Route path="/competitor-analysis" element={<CompetitorAnalysisPage />} />
+                      <Route path="/purchase-requistition" element={<PurchaseRequisitionPage />} />
+                      <Route path="/purchase-requistition/create" element={<PurchaseRequisitionForm/>} />
                     </Routes>
                   ) : (
                     <div className="flex items-center justify-center h-full">
