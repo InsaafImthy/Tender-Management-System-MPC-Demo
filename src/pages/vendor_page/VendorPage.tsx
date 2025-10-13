@@ -37,7 +37,9 @@ function VendorPage() {
   const [filter, setFilter] = useState<any>(defaultFilter);
   const [showLoader] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<string>("All vendors");
-  const [ vendorSubtitle, setvendorSubtitle] = useState<string>("Manage and view all your vendors");
+  const [vendorSubtitle, setvendorSubtitle] = useState<string>(
+    "Manage and view all your vendors"
+  );
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
   // const requestStatuses = [
   //   { label: "Approved", value: "approved" },
@@ -91,7 +93,9 @@ function VendorPage() {
         // setHideDepartment(true);
         // setHideStatus(false)
         // filterdata = { ...filterdata, fields: [{ columnName: "status", operator: "!=", value: 3 }] }
-        setvendorSubtitle("View and manage all registered vendors in the system.")
+        setvendorSubtitle(
+          "View and manage all registered vendors in the system."
+        );
       } else if (tab == "Assigned") {
         setColumns(commonColumns);
         const vendorIds: Set<number> = new Set();
@@ -104,7 +108,9 @@ function VendorPage() {
         await getAllVendors(filterdata, vendorIds);
         setTableName(tab);
         setStatusFilter(tab);
-        setvendorSubtitle("Review and track vendors assigned to you for management.")
+        setvendorSubtitle(
+          "Review and track vendors assigned to you for management."
+        );
         return;
       } else {
         //setColumns(columns.filter(x=>x!="capexId"));
@@ -149,7 +155,9 @@ function VendorPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-xl flex items-center justify-center shadow-lg">
-                    <span className="text-white text-2xl font-bold"><VendorMainICon/></span>
+                    <span className="text-white text-2xl font-bold">
+                      <VendorMainICon />
+                    </span>
                   </div>
                   <div>
                     <h1 className="text-heading-2">Vendors</h1>
@@ -200,7 +208,7 @@ function VendorPage() {
                 filter={filter}
                 setFilter={setFilter}
                 title={tableName || "All vendors"}
-                subtitle={ vendorSubtitle || "Manage and view all your vendors"}
+                subtitle={vendorSubtitle || "Manage and view all your vendors"}
                 setIsSortModalOpen={setIsSortModalOpen}
                 columns={columns}
                 items={vendors || []}
@@ -210,9 +218,12 @@ function VendorPage() {
                 type="vendors"
                 rowNavigationPath="vendors"
                 trigger={() => setTrigger(true)}
-                NoDataTitle = {"No Vendors are Available"}
+                NoDataTitle={"No Vendors are Available"}
                 IsIcon={false}
-                NoDataDescription = {"No vendors have been added yet. Add your first vendor to get started."}
+                dots={false}
+                NoDataDescription={
+                  "No vendors have been added yet. Add your first vendor to get started."
+                }
               />
             </div>
 

@@ -220,10 +220,12 @@ const Table: React.FC<TableProps> = ({
                   {columnLabels[column]}
                 </th>
               ))}
-              {dots && (
+              {dots ? (
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200">
                   Actions
                 </th>
+              ) : (
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200"></th>
               )}
             </tr>
           </thead>

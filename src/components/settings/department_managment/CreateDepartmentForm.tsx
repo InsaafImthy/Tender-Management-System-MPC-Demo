@@ -88,7 +88,7 @@ const CreateDepartmentForm: React.FC<ICreateDepartmentForm> = ({ type = "create"
             }
             closeModal();
             trigger()
-            window.location.reload();
+            // window.location.reload();
         } catch (err: any) {
             notification.error({
                 message: err.message
