@@ -42,7 +42,7 @@ const RequestDetailPage: React.FC = () => {
     getRequestDetailData();
   }, []);
 
-   const Newclass = rfpData?.status != 5 ? "space-y-3 desktop:max-w-[600px] px-3 py-3" : "";
+  const Newclass = rfpData?.status != 5 ? "space-y-3 desktop:max-w-[600px] px-3 py-3" : "";
 
   return (
     <div className="">
@@ -68,8 +68,8 @@ const RequestDetailPage: React.FC = () => {
                 {/* Approval Flow Section - Top */}
                 <div className={`w-full mx-auto rounded h-full ${Newclass}`}>
                   {rfpData.status == 5 ||
-                  rfpData?.status == 9 ||
-                  rfpData.status == 9 ? (
+                    rfpData?.status == 9 ||
+                    rfpData.status == 9 ? (
                     <RfpDetailRight
                       rfp={rfpData}
                       trigger={() => {
@@ -129,9 +129,9 @@ const RequestDetailPage: React.FC = () => {
                       } else if (rfpData?.status == 9) {
                         navigate(`/rfps/${id}/decision-form`);
                       } else {
-                        if(!vendorProposals || vendorProposals.length == 0){
+                        if (!vendorProposals || vendorProposals.length == 0) {
                           notification.warning({
-                            message:"No vendor proposal submitted"
+                            message: "No vendor proposal submitted"
                           })
                           return;
                         }
@@ -145,6 +145,17 @@ const RequestDetailPage: React.FC = () => {
                   }}
                   className="flex justify-end"
                 >
+                  {rfpData?.status == 5 && <Button
+                    type="primary"
+                    htmlType="button"
+                    className="px-6 py-2 text-sm font-medium mr-2"
+                    onClick={async(e) => {
+                      e.preventDefault();
+                      navigate(`/rfps/${rfpData?.id}/live-bidding`);
+                    }}
+                  >
+                    Start Live Bidding
+                  </Button>}
                   <Button
                     type="primary"
                     htmlType="submit"
@@ -153,8 +164,8 @@ const RequestDetailPage: React.FC = () => {
                     {rfpData?.status == 1
                       ? "Publish now"
                       : rfpData?.status == 9
-                      ? "Create DP"
-                      : "Request Approval to Open RFP"}
+                        ? "Create DP"
+                        : "Request Approval to Open RFP"}
                   </Button>
                 </form>
               </div>

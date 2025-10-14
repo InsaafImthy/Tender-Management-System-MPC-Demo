@@ -291,3 +291,17 @@ export const getAllSelectedProposalsByRfpIdAsync = async(rfpId:number)=>{
         console.log(err);
     }
 }
+
+
+export const getAllVendorLiveProposalsAsync = async(rfpId:number)=>{
+    try{
+        const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/VendorLiveProposal?rfpId=${rfpId}`,{
+            headers:{
+                Authorization:`Bearer ${getUserToken()}`
+            }
+        })
+        return response.data;
+    }catch(err){
+        console.log(err);
+    }
+}

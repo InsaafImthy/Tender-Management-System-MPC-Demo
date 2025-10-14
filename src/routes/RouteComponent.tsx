@@ -33,13 +33,16 @@ import DeliveryPage from '../pages/delivery_details/DetailsModal';
 import CompetitorAnalysisPage from '../pages/competitor_analysis/CompetitorAnalysisPage';
 import PurchaseRequisitionPage from '../pages/purchase_requisition/PurchaseRequisitionPage';
 import PurchaseRequisitionForm from '../components/purchase_requisition/pr_form/PurchaseRequisitionForm';
+import LiveBiddingPage from '../pages/live_bidding_page/LiveBiddingPage';
 
 interface procurementContextProp {
   countryCodes: ICountryCode[] | null;
+  connection: HubConnection | null;
 }
 
 export const procurementContext = createContext<procurementContextProp>({
   countryCodes: null,
+  connection: null,
 })
 
 
@@ -148,7 +151,7 @@ const RouteComponent: React.FC = () => {
   return (
     <div className="w-full h-full">
       {/* <ErrorBoundary> */}
-      <procurementContext.Provider value={{ countryCodes }}>
+      <procurementContext.Provider value={{ countryCodes, connection }}>
         <Routes>
           {/* Login Route */}
           <Route
@@ -224,6 +227,7 @@ const RouteComponent: React.FC = () => {
                       <Route path="/competitor-analysis" element={<CompetitorAnalysisPage />} />
                       <Route path="/purchase-requistition" element={<PurchaseRequisitionPage />} />
                       <Route path="/purchase-requistition/create" element={<PurchaseRequisitionForm/>} />
+                      <Route path="/rfps/:id/live-bidding" element={<LiveBiddingPage />} />
                     </Routes>
                   ) : (
                     <div className="flex items-center justify-center h-full">
