@@ -91,6 +91,7 @@ export interface VendorMessage {
 }
 
 interface RfpData {
+  estimatedContractValue: number;
   id: number;
   title: string;
   description: string;
@@ -111,7 +112,7 @@ const LiveBiddingPage: React.FC = () => {
   const [proposals, setProposals] = useState<VendorMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [winning, _setWinning] = useState<number>(0);
+  // Winning bid is derived from filtered proposals below
 
   const fetchRfpData = async () => {
     try {
@@ -220,6 +221,22 @@ const LiveBiddingPage: React.FC = () => {
     return winningProposal;
   };
 
+  // Build a filtered list with only the lowest bid per vendor
+  const lowestPerVendor = React.useMemo(() => {
+    if (!proposals || proposals.length === 0) return [] as VendorMessage[];
+    const vendorIdToLowest = new Map<number, VendorMessage>();
+    for (const proposal of proposals) {
+      const vendorKey = proposal.vendorId || proposal.vendor?.id || proposal.id;
+      const existing = vendorIdToLowest.get(vendorKey);
+      if (!existing || proposal.amount < existing.amount) {
+        vendorIdToLowest.set(vendorKey, proposal);
+      }
+    }
+    return Array.from(vendorIdToLowest.values()).sort((a, b) => a.amount - b.amount);
+  }, [proposals]);
+
+  const winningId = React.useMemo(() => (lowestPerVendor[0]?.id ?? 0), [lowestPerVendor]);
+
   const columns = [
     {
       title: "Vendor Name",
@@ -228,7 +245,7 @@ const LiveBiddingPage: React.FC = () => {
       render: (_: unknown, record: VendorMessage) => (
         <div>
           <div className="font-medium">{record.vendor?.organisationName}</div>
-          {record.id === winning && (
+          {record.id === winningId && (
             <Tag color="gold" icon={<TrophyOutlined />}>
               Winning
             </Tag>
@@ -321,8 +338,8 @@ const LiveBiddingPage: React.FC = () => {
               <div className="font-medium">{rfpData?.category}</div>
             </Col>
             <Col span={6}>
-              <div className="text-sm text-gray-500">Budget</div>
-              <div className="font-medium">${rfpData?.budget?.toLocaleString()}</div>
+              <div className="text-sm text-gray-500">Estimated Contract Value</div>
+              <div className="font-medium">${rfpData?.estimatedContractValue}</div>
             </Col>
             <Col span={6}>
               <div className="text-sm text-gray-500">Closing Date</div>
@@ -418,7 +435,7 @@ const LiveBiddingPage: React.FC = () => {
       }>
         <Table
           columns={columns}
-          dataSource={proposals}
+          dataSource={lowestPerVendor}
           rowKey="id"
           pagination={{
             pageSize: 10,
