@@ -2,20 +2,92 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Card, Statistic, Row, Col, Table, Tag, Space, notification, Spin } from "antd";
 import { ArrowLeftOutlined, TrophyOutlined, DollarOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import { getRfpByIdAsync, getAllProposalsByFilterAsync, getAllVendorLiveProposalsAsync } from "../../services/rfpService";
-import { defaultFilter } from "../../utils/constants";
+import { getRfpByIdAsync, getAllVendorLiveProposalsAsync } from "../../services/rfpService";
 import PageLoader from "../../components/basic_components/PageLoader";
 import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
 import { procurementContext } from "../../routes/RouteComponent";
 
-interface VendorProposal {
+export interface Vendor {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  password: string;
+  vendorEmail: string;
+  organisationName: string;
+  companyPhone: string;
+  phone: string;
+  isTermsAndConditionsAccepted: boolean;
+  relatedTostakeholders: boolean;
+  countryId: number;
+  country: string | null;
+  stateId: number;
+  state: string | null;
+  cityId: number;
+  city: string | null;
+  address1: string;
+  address2: string;
+  postalCode: string;
+  fax: string;
+  website: string;
+  organisationLegalStructure: string;
+  otherOrganisationLegalStructure: string;
+  status: number;
+  isActive: boolean;
+  vendorCode: string;
+  bankName: string;
+  bankAccountNumber: string;
+  bankIFSCCode: string;
+  bankBranch: string;
+  bankAccountHolderName: string;
+  majorClients: string;
+  experience: string;
+  specialization: string;
+  businessGrade: string;
+  activitiesOfCompany: string;
   id: number;
-  vendorName: string;
-  totalAmount: number;
-  submittedDate: string;
-  status: string;
-  isWinning: boolean;
-  proposalDetails: any;
+  clientId: number;
+  createdAt: string | null;
+  createdBy: number | null;
+  updatedAt: string | null;
+  updatedBy: number | null;
+  isdeleted: boolean;
+  deletedBy: number | null;
+  tenantId: number;
+  tenant: string | null;
+  companyId: number;
+  company: string | null;
+  branchId: number;
+  branch: string | null;
+}
+
+export interface VendorMessage {
+  uniqueId: number;
+  uid: string;
+  messageType: string;
+  message: string;
+  rank: number | null;
+  amount: number;
+  status: string | null;
+  priority: string | null;
+  isRead: boolean;
+  userType: string;
+  userId: number;
+  vendorId: number;
+  vendor: Vendor;
+  id: number;
+  clientId: number;
+  createdAt: string;
+  createdBy: number;
+  updatedAt: string | null;
+  updatedBy: number | null;
+  isdeleted: boolean;
+  deletedBy: number | null;
+  tenantId: number;
+  tenant: string | null;
+  companyId: number;
+  company: string | null;
+  branchId: number;
+  branch: string | null;
 }
 
 interface RfpData {
@@ -36,9 +108,10 @@ const LiveBiddingPage: React.FC = () => {
   const navigate = useNavigate();
   const { connection } = useContext(procurementContext);
   const [rfpData, setRfpData] = useState<RfpData | null>(null);
-  const [proposals, setProposals] = useState<VendorProposal[]>([]);
+  const [proposals, setProposals] = useState<VendorMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [winning, _setWinning] = useState<number>(0);
 
   const fetchRfpData = async () => {
     try {
@@ -56,8 +129,8 @@ const LiveBiddingPage: React.FC = () => {
   const fetchProposals = async () => {
     try {
       setRefreshing(true);
-      const response = getAllVendorLiveProposalsAsync(rfpData?.id ?? 0);
-      setProposals(response as any|| []);
+      const response = await getAllVendorLiveProposalsAsync(Number(id || "0"));
+      setProposals(response as any || []);
     } catch (error) {
       console.error("Error fetching proposals:", error);
       notification.error({
@@ -71,20 +144,13 @@ const LiveBiddingPage: React.FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
-      await Promise.all([fetchRfpData(), fetchProposals()]);
-      setLoading(false);
+      if (id) {
+        setLoading(true);
+        await Promise.all([fetchRfpData(), fetchProposals()]);
+        setLoading(false);
+      }
     };
     loadData();
-  }, [id]);
-
-  // Auto-refresh every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchProposals();
-    }, 30000);
-
-    return () => clearInterval(interval);
   }, [id]);
 
   // SignalR: join backend group/event OpenRfpForLiveBidding-{UID} and handle updates
@@ -95,7 +161,6 @@ const LiveBiddingPage: React.FC = () => {
     if (!rfpUid) return;
 
     const groupAndEvent = `${rfpUid}`;
-    let isMounted = true;
 
     const subscribe = async () => {
       try {
@@ -105,9 +170,11 @@ const LiveBiddingPage: React.FC = () => {
         await connection.invoke("OpenRfpForLiveBidding", rfpData.id);
 
         // Backend sends SendAsync(eventName, eventName, message)
-        connection.on("JoinedRfpGroup", (info) => { console.log(info,"info--------info") });
-        connection.on("RfpMessageEvent", (msg) => { console.log(msg,"msg--------msg") });
-        
+        connection.on("JoinedRfpGroup", (info) => { console.log(info, "info--------info") });
+        connection.on("RfpMessageEvent", (msg) => { 
+          setProposals((prev)=>([...prev, msg])); 
+        });
+
 
       } catch (error) {
         console.warn("Live bidding subscription failed:", error);
@@ -117,7 +184,6 @@ const LiveBiddingPage: React.FC = () => {
     subscribe();
 
     return () => {
-      isMounted = false;
       try {
         connection.off(groupAndEvent);
         // Prefer server-side LeaveRfpGroup if available; fallback to generic LeaveGroup
@@ -129,33 +195,40 @@ const LiveBiddingPage: React.FC = () => {
 
   const getHighestBid = () => {
     if (proposals.length === 0) return 0;
-    return Math.max(...proposals.map(p => p.totalAmount));
+    return Math.max(...proposals.map(p => p.amount));
   };
 
   const getLowestBid = () => {
     if (proposals.length === 0) return 0;
-    return Math.min(...proposals.map(p => p.totalAmount));
+    return Math.min(...proposals.map(p => p.amount));
   };
 
   const getAverageBid = () => {
     if (proposals.length === 0) return 0;
-    const sum = proposals.reduce((acc, p) => acc + p.totalAmount, 0);
+    const sum = proposals.reduce((acc, p) => acc + p.amount, 0);
     return sum / proposals.length;
   };
 
   const getWinningBid = () => {
-    return proposals.find(p => p.isWinning) || null;
+    if (!proposals || proposals.length === 0) return null;
+
+    // Find the proposal with the lowest amount
+    const winningProposal = proposals.reduce((lowest, current) =>
+      current.amount < lowest.amount ? current : lowest
+    );
+
+    return winningProposal;
   };
 
   const columns = [
     {
       title: "Vendor Name",
-      dataIndex: "vendorName",
+      dataIndex: ["vendor", "organisationName"],
       key: "vendorName",
-      render: (text: string, record: VendorProposal) => (
+      render: (_: unknown, record: VendorMessage) => (
         <div>
-          <div className="font-medium">{text}</div>
-          {record.isWinning && (
+          <div className="font-medium">{record.vendor?.organisationName}</div>
+          {record.id === winning && (
             <Tag color="gold" icon={<TrophyOutlined />}>
               Winning
             </Tag>
@@ -165,34 +238,25 @@ const LiveBiddingPage: React.FC = () => {
     },
     {
       title: "Bid Amount",
-      dataIndex: "totalAmount",
-      key: "totalAmount",
+      dataIndex: "amount",
+      key: "amount",
       render: (amount: number) => (
         <span className="font-bold text-lg">
-          ${amount.toLocaleString()}
+          ${amount}
         </span>
       ),
-      sorter: (a: VendorProposal, b: VendorProposal) => a.totalAmount - b.totalAmount,
+      sorter: (a: VendorMessage, b: VendorMessage) => a.amount - b.amount,
     },
     {
       title: "Submitted Date",
-      dataIndex: "submittedDate",
-      key: "submittedDate",
+      dataIndex: "createdAt",
+      key: "createdAt",
       render: (date: string) => new Date(date).toLocaleString(),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status: string) => {
-        const color = status === "Approved" ? "green" : status === "Rejected" ? "red" : "blue";
-        return <Tag color={color}>{status}</Tag>;
-      },
     },
     {
       title: "Actions",
       key: "actions",
-      render: (_: unknown, record: VendorProposal) => (
+      render: (_: unknown, _record: VendorMessage) => (
         <Space>
           <Button size="small" type="link">
             View Details
@@ -332,7 +396,7 @@ const LiveBiddingPage: React.FC = () => {
               <div>
                 <h3 className="text-lg font-semibold text-yellow-800">Current Winning Bid</h3>
                 <p className="text-yellow-700">
-                  {getWinningBid()?.vendorName} - ${getWinningBid()?.totalAmount?.toLocaleString()}
+                  {getWinningBid()?.vendor?.organisationName} - ${getWinningBid()?.amount?.toLocaleString()}
                 </p>
               </div>
             </div>
