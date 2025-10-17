@@ -173,8 +173,8 @@ const LiveBiddingPage: React.FC = () => {
 
         // Backend sends SendAsync(eventName, eventName, message)
         connection.on("JoinedRfpGroup", (info) => { console.log(info, "info--------info") });
-        connection.on("RfpMessageEvent", (msg) => { 
-          setProposals((prev)=>([...prev, msg])); 
+        connection.on("RfpMessageEvent", (msg) => {
+          setProposals((prev) => ([msg, ...prev]));
         });
 
 
