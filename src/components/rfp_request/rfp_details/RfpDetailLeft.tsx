@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import userPhoto from "../../../assets/profile_photo/userPhoto.png";
 import { getAllUsersByFilterAsync } from "../../../services/userService";
 import { useNavigate, useParams } from "react-router-dom";
-import { ClipboardIcon, PenIcon } from "lucide-react";
+import { ClipboardIcon, PenIcon, PlayCircle } from "lucide-react";
 import ViewTable from "../../basic_components/ViewTable";
 import { documentTypeConst } from "../../../utils/constants";
 
@@ -122,7 +122,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
         });
         setOwners(tempOwners);
       }
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const setDocuments = async () => {
@@ -154,13 +154,13 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
         );
         setRfpDocuments(documents_to_display);
       }
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const onEditRequest = async () => {
     try {
       navigate(`/rfps/edit-rfp/${id}`);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   useEffect(() => {
@@ -178,7 +178,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-lg flex items-center justify-center">
-                    <span className="text-white text-sm"><ClipboardIcon/></span>
+                    <span className="text-white text-sm"><ClipboardIcon /></span>
                   </div>
                   <div>
                     <h1 className="text-xl font-bold text-gray-900">
@@ -196,311 +196,316 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                       </button>
                     </div>
                   </div>
+                  <div onClick={() => navigate(`/rfps/${requestData?.id}/live-bidding`)} className="flex items-center px-3 py-1 border rounded-full bg-gray-100">
+                  <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                  <span className="ml-2 text-red-600 font-semibold">Live</span>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="p-6">
-            {/* Description */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">
-                Description
-              </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                {requestData.rfpDescription}
-              </p>
-            </div>
-
-            {/* Rfp Items */}
-            <div className="mb-6">
-              <ViewTable
-                columns={["itemCode", "itemName", "quantity"]}
-                columnLabels={{
-                  itemCode: "Id",
-                  itemName: "Item",
-                  quantity: "Quantity",
-                }}
-                items={requestData?.rfpItems}
-              />
-            </div>
-
-            {/* General Details */}
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                <GeneralDetailIcon className="w-4 h-4 mr-2" /> General Details
-              </h3>
-
-              {/* Published Categories */}
-              <div className="mb-4">
-                <h4 className="text-xs font-medium text-gray-700 mb-2">
-                  Published Categories
-                </h4>
-                {masterData?.categories?.length > 0 &&
-                requestData?.rfpCategories?.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {requestData?.rfpCategories?.map((item: any) => {
-                      const category = masterData?.categories?.find(
-                        (c: any) => c.id === item.categoryId
-                      );
-                      return (
-                        <span
-                          key={item.categoryId}
-                          className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
-                        >
-                          {category?.name || "Unknown"}
-                        </span>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
-                    No categories assigned
-                  </p>
-                )}
-              </div>
-
-              {/* Status and Requisition ID */}
-              <div className="bg-gray-50 rounded p-4 mb-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">
-                      Purchase Requisition ID
-                    </p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {requestData?.purchaseRequisitionId || "-"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">RFP Status</p>
-                    <ShowStatus type="rfps" status={requestData?.status} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Additional Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-gray-50 rounded p-3">
-                  <p className="text-xs text-gray-500 mb-1">Closed / Open</p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {requestData?.isOpen ? "Open" : "Closed"}
-                  </p>
-                </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <p className="text-xs text-gray-500 mb-1">
-                    Serial / Parallel
-                  </p>
-                  <p className="text-sm font-medium text-gray-900">
-                    {requestData?.isSerial ? "Serial" : "Parallel"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Financial Details */}
-              <div className="space-y-3">
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">
-                      Estimated Contract Value
-                    </span>
-                    <span className="text-sm font-semibold text-gray-900">
-                      {convertCurrencyLabel(requestData?.rfpCurrency)}
-                      {requestData?.estimatedContractValue}
-                    </span>
-                  </div>
-                </div>
-                {requestData?.bidValue && (
-                  <div className="bg-gray-50 rounded p-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Bid Value</span>
-                      <span className="text-sm font-semibold text-gray-900">
-                        {convertCurrencyLabel(requestData?.rfpCurrency)}
-                        {requestData?.bidValue}
-                      </span>
-                    </div>
-                  </div>
-                )}
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">Tender Fee</span>
-                    <span className="text-sm font-semibold text-gray-900">
-                      {convertCurrencyLabel(requestData?.rfpCurrency)}
-                      {requestData?.tenderFee}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* RFP Details */}
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                <GeneralDetailIcon className="w-4 h-4 mr-2" /> RFP Details
-              </h3>
-
-              {/* Buyer Information */}
-              <div className="bg-gray-50 rounded p-4 mb-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Buyer Name</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {requestData?.buyerName || "-"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Department</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {requestData?.departmentName || "-"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Organization</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {requestData?.buyerOrganizationName || "-"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Timeline Information */}
-              <div className="space-y-3">
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">
-                      Express Interest Last Date
-                    </span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {dayjs(requestData?.expressInterestLastDate).format(
-                        "DD-MM-YYYY"
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">
-                      Clarification Date
-                    </span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {dayjs(requestData?.clarificationDate).format(
-                        "DD-MM-YYYY"
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">Closing Date</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {dayjs(requestData?.closingDate).format("DD-MM-YYYY")}
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">Closing Time</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {dayjs(requestData?.closingDate).format("hh:mm A")}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Ownership Details */}
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                <GeneralDetailIcon className="w-4 h-4 mr-2" /> Ownership
-              </h3>
-
-              {/* Technical Owners */}
-              <div className="mb-4">
-                <h4 className="text-xs font-medium text-gray-700 mb-2">
-                  Technical Owners
-                </h4>
-                {owners.technical.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {owners.technical.map((user, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center bg-blue-100 rounded px-3 py-1"
-                      >
-                        <img
-                          src={user.avatarUrl || userPhoto}
-                          alt={user.name}
-                          className="w-6 h-6 rounded-full mr-2"
-                        />
-                        <span className="text-xs font-medium text-gray-800">
-                          {user.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
-                    No technical owners assigned
-                  </p>
-                )}
-              </div>
-
-              {/* Commercial Owners */}
-              <div className="mb-4">
-                <h4 className="text-xs font-medium text-gray-700 mb-2">
-                  Commercial Owners
-                </h4>
-                {owners.commercial.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {owners.commercial.map((user, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center bg-green-100 rounded px-3 py-1"
-                      >
-                        <img
-                          src={user.avatarUrl || userPhoto}
-                          alt={user.name}
-                          className="w-6 h-6 rounded-full mr-2"
-                        />
-                        <span className="text-xs font-medium text-gray-800">
-                          {user.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
-                    No commercial owners assigned
-                  </p>
-                )}
-              </div>
-
-              {/* Supporting Documents */}
-              <div>
-                <h4 className="text-xs font-medium text-gray-700 mb-2">
-                  Supporting Documents
-                </h4>
-                {rfpDocuments.length > 0 ? (
-                  <div className="bg-gray-50 rounded p-3">
-                    <ViewTable
-                      columns={["attachmentComponent", "type"]}
-                      columnLabels={{
-                        attachmentComponent: "Attachment",
-                        type: "Type",
-                      }}
-                      items={rfpDocuments}
-                    />
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
-                    No supporting documents
-                  </p>
-                )}
               </div>
             </div>
           </div>
         </div>
-      )}
+
+          {/* Content */}
+      <div className="p-6">
+        {/* Description */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">
+            Description
+          </h3>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {requestData.rfpDescription}
+          </p>
+        </div>
+
+        {/* Rfp Items */}
+        <div className="mb-6">
+          <ViewTable
+            columns={["itemCode", "itemName", "quantity"]}
+            columnLabels={{
+              itemCode: "Id",
+              itemName: "Item",
+              quantity: "Quantity",
+            }}
+            items={requestData?.rfpItems}
+          />
+        </div>
+
+        {/* General Details */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+            <GeneralDetailIcon className="w-4 h-4 mr-2" /> General Details
+          </h3>
+
+          {/* Published Categories */}
+          <div className="mb-4">
+            <h4 className="text-xs font-medium text-gray-700 mb-2">
+              Published Categories
+            </h4>
+            {masterData?.categories?.length > 0 &&
+              requestData?.rfpCategories?.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {requestData?.rfpCategories?.map((item: any) => {
+                  const category = masterData?.categories?.find(
+                    (c: any) => c.id === item.categoryId
+                  );
+                  return (
+                    <span
+                      key={item.categoryId}
+                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+                    >
+                      {category?.name || "Unknown"}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
+                No categories assigned
+              </p>
+            )}
+          </div>
+
+          {/* Status and Requisition ID */}
+          <div className="bg-gray-50 rounded p-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-gray-500 mb-1">
+                  Purchase Requisition ID
+                </p>
+                <p className="text-sm font-medium text-gray-900">
+                  {requestData?.purchaseRequisitionId || "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">RFP Status</p>
+                <ShowStatus type="rfps" status={requestData?.status} />
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="bg-gray-50 rounded p-3">
+              <p className="text-xs text-gray-500 mb-1">Closed / Open</p>
+              <p className="text-sm font-medium text-gray-900">
+                {requestData?.isOpen ? "Open" : "Closed"}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded p-3">
+              <p className="text-xs text-gray-500 mb-1">
+                Serial / Parallel
+              </p>
+              <p className="text-sm font-medium text-gray-900">
+                {requestData?.isSerial ? "Serial" : "Parallel"}
+              </p>
+            </div>
+          </div>
+
+          {/* Financial Details */}
+          <div className="space-y-3">
+            <div className="bg-gray-50 rounded p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">
+                  Estimated Contract Value
+                </span>
+                <span className="text-sm font-semibold text-gray-900">
+                  {convertCurrencyLabel(requestData?.rfpCurrency)}
+                  {requestData?.estimatedContractValue}
+                </span>
+              </div>
+            </div>
+            {requestData?.bidValue && (
+              <div className="bg-gray-50 rounded p-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-500">Bid Value</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {convertCurrencyLabel(requestData?.rfpCurrency)}
+                    {requestData?.bidValue}
+                  </span>
+                </div>
+              </div>
+            )}
+            <div className="bg-gray-50 rounded p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">Tender Fee</span>
+                <span className="text-sm font-semibold text-gray-900">
+                  {convertCurrencyLabel(requestData?.rfpCurrency)}
+                  {requestData?.tenderFee}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RFP Details */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+            <GeneralDetailIcon className="w-4 h-4 mr-2" /> RFP Details
+          </h3>
+
+          {/* Buyer Information */}
+          <div className="bg-gray-50 rounded p-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Buyer Name</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {requestData?.buyerName || "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Department</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {requestData?.departmentName || "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Organization</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {requestData?.buyerOrganizationName || "-"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Timeline Information */}
+          <div className="space-y-3">
+            <div className="bg-gray-50 rounded p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">
+                  Express Interest Last Date
+                </span>
+                <span className="text-sm font-medium text-gray-900">
+                  {dayjs(requestData?.expressInterestLastDate).format(
+                    "DD-MM-YYYY"
+                  )}
+                </span>
+              </div>
+            </div>
+            <div className="bg-gray-50 rounded p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">
+                  Clarification Date
+                </span>
+                <span className="text-sm font-medium text-gray-900">
+                  {dayjs(requestData?.clarificationDate).format(
+                    "DD-MM-YYYY"
+                  )}
+                </span>
+              </div>
+            </div>
+            <div className="bg-gray-50 rounded p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">Closing Date</span>
+                <span className="text-sm font-medium text-gray-900">
+                  {dayjs(requestData?.closingDate).format("DD-MM-YYYY")}
+                </span>
+              </div>
+            </div>
+            <div className="bg-gray-50 rounded p-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500">Closing Time</span>
+                <span className="text-sm font-medium text-gray-900">
+                  {dayjs(requestData?.closingDate).format("hh:mm A")}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Ownership Details */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+            <GeneralDetailIcon className="w-4 h-4 mr-2" /> Ownership
+          </h3>
+
+          {/* Technical Owners */}
+          <div className="mb-4">
+            <h4 className="text-xs font-medium text-gray-700 mb-2">
+              Technical Owners
+            </h4>
+            {owners.technical.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {owners.technical.map((user, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center bg-blue-100 rounded px-3 py-1"
+                  >
+                    <img
+                      src={user.avatarUrl || userPhoto}
+                      alt={user.name}
+                      className="w-6 h-6 rounded-full mr-2"
+                    />
+                    <span className="text-xs font-medium text-gray-800">
+                      {user.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
+                No technical owners assigned
+              </p>
+            )}
+          </div>
+
+          {/* Commercial Owners */}
+          <div className="mb-4">
+            <h4 className="text-xs font-medium text-gray-700 mb-2">
+              Commercial Owners
+            </h4>
+            {owners.commercial.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {owners.commercial.map((user, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center bg-green-100 rounded px-3 py-1"
+                  >
+                    <img
+                      src={user.avatarUrl || userPhoto}
+                      alt={user.name}
+                      className="w-6 h-6 rounded-full mr-2"
+                    />
+                    <span className="text-xs font-medium text-gray-800">
+                      {user.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
+                No commercial owners assigned
+              </p>
+            )}
+          </div>
+
+          {/* Supporting Documents */}
+          <div>
+            <h4 className="text-xs font-medium text-gray-700 mb-2">
+              Supporting Documents
+            </h4>
+            {rfpDocuments.length > 0 ? (
+              <div className="bg-gray-50 rounded p-3">
+                <ViewTable
+                  columns={["attachmentComponent", "type"]}
+                  columnLabels={{
+                    attachmentComponent: "Attachment",
+                    type: "Type",
+                  }}
+                  items={rfpDocuments}
+                />
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 bg-gray-50 rounded p-2">
+                No supporting documents
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
+  )
+}
+    </div >
   );
 };
 

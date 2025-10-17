@@ -6,6 +6,7 @@ import { Button, notification } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getRfpByIdAsync,
+  openRfpForLiveBidding,
   openRfpProposalsAsync,
   publishRfpAsync,
 } from "../../services/rfpService";
@@ -17,6 +18,8 @@ import { getAllCategoriesAsync } from "../../services/categoryService";
 import { getUserCredentials } from "../../utils/common";
 import RfpProposalApproveReject from "../../components/rfp_request/rfp_details/RfpProposalApproveReject";
 import RfpAwardflow from "../../components/rfp_request/rfp_details/RfpAwardflow";
+import Modal from "../../components/basic_components/Modal";
+import DateTimePicker from "../../components/basic_components/date_time_picker/DateTimePicker";
 
 const RequestDetailPage: React.FC = () => {
   const { id } = useParams();
@@ -25,6 +28,9 @@ const RequestDetailPage: React.FC = () => {
     categories: [],
   });
   const [vendorProposals, setVendorProposals] = useState<any[]>([]);
+  const [isLiveBiddingModalOpen, setIsLiveBiddingModalOpen] = useState(false);
+  const [liveBiddingStartDateTime, setLiveBiddingStartDateTime] = useState("");
+  const [liveBiddingEndDateTime, setLiveBiddingEndDateTime] = useState("");
   const navigate = useNavigate();
 
   const getRequestDetailData = async () => {
@@ -35,6 +41,44 @@ const RequestDetailPage: React.FC = () => {
       setRfpData(response);
       const categoriesResponse = await getAllCategoriesAsync();
       setMasterData((prev) => ({ ...prev, categories: categoriesResponse }));
+    }
+  };
+
+  const handleScheduleLiveBidding = async () => {
+    if (!liveBiddingStartDateTime || !liveBiddingEndDateTime) {
+      notification.error({
+        message: "Please select both start and end date/time",
+      });
+      return;
+    }
+
+    if (new Date(liveBiddingStartDateTime) >= new Date(liveBiddingEndDateTime)) {
+      notification.error({
+        message: "End date/time must be after start date/time",
+      });
+      return;
+    }
+
+    try {
+      const response = await openRfpForLiveBidding({
+        rfpId: rfpData?.id,
+        liveBiddingStartDateTime,
+        liveBiddingEndDateTime,
+      });
+
+      if (response) {
+        notification.success({
+          message: "Live bidding scheduled successfully",
+        });
+        setIsLiveBiddingModalOpen(false);
+        setLiveBiddingStartDateTime("");
+        setLiveBiddingEndDateTime("");
+        navigate(`/rfps/${rfpData?.id}/live-bidding`);
+      }
+    } catch (error) {
+      notification.error({
+        message: "Failed to schedule live bidding",
+      });
     }
   };
 
@@ -145,33 +189,85 @@ const RequestDetailPage: React.FC = () => {
                   }}
                   className="flex justify-end"
                 >
-                  {rfpData?.status == 5 && <Button
+                  {rfpData?.status == 5 && !rfpData?.isLiveBiddingOn && <Button
                     type="primary"
                     htmlType="button"
                     className="px-6 py-2 text-sm font-medium mr-2"
-                    onClick={async(e) => {
+                    onClick={(e) => {
                       e.preventDefault();
-                      navigate(`/rfps/${rfpData?.id}/live-bidding`);
+                      setIsLiveBiddingModalOpen(true);
                     }}
                   >
-                    Start Live Bidding
+                    Schedule Live Bidding
                   </Button>}
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="px-6 py-2 text-sm font-medium"
-                  >
-                    {rfpData?.status == 1
-                      ? "Publish now"
-                      : rfpData?.status == 9
-                        ? "Create DP"
-                        : "Request Approval to Open RFP"}
-                  </Button>
+                  {!rfpData?.rfpType && (
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className="px-6 py-2 text-sm font-medium"
+                    >
+                      {rfpData?.status == 1
+                        ? "Publish now"
+                        : rfpData?.status == 9
+                          ? "Create DP"
+                          : "Request Approval to Open RFP"}
+                    </Button>)}
                 </form>
               </div>
             </div>
           )}
       </div>
+
+      {/* Live Bidding Schedule Modal */}
+      <Modal
+        modalPosition="end"
+        isOpen={isLiveBiddingModalOpen}
+        onClose={() => {
+          setIsLiveBiddingModalOpen(false);
+          setLiveBiddingStartDateTime("");
+          setLiveBiddingEndDateTime("");
+        }}
+        width="w-full md:w-2/5"
+        content={
+          <div className="p-6">
+            <h2 className="text-xl font-semibold mb-6">Schedule Live Bidding</h2>
+
+            <div className="space-y-4">
+              <DateTimePicker
+                label="Live Bidding Start Date & Time"
+                value={liveBiddingStartDateTime}
+                setValue={setLiveBiddingStartDateTime}
+                required={true}
+              />
+
+              <DateTimePicker
+                label="Live Bidding End Date & Time"
+                value={liveBiddingEndDateTime}
+                setValue={setLiveBiddingEndDateTime}
+                required={true}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3 mt-6">
+              <Button
+                onClick={() => {
+                  setIsLiveBiddingModalOpen(false);
+                  setLiveBiddingStartDateTime("");
+                  setLiveBiddingEndDateTime("");
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="primary"
+                onClick={handleScheduleLiveBidding}
+              >
+                Schedule Live Bidding
+              </Button>
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { getRfpByIdAsync, getAllVendorLiveProposalsAsync } from "../../services/
 import PageLoader from "../../components/basic_components/PageLoader";
 import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
 import { procurementContext } from "../../routes/RouteComponent";
+import { Mails } from "lucide-react";
 
 export interface Vendor {
   firstName: string;
@@ -188,8 +189,6 @@ const LiveBiddingPage: React.FC = () => {
       try {
         connection.off(groupAndEvent);
         // Prefer server-side LeaveRfpGroup if available; fallback to generic LeaveGroup
-        connection.invoke("LeaveRfpGroup", rfpData.id)
-          .catch(() => connection.invoke("LeaveGroup", groupAndEvent).catch(() => { }));
       } catch { }
     };
   }, [connection, rfpData]);
@@ -333,10 +332,10 @@ const LiveBiddingPage: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">{rfpData?.title}</h2>
           <p className="text-gray-600 mb-4">{rfpData?.description}</p>
           <Row gutter={16}>
-            <Col span={6}>
+            {/* <Col span={6}>
               <div className="text-sm text-gray-500">Category</div>
               <div className="font-medium">{rfpData?.category}</div>
-            </Col>
+            </Col> */}
             <Col span={6}>
               <div className="text-sm text-gray-500">Estimated Contract Value</div>
               <div className="font-medium">${rfpData?.estimatedContractValue}</div>
@@ -364,7 +363,7 @@ const LiveBiddingPage: React.FC = () => {
             <Statistic
               title="Total Proposals"
               value={proposals.length}
-              prefix={<DollarOutlined />}
+              prefix={<Mails />}
               valueStyle={{ color: "#1890ff" }}
             />
           </Card>
