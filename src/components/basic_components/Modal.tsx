@@ -6,6 +6,7 @@ const Modal = ({
   onClose,
   content,
   width = "3/4",
+  height = 'h-full',
   modalPosition = "center",
   contentPosition = "start",
 }: ModalProps) => {
@@ -31,7 +32,7 @@ const Modal = ({
       className={`fixed inset-0 flex ${justifyClass} ${alignClass} z-20 bg-black bg-opacity-20 backdrop-blur-sm !m-0`}
     >
       <div
-        className={`bg-white relative flex flex-col h-full ${width} shadow-2xl rounded-md overflow-hidden`}
+        className={`bg-white relative flex flex-col ${height} ${width} shadow-2xl rounded-md overflow-hidden`}
       >
         {/* Close Button */}
         <button
