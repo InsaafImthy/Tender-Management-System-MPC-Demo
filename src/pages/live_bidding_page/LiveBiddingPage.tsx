@@ -1,12 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button, Card, Statistic, Row, Col, Table, Tag, Space, notification, Spin } from "antd";
-import { ArrowLeftOutlined, TrophyOutlined, DollarOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import { getRfpByIdAsync, getAllVendorLiveProposalsAsync } from "../../services/rfpService";
+import {
+  Button,
+  Card,
+  Statistic,
+  Row,
+  Col,
+  Table,
+  Tag,
+  Space,
+  notification,
+  Spin,
+} from "antd";
+import {
+  ArrowLeftOutlined,
+  TrophyOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
+import {
+  getRfpByIdAsync,
+  getAllVendorLiveProposalsAsync,
+} from "../../services/rfpService";
 import PageLoader from "../../components/basic_components/PageLoader";
 import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
 import { procurementContext } from "../../routes/RouteComponent";
 import { Mails } from "lucide-react";
+import Modal from "../../components/basic_components/Modal";
+import { motion } from "framer-motion";
 
 export interface Vendor {
   firstName: string;
@@ -89,7 +109,18 @@ export interface VendorMessage {
   company: string | null;
   branchId: number;
   branch: string | null;
+  vendorRfpProposalItems?: RfpItem[];
 }
+
+type RfpItem = {
+  rfpItem: {
+    itemName: string;
+    itemCode: string;
+    quantity: number;
+    unit: string;
+  };
+  amount: string;
+};
 
 interface RfpData {
   estimatedContractValue: number;
@@ -113,6 +144,8 @@ const LiveBiddingPage: React.FC = () => {
   const [proposals, setProposals] = useState<VendorMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [IsViewModalOpen, setisViewModalOpen] = useState(false);
+  const [rfpItems, setRfpItems] = useState<RfpItem[]>([]);
   // Winning bid is derived from filtered proposals below
 
   const fetchRfpData = async () => {
@@ -123,7 +156,7 @@ const LiveBiddingPage: React.FC = () => {
       console.error("Error fetching RFP data:", error);
       notification.error({
         message: "Error",
-        description: "Failed to fetch RFP details"
+        description: "Failed to fetch RFP details",
       });
     }
   };
@@ -132,17 +165,19 @@ const LiveBiddingPage: React.FC = () => {
     try {
       setRefreshing(true);
       const response = await getAllVendorLiveProposalsAsync(Number(id || "0"));
-      setProposals(response as any || []);
+      setProposals((response as any) || []);
     } catch (error) {
       console.error("Error fetching proposals:", error);
       notification.error({
         message: "Error",
-        description: "Failed to fetch vendor proposals"
+        description: "Failed to fetch vendor proposals",
       });
     } finally {
       setRefreshing(false);
     }
   };
+
+  const handleSubmitBidTime = () => {};
 
   useEffect(() => {
     const loadData = async () => {
@@ -172,12 +207,12 @@ const LiveBiddingPage: React.FC = () => {
         await connection.invoke("OpenRfpForLiveBidding", rfpData.id);
 
         // Backend sends SendAsync(eventName, eventName, message)
-        connection.on("JoinedRfpGroup", (info) => { console.log(info, "info--------info") });
-        connection.on("RfpMessageEvent", (msg) => { 
-          setProposals((prev)=>([...prev, msg])); 
+        connection.on("JoinedRfpGroup", (info) => {
+          console.log(info, "info--------info");
         });
-
-
+        connection.on("RfpMessageEvent", (msg) => {
+          setProposals((prev) => [...prev, msg]);
+        });
       } catch (error) {
         console.warn("Live bidding subscription failed:", error);
       }
@@ -189,18 +224,18 @@ const LiveBiddingPage: React.FC = () => {
       try {
         connection.off(groupAndEvent);
         // Prefer server-side LeaveRfpGroup if available; fallback to generic LeaveGroup
-      } catch { }
+      } catch {}
     };
   }, [connection, rfpData]);
 
   const getHighestBid = () => {
     if (proposals.length === 0) return 0;
-    return Math.max(...proposals.map(p => p.amount));
+    return Math.max(...proposals.map((p) => p.amount));
   };
 
   const getLowestBid = () => {
     if (proposals.length === 0) return 0;
-    return Math.min(...proposals.map(p => p.amount));
+    return Math.min(...proposals.map((p) => p.amount));
   };
 
   const getAverageBid = () => {
@@ -220,6 +255,14 @@ const LiveBiddingPage: React.FC = () => {
     return winningProposal;
   };
 
+  const handleOpenItemDetails = (vendorId: number) => {
+    const selectedVendor = proposals.find((item) => item?.id === vendorId);
+    if (selectedVendor?.vendorRfpProposalItems) {
+      setRfpItems(selectedVendor.vendorRfpProposalItems);
+    }
+    setisViewModalOpen(true);
+  };
+
   // Build a filtered list with only the lowest bid per vendor
   const lowestPerVendor = React.useMemo(() => {
     if (!proposals || proposals.length === 0) return [] as VendorMessage[];
@@ -231,10 +274,15 @@ const LiveBiddingPage: React.FC = () => {
         vendorIdToLowest.set(vendorKey, proposal);
       }
     }
-    return Array.from(vendorIdToLowest.values()).sort((a, b) => a.amount - b.amount);
+    return Array.from(vendorIdToLowest.values()).sort(
+      (a, b) => a.amount - b.amount
+    );
   }, [proposals]);
 
-  const winningId = React.useMemo(() => (lowestPerVendor[0]?.id ?? 0), [lowestPerVendor]);
+  const winningId = React.useMemo(
+    () => lowestPerVendor[0]?.id ?? 0,
+    [lowestPerVendor]
+  );
 
   const columns = [
     {
@@ -257,9 +305,7 @@ const LiveBiddingPage: React.FC = () => {
       dataIndex: "amount",
       key: "amount",
       render: (amount: number) => (
-        <span className="font-bold text-lg">
-          ${amount}
-        </span>
+        <span className="font-bold text-lg">${amount}</span>
       ),
       sorter: (a: VendorMessage, b: VendorMessage) => a.amount - b.amount,
     },
@@ -274,7 +320,12 @@ const LiveBiddingPage: React.FC = () => {
       key: "actions",
       render: (_: unknown, _record: VendorMessage) => (
         <Space>
-          <Button size="small" type="link">
+          <Button
+            size="small"
+            type="link"
+            // onClick={() => setisViewModalOpen(true)}
+            onClick={() => handleOpenItemDetails(_record?.id ?? 0)}
+          >
             View Details
           </Button>
           <Button size="small" type="link">
@@ -337,13 +388,19 @@ const LiveBiddingPage: React.FC = () => {
               <div className="font-medium">{rfpData?.category}</div>
             </Col> */}
             <Col span={6}>
-              <div className="text-sm text-gray-500">Estimated Contract Value</div>
-              <div className="font-medium">${rfpData?.estimatedContractValue}</div>
+              <div className="text-sm text-gray-500">
+                Estimated Contract Value
+              </div>
+              <div className="font-medium">
+                ${rfpData?.estimatedContractValue}
+              </div>
             </Col>
             <Col span={6}>
               <div className="text-sm text-gray-500">Closing Date</div>
               <div className="font-medium">
-                {rfpData?.closingDate ? new Date(rfpData.closingDate).toLocaleDateString() : "N/A"}
+                {rfpData?.closingDate
+                  ? new Date(rfpData.closingDate).toLocaleDateString()
+                  : "N/A"}
               </div>
             </Col>
             <Col span={6}>
@@ -410,9 +467,12 @@ const LiveBiddingPage: React.FC = () => {
             <div className="flex items-center space-x-4">
               <TrophyOutlined className="text-2xl text-yellow-600" />
               <div>
-                <h3 className="text-lg font-semibold text-yellow-800">Current Winning Bid</h3>
+                <h3 className="text-lg font-semibold text-yellow-800">
+                  Current Winning Bid
+                </h3>
                 <p className="text-yellow-700">
-                  {getWinningBid()?.vendor?.organisationName} - ${getWinningBid()?.amount?.toLocaleString()}
+                  {getWinningBid()?.vendor?.organisationName} - $
+                  {getWinningBid()?.amount?.toLocaleString()}
                 </p>
               </div>
             </div>
@@ -424,14 +484,17 @@ const LiveBiddingPage: React.FC = () => {
       )}
 
       {/* Proposals Table */}
-      <Card title="Vendor Proposals" extra={
-        <div className="flex items-center space-x-2">
-          <Spin spinning={refreshing} size="small" />
-          <span className="text-sm text-gray-500">
-            Auto-refreshes every 30 seconds
-          </span>
-        </div>
-      }>
+      <Card
+        title="Vendor Proposals"
+        extra={
+          <div className="flex items-center space-x-2">
+            <Spin spinning={refreshing} size="small" />
+            <span className="text-sm text-gray-500">
+              Auto-refreshes every 30 seconds
+            </span>
+          </div>
+        }
+      >
         <Table
           columns={columns}
           dataSource={lowestPerVendor}
@@ -446,6 +509,80 @@ const LiveBiddingPage: React.FC = () => {
           scroll={{ x: 800 }}
         />
       </Card>
+      <Modal
+        isOpen={IsViewModalOpen}
+        onClose={() => setisViewModalOpen(false)}
+        width="w-3/4  mt-4"
+        height="h-3/4"
+        content={
+          <div className="flex flex-col w-full mt-4 p-6 h-full">
+            {/* Title */}
+            <h2 className="text-lg font-semibold mb-4">Bidding Overview</h2>
+            <h4 className="text-lg font-semibold mb-4">
+              Bidding Amount :{" $"}
+              {rfpItems.reduce(
+                (sum, item) => sum + (Number(item.amount) || 0),
+                0
+              )}
+            </h4>
+            {/* Table: RFP Items */}
+            <div className="overflow-x-auto mt-4 flex-1">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-40">
+                      ItemName
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      ItemCode
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Quantity
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Unit
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Bid Amount
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {rfpItems?.map((item, index) => (
+                    <motion.tr
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="hover:bg-gray-50"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 w-40">
+                        {item.rfpItem.itemName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {item.rfpItem.itemCode}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {item.rfpItem.quantity}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {item.rfpItem.unit}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {item.amount}
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex justify-end gap-2 mt-4">
+              <Button onClick={() => setisViewModalOpen(false)}>Close</Button>
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 };
