@@ -207,11 +207,9 @@ const LiveBiddingPage: React.FC = () => {
         await connection.invoke("OpenRfpForLiveBidding", rfpData.id);
 
         // Backend sends SendAsync(eventName, eventName, message)
-        connection.on("JoinedRfpGroup", (info) => {
-          console.log(info, "info--------info");
-        });
+        connection.on("JoinedRfpGroup", (info) => { console.log(info, "info--------info") });
         connection.on("RfpMessageEvent", (msg) => {
-          setProposals((prev) => [...prev, msg]);
+          setProposals((prev) => ([msg, ...prev]));
         });
       } catch (error) {
         console.warn("Live bidding subscription failed:", error);

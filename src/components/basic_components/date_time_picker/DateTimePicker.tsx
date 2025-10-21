@@ -24,7 +24,7 @@ export default function DateTimePicker({ id, label, value, setValue, required = 
                 }}
                 value={value ? dayjs(value) : null}
                 onChange={(val) => {
-                    if (val) setValue(val.toISOString());
+                    if (val) setValue(val.format("YYYY-MM-DDTHH:mm:ss"));
                     else setValue('');
                 }}
                 format={format ? format : "YYYY-MM-DD hh:mm A"} // Note lowercase `hh` and uppercase `A`
