@@ -177,7 +177,7 @@ const LiveBiddingPage: React.FC = () => {
     }
   };
 
-  const handleSubmitBidTime = () => {};
+  // const handleSubmitBidTime = () => {};
 
   useEffect(() => {
     const loadData = async () => {
