@@ -122,7 +122,7 @@ type RfpItem = {
   amount: string;
 };
 
-interface RfpData {
+export interface RfpData {
   estimatedContractValue: number;
   id: number;
   title: string;
@@ -133,7 +133,8 @@ interface RfpData {
   budget: number;
   category: string;
   uid?: string; // prefer lower-case if API serializes that way
-  UID?: string; // fallback in case API sends upper-case
+  UID?: string;
+  liveBiddingEndDateTime : string; // fallback in case API sends upper-case
 }
 
 const LiveBiddingPage: React.FC = () => {
