@@ -189,7 +189,7 @@ const RequestDetailPage: React.FC = () => {
                   }}
                   className="flex justify-end"
                 >
-                  {rfpData?.status == 5  && !rfpData?.isLiveBiddingOn && <Button
+                  {rfpData?.status == 5  && rfpData?.isLiveBiddingOn == null && <Button
                     type="primary"
                     htmlType="button"
                     className="px-6 py-2 text-sm font-medium mr-2"

@@ -9,8 +9,7 @@ import {
   Table,
   Tag,
   Space,
-  notification,
-  Spin,
+  notification
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -204,7 +203,6 @@ const LiveBiddingPage: React.FC = () => {
         // Ensure this connection is in the server-side RFP group
         // Backend: JoinRfpGroup(long rfpId, CancellationToken ct = default)
         await connection.invoke("JoinRfpGroup", rfpData.id);
-        await connection.invoke("OpenRfpForLiveBidding", rfpData.id);
 
         // Backend sends SendAsync(eventName, eventName, message)
         connection.on("JoinedRfpGroup", (info) => { console.log(info, "info--------info") });
