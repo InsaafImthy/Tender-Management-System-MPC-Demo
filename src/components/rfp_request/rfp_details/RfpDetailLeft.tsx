@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import userPhoto from "../../../assets/profile_photo/userPhoto.png";
 import { getAllUsersByFilterAsync } from "../../../services/userService";
 import { useNavigate, useParams } from "react-router-dom";
-import { ClipboardIcon, PenIcon, PlayCircle } from "lucide-react";
+import { ClipboardIcon, PenIcon } from "lucide-react";
 import ViewTable from "../../basic_components/ViewTable";
 import { documentTypeConst } from "../../../utils/constants";
 
@@ -196,10 +196,10 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                       </button>
                     </div>
                   </div>
-                  <div onClick={() => navigate(`/rfps/${requestData?.id}/live-bidding`)} className="flex items-center px-3 py-1 border rounded-full bg-gray-100 cursor-pointer">
+                  {requestData?.isLiveBiddingOn && <div onClick={() => navigate(`/rfps/${requestData?.id}/live-bidding`)} className="flex items-center px-3 py-1 border rounded-full bg-gray-100 cursor-pointer">
                     <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                     <span className="ml-2 text-red-600 font-semibold">{"Live"}</span>
-                  </div>
+                  </div>}
                 </div>
               </div>
             </div>

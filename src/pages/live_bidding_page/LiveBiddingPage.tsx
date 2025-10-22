@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button, Card, Statistic, Row, Col, Table, Tag, Space, notification, Spin } from "antd";
-import { ArrowLeftOutlined, TrophyOutlined, DollarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { Button, Card, Statistic, Row, Col, Table, Tag, Space, notification } from "antd";
+import { ArrowLeftOutlined, TrophyOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { getRfpByIdAsync, getAllVendorLiveProposalsAsync } from "../../services/rfpService";
 import PageLoader from "../../components/basic_components/PageLoader";
 import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
@@ -424,14 +424,7 @@ const LiveBiddingPage: React.FC = () => {
       )}
 
       {/* Proposals Table */}
-      <Card title="Vendor Proposals" extra={
-        <div className="flex items-center space-x-2">
-          <Spin spinning={refreshing} size="small" />
-          <span className="text-sm text-gray-500">
-            Auto-refreshes every 30 seconds
-          </span>
-        </div>
-      }>
+      <Card title="Vendor Proposals">
         <Table
           columns={columns}
           dataSource={lowestPerVendor}
