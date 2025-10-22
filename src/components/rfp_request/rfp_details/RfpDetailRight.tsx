@@ -14,6 +14,7 @@ import { DocumentIconByExtension, IntrestedIcon, OpenMainIcon } from '../../../u
 import { notification } from 'antd';
 import { getUserCredentials } from "../../../utils/common";
 import { documentTypeConst } from "../../../utils/constants";
+import { useNavigate } from 'react-router-dom';
 
 // interface User {
 //     name: string;
@@ -63,6 +64,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({ rfp, trigger, vendorProposa
         technical: false,
         commercial: false,
     });
+    const navigate = useNavigate();
 
     useEffect(() => {
         const tempOwnerIn = { technical: false, commercial: false };
@@ -163,7 +165,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({ rfp, trigger, vendorProposa
     return (
         <>
             <div className="w-full bg-white h-full">
-                <div className="w-full space-y-2 desktop:max-w-[700px] mx-auto rounded-lg h-full px-6 max-h-[900px] overflow-y-auto scrollbar">
+                {!rfp?.rfpType ? (<div className="w-full space-y-2 desktop:max-w-[700px] mx-auto rounded-lg h-full px-6 max-h-[900px] overflow-y-auto scrollbar">
                     <div className="flex items-center sticky top-0 bg-white z-10">
                         <div className="overflow-x-auto py-4 flex-1 scroll-smooth no-scrollbar">
                             <div className="pt-[24px] flex justify-start border-b ml-[10px]">
@@ -266,7 +268,9 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({ rfp, trigger, vendorProposa
                             </div>
                         )}
                     </div>
-                </div>
+                </div>) : <div onClick={() => navigate(`/rfps/${rfp?.id}/live-bidding`)}>
+                    Live Bidding
+                </div>}
             </div>
             <Modal content={<ProposalSubmissionModal rfp={rfp} proposal={isModalOpenItem} trigger={() => { setIsModalOpenItem(null); trigger(); }} />} isOpen={isModalOpenItem} onClose={() => setIsModalOpenItem(null)} modalPosition='end' width="w-full md:w-2/5" />
         </>)

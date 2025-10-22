@@ -112,8 +112,7 @@ const RequestDetailPage: React.FC = () => {
                 {/* Approval Flow Section - Top */}
                 <div className={`w-full mx-auto rounded h-full ${Newclass}`}>
                   {rfpData.status == 5 ||
-                    rfpData?.status == 9 ||
-                    rfpData.status == 9 ? (
+                    rfpData?.status == 9 ? (
                     <RfpDetailRight
                       rfp={rfpData}
                       trigger={() => {
@@ -189,7 +188,7 @@ const RequestDetailPage: React.FC = () => {
                   }}
                   className="flex justify-end"
                 >
-                  {rfpData?.status == 5  && rfpData?.isLiveBiddingOn == null && <Button
+                  {rfpData?.status == 5 && rfpData?.isLiveBiddingOn == null && <Button
                     type="primary"
                     htmlType="button"
                     className="px-6 py-2 text-sm font-medium mr-2"

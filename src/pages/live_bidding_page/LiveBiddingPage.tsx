@@ -25,6 +25,7 @@ import CommonTitleCard from "../../components/basic_components/CommonTitleCard";
 import { procurementContext } from "../../routes/RouteComponent";
 import { Mails } from "lucide-react";
 import Modal from "../../components/basic_components/Modal";
+import VariantsGraph from "../../components/basic_components/VariantsGraph";
 import { motion } from "framer-motion";
 
 export interface Vendor {
@@ -455,6 +456,20 @@ const LiveBiddingPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Variants Graph */}
+      <Card className="mb-6" title="Bid Variations Over Time">
+        <VariantsGraph 
+          data={proposals.map(proposal => ({
+            timestamp: proposal.createdAt,
+            amount: proposal.amount,
+            vendorName: proposal.vendor?.organisationName || 'Unknown Vendor',
+            vendorId: proposal.vendorId || proposal.vendor?.id || 0
+          }))}
+          title="Live Bidding Variations"
+          height={400}
+        />
+      </Card>
 
       {/* Winning Bid Highlight */}
       {getWinningBid() && (

@@ -50,4 +50,5 @@ export interface IRfp {
     rfpCategories:any[],
     rfpItems?: IProcurementItem[],
     status?:number,
+    rfpType?:number,
 }
