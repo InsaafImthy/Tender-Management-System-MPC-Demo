@@ -27,6 +27,7 @@ import { Mails } from "lucide-react";
 import Modal from "../../components/basic_components/Modal";
 import VariantsGraph from "../../components/basic_components/VariantsGraph";
 import { motion } from "framer-motion";
+import dayjs from "dayjs";
 
 export interface Vendor {
   firstName: string;
@@ -134,7 +135,7 @@ export interface RfpData {
   category: string;
   uid?: string; // prefer lower-case if API serializes that way
   UID?: string;
-  liveBiddingEndDateTime : string; // fallback in case API sends upper-case
+  liveBiddingEndDateTime: string; // fallback in case API sends upper-case
 }
 
 const LiveBiddingPage: React.FC = () => {
@@ -222,7 +223,7 @@ const LiveBiddingPage: React.FC = () => {
       try {
         connection.off(groupAndEvent);
         // Prefer server-side LeaveRfpGroup if available; fallback to generic LeaveGroup
-      } catch {}
+      } catch { }
     };
   }, [connection, rfpData]);
 
@@ -394,10 +395,10 @@ const LiveBiddingPage: React.FC = () => {
               </div>
             </Col>
             <Col span={6}>
-              <div className="text-sm text-gray-500">Closing Date</div>
+              <div className="text-sm text-gray-500">Closing Date & Time</div>
               <div className="font-medium">
-                {rfpData?.closingDate
-                  ? new Date(rfpData.closingDate).toLocaleDateString()
+                {rfpData?.liveBiddingEndDateTime
+                  ? dayjs(rfpData.liveBiddingEndDateTime).format("DD MMM, YYYY hh:mm A")
                   : "N/A"}
               </div>
             </Col>
@@ -460,7 +461,7 @@ const LiveBiddingPage: React.FC = () => {
 
       {/* Variants Graph */}
       <Card className="mb-6" title="Bid Variations Over Time">
-        <VariantsGraph 
+        <VariantsGraph
           data={proposals.map(proposal => ({
             timestamp: proposal.createdAt,
             amount: proposal.amount,
