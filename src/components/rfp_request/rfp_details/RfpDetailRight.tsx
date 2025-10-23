@@ -25,6 +25,7 @@ import { documentTypeConst } from "../../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { RfpData } from "../../../pages/live_bidding_page/LiveBiddingPage";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 interface IRfpDetailRight {
   rfp: IRfp;
@@ -34,7 +35,7 @@ interface IRfpDetailRight {
 }
 
 const ItemCountCard: React.FC<{
-  item: { icon: any; label: string; bgColor: string; count: number | string };
+  item: { icon?: any; label: string; bgColor: string; count: number | string | any };
   className?: string;
 }> = ({ item, className }) => {
   return (
@@ -42,12 +43,13 @@ const ItemCountCard: React.FC<{
       className={`w-full h-[64px] border border-gray-200 rounded-xl shadow-sm flex justify-between items-center px-[21px] ${className}`}
     >
       <div className="flex items-center">
-        <div
-          className="w-[32px] h-[32px] rounded-full mr-3 flex justify-center items-center"
-          style={{ backgroundColor: item.bgColor }}
-        >
-          {item?.icon}
-        </div>
+        {item?.icon && (
+          <div
+            className="w-[32px] h-[32px] rounded-full mr-3 flex justify-center items-center"
+            style={{ backgroundColor: item.bgColor }}
+          >
+            {item?.icon}
+          </div>)}
 
         <span className="text-sm font-semibold text-black">{item.label}</span>
       </div>
@@ -125,12 +127,12 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
     ...p,
     bidAmount:
       ownerIn.commercial ||
-      rfp?.createdBy?.toString() == getUserCredentials().userId
+        rfp?.createdBy?.toString() == getUserCredentials().userId
         ? p.bidAmount
         : "*******",
     bidValidity:
       ownerIn.commercial ||
-      rfp?.createdBy?.toString() == getUserCredentials().userId
+        rfp?.createdBy?.toString() == getUserCredentials().userId
         ? p.bidValidity
         : "*******",
   }));
@@ -145,7 +147,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
         );
         setVendorProposals(filtered_proposals);
       }
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const setupTabsAsync = async () => {
@@ -173,7 +175,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
       } else if (activeTab == "Clarifications") {
       }
       trigger && trigger();
-    } catch (err) {}
+    } catch (err) { }
   };
 
   useEffect(() => {
@@ -238,19 +240,17 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                     <div className="flex items-center h-[37px]" key={tab}>
                       <div
                         onClick={() => setActiveTab(tab)}
-                        className={`relative h-full w-full text-sm text-start cursor-pointer font-semibold ${
-                          activeTab === tab
-                            ? "text-customBlue"
-                            : "text-gray-500 hover:text-black"
-                        }`}
+                        className={`relative h-full w-full text-sm text-start cursor-pointer font-semibold ${activeTab === tab
+                          ? "text-customBlue"
+                          : "text-gray-500 hover:text-black"
+                          }`}
                       >
                         {tab}
                         <span
-                          className={`absolute bottom-0 left-0 w-full h-[3px] ${
-                            activeTab === tab
-                              ? "bg-customBlue"
-                              : "bg-transparent group-hover:bg-customeBlue"
-                          }`}
+                          className={`absolute bottom-0 left-0 w-full h-[3px] ${activeTab === tab
+                            ? "bg-customBlue"
+                            : "bg-transparent group-hover:bg-customeBlue"
+                            }`}
                         ></span>
                       </div>
                       {index !== tabs.length - 1 && (
@@ -400,9 +400,6 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
               <ItemCountCard
                 className="mb-[16px]"
                 item={{
-                  icon: (
-                    <OpenMainIcon className="w-[16px] h-[16px] text-white" />
-                  ),
                   bgColor: "#314DA0",
                   count: rfpData?.estimatedContractValue || 0,
                   label: "Estimated Contract Value",
@@ -411,16 +408,11 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
               <ItemCountCard
                 className="mb-[16px]"
                 item={{
-                  icon: (
-                    <OpenMainIcon className="w-[16px] h-[16px] text-white" />
-                  ),
                   bgColor: "#314DA0",
                   count: rfpData?.liveBiddingEndDateTime
-                    ? new Date(
-                        rfpData.liveBiddingEndDateTime
-                      ).toLocaleDateString()
+                    ? <p className="text-sm">{dayjs(rfpData.liveBiddingEndDateTime).format("DD MMM, YYYY hh:mm A")}</p>
                     : "N/A",
-                  label: "Closing Date",
+                  label: "Closing Date & Time",
                 }}
               />
             </div>
