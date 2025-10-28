@@ -4,6 +4,7 @@ import { Button, notification } from "antd";
 // import RequestDetailRight from "../../components/requests/RequestDetailRight";
 // import { ICapexRequestDetail } from "../../types/capexTypes";
 import { useNavigate, useParams } from "react-router-dom";
+import buildingIcon from "../../assets/building-2.svg";
 import {
   getRfpByIdAsync,
   openRfpForLiveBidding,
@@ -20,6 +21,8 @@ import RfpProposalApproveReject from "../../components/rfp_request/rfp_details/R
 import RfpAwardflow from "../../components/rfp_request/rfp_details/RfpAwardflow";
 import Modal from "../../components/basic_components/Modal";
 import DateTimePicker from "../../components/basic_components/date_time_picker/DateTimePicker";
+import { getAllVendorsAsync } from "../../services/vendorService";
+import PeoplePicker from "../../components/basic_components/PeoplePicker";
 
 const RequestDetailPage: React.FC = () => {
   const { id } = useParams();
@@ -31,6 +34,8 @@ const RequestDetailPage: React.FC = () => {
   const [isLiveBiddingModalOpen, setIsLiveBiddingModalOpen] = useState(false);
   const [liveBiddingStartDateTime, setLiveBiddingStartDateTime] = useState("");
   const [liveBiddingEndDateTime, setLiveBiddingEndDateTime] = useState("");
+  const [vendorsList, setVendorsList] = useState<any[]>([]);
+  const [selectedVendors, setSelectedVendors] = useState<{ id: number; name: string; imageUrl: string }[]>([]);
   const navigate = useNavigate();
 
   const getRequestDetailData = async () => {
@@ -41,6 +46,8 @@ const RequestDetailPage: React.FC = () => {
       setRfpData(response);
       const categoriesResponse = await getAllCategoriesAsync();
       setMasterData((prev) => ({ ...prev, categories: categoriesResponse }));
+      const vendorsListResponse = await getAllVendorsAsync();
+      setVendorsList(vendorsListResponse);
     }
   };
 
@@ -59,11 +66,19 @@ const RequestDetailPage: React.FC = () => {
       return;
     }
 
+    if (!selectedVendors || selectedVendors.length === 0) {
+      notification.error({
+        message: "Please select at least one vendor",
+      });
+      return;
+    }
+
     try {
       const response = await openRfpForLiveBidding({
         rfpId: rfpData?.id,
         liveBiddingStartDateTime,
         liveBiddingEndDateTime,
+        vendorIds: selectedVendors.map((v) => v.id),
       });
 
       if (response) {
@@ -73,6 +88,7 @@ const RequestDetailPage: React.FC = () => {
         setIsLiveBiddingModalOpen(false);
         setLiveBiddingStartDateTime("");
         setLiveBiddingEndDateTime("");
+        setSelectedVendors([]);
         navigate(`/rfps/${rfpData?.id}/live-bidding`);
       }
     } catch (error) {
@@ -225,6 +241,7 @@ const RequestDetailPage: React.FC = () => {
           setIsLiveBiddingModalOpen(false);
           setLiveBiddingStartDateTime("");
           setLiveBiddingEndDateTime("");
+          setSelectedVendors([]);
         }}
         width="w-full md:w-2/5"
         content={
@@ -245,7 +262,22 @@ const RequestDetailPage: React.FC = () => {
                 setValue={setLiveBiddingEndDateTime}
                 required={true}
               />
+
+              <PeoplePicker
+                label="Select Vendors"
+                users={(vendorsList || []).map((v:any) => ({
+                  id: v.id,
+                  name: v.organisationName || `${v.firstName || ""} ${v.lastName || ""}`.trim() || `Vendor #${v.id}`,
+                  imageUrl: buildingIcon,
+                }))}
+                value={selectedVendors}
+                setValue={setSelectedVendors}
+                placeholder="Type to search vendors..."
+                height="72px"
+              />
             </div>
+
+            
 
             <div className="flex justify-end space-x-3 mt-6">
               <Button
@@ -253,6 +285,7 @@ const RequestDetailPage: React.FC = () => {
                   setIsLiveBiddingModalOpen(false);
                   setLiveBiddingStartDateTime("");
                   setLiveBiddingEndDateTime("");
+                  setSelectedVendors([]);
                 }}
               >
                 Cancel

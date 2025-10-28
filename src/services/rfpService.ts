@@ -297,6 +297,7 @@ export const openRfpForLiveBidding = async(data: {
     rfpId: number;
     liveBiddingStartDateTime: string;
     liveBiddingEndDateTime: string;
+    vendorIds: number[];
 })=>{
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/OpenRfpLiveBid`, data, {
@@ -313,6 +314,19 @@ export const openRfpForLiveBidding = async(data: {
 export const getAllVendorLiveProposalsAsync = async(rfpId:number)=>{
     try{
         const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/VendorLiveProposal?rfpId=${rfpId}`,{
+            headers:{
+                Authorization:`Bearer ${getUserToken()}`
+            }
+        })
+        return response.data;
+    }catch(err){
+        console.log(err);
+    }
+}
+
+export const getAllRfpLiveBiddingVendorsAsync = async(rfpId:number)=>{
+    try{
+        const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/LiveBiddingVendorsByRfpId?rfpId=${rfpId}`,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }

@@ -9,6 +9,7 @@ import {
   getAllEvaluationReportsAsync,
   getAllProposalsByFilterAsync,
   getAllRfpIntrestByFilterAsync,
+  getAllRfpLiveBiddingVendorsAsync,
   getProposalByIdAsync,
   getRfpByIdAsync,
   uploadEvaluationReportAsync,
@@ -70,6 +71,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeTab, setActiveTab] = useState("Proposals");
   const [evaluationDocuments, setEvaluationDocuments] = useState<any>([]);
+  const [liveBiddingVendors, setLiveBiddingVendors] = useState<any[]>([])
   const [ownerIn, setOwnerIn] = useState<{
     technical: boolean;
     commercial: boolean;
@@ -78,30 +80,39 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
     commercial: false,
   });
   const navigate = useNavigate();
-  const [rfpData, setRfpData] = useState<RfpData | null>(null);
-  const { id } = useParams<{ id: string }>();
+  const [rfpData,] = useState<RfpData | null>(rfp as any);
+  // const { id } = useParams<{ id: string }>();
 
-  const fetchRfpData = async () => {
+  // const fetchRfpData = async () => {
+  //   try {
+  //     const rfp = await getRfpByIdAsync(Number(id));
+  //     setRfpData(rfp);
+  //   } catch (error) {
+  //     console.error("Error fetching RFP data:", error);
+  //     notification.error({
+  //       message: "Error",
+  //       description: "Failed to fetch RFP details",
+  //     });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     if (id) {
+  //       await Promise.all([fetchRfpData()]);
+  //     }
+  //   };
+  //   loadData();
+  // }, [id]);
+
+  const fetchVendorsListAsync = async () => {
     try {
-      const rfp = await getRfpByIdAsync(Number(id));
-      setRfpData(rfp);
-    } catch (error) {
-      console.error("Error fetching RFP data:", error);
-      notification.error({
-        message: "Error",
-        description: "Failed to fetch RFP details",
-      });
-    }
-  };
+      var vendorsList = await getAllRfpLiveBiddingVendorsAsync(rfp.id ?? 0);
+      setLiveBiddingVendors(vendorsList);
+    } catch (err) {
 
-  useEffect(() => {
-    const loadData = async () => {
-      if (id) {
-        await Promise.all([fetchRfpData()]);
-      }
-    };
-    loadData();
-  }, [id]);
+    }
+  }
 
   useEffect(() => {
     const tempOwnerIn = { technical: false, commercial: false };
@@ -121,6 +132,9 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
     });
 
     setOwnerIn(tempOwnerIn);
+    if (rfp?.rfpType) {
+      fetchVendorsListAsync();
+    }
   }, [rfp]);
 
   const maskedProposals = vendorProposals.map((p) => ({
@@ -415,10 +429,17 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                   label: "Closing Date & Time",
                 }}
               />
+              <div>
+
+                <span className="text-sm font-semibold text-black mb-2">Participating Vendors:</span>
+                <div className="flex flex-col">
+                  {liveBiddingVendors.map(x => (<div className="text-sm text-[#0B1F49]">{x?.vendor?.organisationName}</div>))}
+                </div>
+              </div>
             </div>
           </div>
         )}
-      </div>
+      </div >
       <Modal
         content={
           <ProposalSubmissionModal
