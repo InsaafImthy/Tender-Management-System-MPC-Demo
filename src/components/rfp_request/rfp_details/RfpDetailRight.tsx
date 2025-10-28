@@ -11,7 +11,6 @@ import {
   getAllRfpIntrestByFilterAsync,
   getAllRfpLiveBiddingVendorsAsync,
   getProposalByIdAsync,
-  getRfpByIdAsync,
   uploadEvaluationReportAsync,
 } from "../../../services/rfpService";
 import ClarificationList from "./ClarificationList";
@@ -23,7 +22,7 @@ import {
 import { Button, notification } from "antd";
 import { getUserCredentials } from "../../../utils/common";
 import { documentTypeConst } from "../../../utils/constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RfpData } from "../../../pages/live_bidding_page/LiveBiddingPage";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
