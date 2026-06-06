@@ -75,9 +75,9 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
           return { ...bom, bomItemDtos: updatedItems };
         }
         return bom;
-      }).filter((bom) => bom.bomItemDtos.length > 0) // Remove BOM if no items left
+      }).filter((bom) => bom.bomItemDtos.length > 0) // Remove product list if no items left
     );
-    message.success("Item deleted successfully");
+    message.success("Product deleted successfully");
   };
 
   const calculateBomTotal = (items: any[]) => {
@@ -101,10 +101,10 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
         <div className="flex items-center space-x-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              Item Selection
+              Product Selection
             </h2>
             <p className="text-gray-600 mt-1">
-              Select Bill of Materials and specify quantities for requisition
+              Select product lists and specify quantities for requisition
             </p>
           </div>
         </div>
@@ -115,7 +115,7 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-800">
-              Selected Items
+              Selected Products
             </h3>
             <button
               type="button"
@@ -133,10 +133,10 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
                   <BoxIcon />
                 </div>
                 <h3 className="text-lg font-medium text-gray-700 mb-2">
-                  No BOMs added yet
+                  No product lists added yet
                 </h3>
                 <p className="text-gray-500 mb-4">
-                  Click "Add BOM" button to select items for this requisition
+                  Click "Add" to select medicines and medical supplies for this requisition
                 </p>
               </div>
             )}
@@ -183,7 +183,7 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
                       </div>
                       <div className="text-xs text-gray-500 mt-3 flex gap-6 ml-11">
                         <span className="flex items-center">
-                          <span className="font-semibold mr-1">Items:</span>
+                          <span className="font-semibold mr-1">Products:</span>
                           {items.length}
                         </span>
                         <span className="flex items-center">
@@ -211,7 +211,7 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
                         )
                       }
                     >
-                      Remove BOM
+                      Remove Product List
                     </button>
                   </div>
 
@@ -222,10 +222,10 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
                           <thead className="bg-gray-50">
                             <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                                Item Code
+                                Product Code
                               </th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
-                                Description
+                                Medicine/Supply Name
                               </th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
                                 UOM
@@ -325,7 +325,7 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
                                               handleDeleteItem(bom.id, idx)
                                             }
                                             className="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:text-red-800 hover:bg-red-100 rounded-lg transition-all duration-200"
-                                            title="Delete item"
+                                            title="Delete product"
                                           >
                                             <DeleteOutlined className="text-sm" />
                                           </button>
@@ -373,15 +373,15 @@ const PRBomItems: React.FC<PRBomItemsProps> = ({
         open={bomModalOpen}
         onClose={() => setBomModalOpen(false)}
         onSelect={(bom) => {
-          // Check if BOM already exists
+          // Check if product list already exists
           const exists = selectedBoms.some((b) => b.id === bom.id);
           if (exists) {
-            message.warning("This BOM has already been added");
+            message.warning("This product list has already been added");
             return;
           }
           setSelectedBoms((prev) => [...prev, bom]);
           setBomModalOpen(false);
-          message.success("BOM added successfully");
+          message.success("Product list added successfully");
         }}
       />
     </div>

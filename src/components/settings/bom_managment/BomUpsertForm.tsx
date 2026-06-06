@@ -41,7 +41,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
 
   const addItem = () => {
     if (!currentItem.itemCode || !currentItem.itemName) {
-      notification.error({ message: 'Item code and name are required' });
+      notification.error({ message: 'Product code and name are required' });
       return;
     }
     setFormData(prev => ({ ...prev, bomItemDtos: [...(prev.bomItemDtos || []), { ...currentItem, id:0 }] }));
@@ -55,7 +55,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!(formData.bomName || '').toString().trim()) {
-      notification.error({ message: 'BOM name is required' });
+      notification.error({ message: 'Product list name is required' });
       return;
     }
     if (!formData.categoryId) {
@@ -63,7 +63,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
       return;
     }
     if (!formData.bomItemDtos || formData.bomItemDtos.length === 0) {
-      notification.error({ message: 'Add at least one item' });
+      notification.error({ message: 'Add at least one product' });
       return;
     }
 
@@ -78,16 +78,16 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
       };
       if (type === 'edit' && formData.id) {
         await updateBomAsync(formData.id, payload);
-        notification.success({ message: 'BOM updated successfully' });
+        notification.success({ message: 'Product list updated successfully' });
       } else {
         const { id, ...createPayload } = payload;
         await createBomAsync(createPayload);
-        notification.success({ message: 'BOM created successfully' });
+        notification.success({ message: 'Product list created successfully' });
       }
       closeModal();
       trigger();
     } catch (err: any) {
-      notification.error({ message: err?.message || 'Failed to save BOM' });
+      notification.error({ message: err?.message || 'Failed to save product list' });
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +99,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
     <form onSubmit={handleSubmit} className="p-4">
       <div className="space-y-3">
         <div>
-          <label className="text-xs text-gray-600">BOM Name *</label>
+          <label className="text-xs text-gray-600">Product List Name *</label>
           <input className="w-full border rounded px-3 py-2" value={formData.bomName || ''} onChange={e => setFormData({ ...formData, bomName: e.target.value })} />
         </div>
         <div>
@@ -121,14 +121,14 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
         </div>
 
         <div className="mt-4 border rounded p-3">
-          <h3 className="font-semibold mb-2">Add Items</h3>
+          <h3 className="font-semibold mb-2">Add Products</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <div>
-              <label className="text-xs text-gray-600">Item Code *</label>
+              <label className="text-xs text-gray-600">Product Code *</label>
               <input className="w-full border rounded px-3 py-2" value={currentItem.itemCode} onChange={e => setCurrentItem({ ...currentItem, itemCode: e.target.value })} />
             </div>
             <div>
-              <label className="text-xs text-gray-600">Item Name *</label>
+              <label className="text-xs text-gray-600">Medicine/Supply Name *</label>
               <input className="w-full border rounded px-3 py-2" value={currentItem.itemName} onChange={e => setCurrentItem({ ...currentItem, itemName: e.target.value })} />
             </div>
             <div>
@@ -148,16 +148,16 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
               </select>
             </div>
             <div>
-              <label className="text-xs text-gray-600">Expected Price</label>
+              <label className="text-xs text-gray-600">Expected Unit Price</label>
               <input type="number" className="w-full border rounded px-3 py-2" value={currentItem.price} onChange={e => setCurrentItem({ ...currentItem, price: Number(e.target.value) })} />
             </div>
             <div className="md:col-span-3 col-span-2">
-              <label className="text-xs text-gray-600">Item Description</label>
+              <label className="text-xs text-gray-600">Product Description</label>
               <input className="w-full border rounded px-3 py-2" value={currentItem.description || ''} onChange={e => setCurrentItem({ ...currentItem, description: e.target.value })} />
             </div>
           </div>
           <div className="mt-3">
-            <button type="button" className="px-3 py-2 bg-[#7C3AED] text-white rounded" onClick={addItem}>+ Add Item</button>
+            <button type="button" className="px-3 py-2 bg-[#7C3AED] text-white rounded" onClick={addItem}>+ Add Product</button>
           </div>
 
           <div className="mt-4 max-h-48 overflow-auto">
@@ -170,7 +170,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
                 <button type="button" className="text-red-600" onClick={() => removeItem(it.id)}>Remove</button>
               </div>
             ))}
-            {(!formData.bomItemDtos || formData.bomItemDtos.length === 0) && <div className="text-xs text-gray-500">No items added yet.</div>}
+            {(!formData.bomItemDtos || formData.bomItemDtos.length === 0) && <div className="text-xs text-gray-500">No products added yet.</div>}
           </div>
 
           <div className="mt-3 text-right font-semibold">Total: ${total.toFixed(2)}</div>
@@ -178,7 +178,7 @@ const BomUpsertForm: React.FC<IBomUpsertFormProps> = ({ type = 'create', bom, tr
 
         <div className="flex justify-end gap-2 mt-4">
           <button type="button" className="px-4 py-2 border rounded" onClick={closeModal}>Cancel</button>
-          <button type="submit" className="px-4 py-2 bg-[#7C3AED] text-white rounded" disabled={isLoading}>{isLoading ? 'Saving...' : type === 'edit' ? 'Update BOM' : 'Save BOM'}</button>
+          <button type="submit" className="px-4 py-2 bg-[#7C3AED] text-white rounded" disabled={isLoading}>{isLoading ? 'Saving...' : type === 'edit' ? 'Update Product List' : 'Save Product List'}</button>
         </div>
       </div>
     </form>

@@ -395,7 +395,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
                     <span className="text-blue-700 text-sm font-bold">4</span>
                   </div>
                   <span className="text-sm font-semibold text-blue-700">
-                    Procurement Items
+                    Pharmacy Products
                   </span>
                 </div>
                 <div className="w-16 h-1 bg-gray-300 rounded-full"></div>
@@ -454,7 +454,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
                       {type === "create" ? "Creating new RFP" : "Updating RFP"}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {(procurementItems || []).length} items •{" "}
+                      {(procurementItems || []).length} products •{" "}
                       {(attachments || []).length} attachments
                     </div>
                   </div>

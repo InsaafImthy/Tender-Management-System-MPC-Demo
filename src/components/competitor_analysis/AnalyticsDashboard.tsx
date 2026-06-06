@@ -204,7 +204,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         {/* Main Chart */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
           <h4 className="text-lg font-semibold text-gray-900 mb-4">
-            {selectedChart === 'bar' && 'Item vs Supplier Prices'}
+            {selectedChart === 'bar' && 'Product vs Supplier Prices'}
             {selectedChart === 'line' && 'Price Trends Over Time'}
             {selectedChart === 'pie' && 'Supplier Distribution'}
           </h4>
@@ -260,7 +260,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <div className="text-2xl font-bold text-green-600">
               {analyticsData.length}
             </div>
-            <div className="text-sm text-green-700">Items Analyzed</div>
+            <div className="text-sm text-green-700">Products Analyzed</div>
           </div>
           <div className="text-center p-4 bg-blue-50 rounded-lg">
             <div className="text-2xl font-bold text-blue-600">

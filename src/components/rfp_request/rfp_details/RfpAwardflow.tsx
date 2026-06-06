@@ -56,8 +56,8 @@ const BidSplitSection: React.FC<{ proposals: any[] }> = ({ proposals }) => {
               <ViewTable
                 columns={["itemCode", "itemName", "quantity", "amount"]}
                 columnLabels={{
-                  itemCode: "Item Code",
-                  itemName: "Item Name",
+                  itemCode: "Product Code",
+                  itemName: "Medicine/Supply Name",
                   quantity: "Qty",
                   amount: "Amount",
                 }}
@@ -220,8 +220,8 @@ const RfpAwardflow: React.FC<IRfpDetailRight> = ({ rfpDetails, trigger }) => {
                     <ViewTable
                       columns={["itemName", "itemCode", "quantity", "amount"]}
                       columnLabels={{
-                        itemName: "Item Name",
-                        itemCode: "Item Code",
+                        itemName: "Medicine/Supply Name",
+                        itemCode: "Product Code",
                         quantity: "Quantity",
                         amount: "Amount",
                       }}

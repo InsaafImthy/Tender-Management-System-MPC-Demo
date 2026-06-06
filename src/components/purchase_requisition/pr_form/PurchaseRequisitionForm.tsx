@@ -105,18 +105,18 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
       return false;
     }
 
-    // Validate that at least one BOM with items is selected
+    // Validate that at least one product list with items is selected
     if (!selectedBoms || selectedBoms.length === 0) {
-      message.error("Please add at least one item");
+      message.error("Please add at least one product");
       return false;
     }
 
-    // Check if all BOMs have items
+    // Check if all product lists have items
     const hasEmptyBom = selectedBoms.some(
       (bom) => !bom.bomItemDtos || bom.bomItemDtos.length === 0
     );
     if (hasEmptyBom) {
-      message.error("All selected BOMs must have at least one item");
+      message.error("All selected product lists must have at least one product");
       return false;
     }
 
@@ -269,7 +269,7 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
                         : "Updating purchase requisition"}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {getTotalItems()} items • {selectedBoms.length} BOM(s)
+                      {getTotalItems()} products - {selectedBoms.length} product list(s)
                     </div>
                   </div>
                 </div>
@@ -352,7 +352,7 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Total Items:</span>
+              <span className="text-sm text-gray-600">Total Products:</span>
               <span className="text-sm font-semibold text-gray-900">
                 {getTotalItems()}
               </span>

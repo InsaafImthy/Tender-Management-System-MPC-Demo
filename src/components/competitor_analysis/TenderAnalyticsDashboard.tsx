@@ -32,7 +32,7 @@ const HeatmapTable: React.FC<{
     <table className="w-full text-sm">
       <thead>
         <tr className="border-b">
-          <th className="text-left p-2">Item</th>
+          <th className="text-left p-2">Product</th>
           {data[0] && Object.keys(data[0].suppliers).map(supplier => (
             <th key={supplier} className="text-center p-2 min-w-[100px]">{supplier}</th>
           ))}
@@ -224,8 +224,8 @@ const TenderAnalyticsDashboard: React.FC<TenderAnalyticsDashboardProps> = ({
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
           <h4 className="text-lg font-semibold text-gray-900 mb-4">
             {selectedChart === 'supplier' && 'Supplier Performance by Total Value'}
-            {selectedChart === 'heatmap' && 'Price Heatmap - Supplier vs Items'}
-            {selectedChart === 'variance' && 'Variance Analysis by Item'}
+            {selectedChart === 'heatmap' && 'Price Heatmap - Supplier vs Products'}
+            {selectedChart === 'variance' && 'Variance Analysis by Product'}
           </h4>
           {selectedChart === 'supplier' && <BarChart data={supplierChartData} />}
           {selectedChart === 'heatmap' && <HeatmapTable data={heatmapData} />}
@@ -266,14 +266,14 @@ const TenderAnalyticsDashboard: React.FC<TenderAnalyticsDashboardProps> = ({
         </div>
       </div>
 
-      {/* Item Analysis */}
+      {/* Product Analysis */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-        <h4 className="text-lg font-semibold text-gray-900 mb-4">Item Competitiveness Analysis</h4>
+        <h4 className="text-lg font-semibold text-gray-900 mb-4">Product Competitiveness Analysis</h4>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2">Item</th>
+                <th className="text-left py-2">Product</th>
                 <th className="text-left py-2">Description</th>
                 <th className="text-center py-2">Variance</th>
                 <th className="text-center py-2">Competitiveness</th>

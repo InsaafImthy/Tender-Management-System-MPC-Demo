@@ -111,7 +111,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Tender-Wide Price Matrix</h3>
             <p className="text-sm text-gray-600 mt-1">
-              {tenderMatrix.tenderName} - {filteredData.items.length} items, {filteredData.suppliers.length} suppliers
+              {tenderMatrix.tenderName} - {filteredData.items.length} products, {filteredData.suppliers.length} suppliers
             </p>
           </div>
           <div className="flex items-center space-x-4">
@@ -137,13 +137,13 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Items</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Products</label>
             <SelectField
             id="itemOptions"
               options={itemOptions}
               value={filters.items?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, items: value ? [value] : [] })}
-              placeholder="All Items"
+              placeholder="All Products"
             />
           </div>
           <div>
@@ -170,7 +170,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
                     onClick={() => handleSort('item')}
                     className="flex items-center space-x-1 hover:text-gray-700"
                   >
-                    <span>Item</span>
+                    <span>Product</span>
                     {sortBy === 'item' && (
                       <span className="text-blue-500">
                         {sortDirection === 'asc' ? '↑' : '↓'}
@@ -276,7 +276,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
                       {formatPrice(tenderMatrix.suppliers.reduce((sum, s) => sum + s.totalQuotedValue, 0))}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {tenderMatrix.tenderSummary.totalItems} items
+                      {tenderMatrix.tenderSummary.totalItems} products
                     </div>
                     <div className="text-xs text-gray-500">
                       {tenderMatrix.tenderSummary.totalSuppliers} suppliers
@@ -313,7 +313,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
                   <span className="font-semibold text-green-600">{supplier.numberOfLowestQuotes}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Items Quoted:</span>
+                  <span className="text-gray-500">Products Quoted:</span>
                   <span className="font-semibold">{supplier.itemsQuoted}</span>
                 </div>
                 <div className="flex justify-between">

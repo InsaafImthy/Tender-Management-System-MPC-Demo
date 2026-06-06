@@ -74,8 +74,8 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
       title={
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-[20px] font-semibold">Select Bill of Materials</div>
-            <div className="text-xs text-gray-500">Choose an existing BOM or create a new one</div>
+            <div className="text-[20px] font-semibold">Select Product List</div>
+            <div className="text-xs text-gray-500">Choose an existing product list or create a new one</div>
           </div>
         </div>
       }
@@ -87,7 +87,7 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
       <div className="flex gap-3 mb-4">
         <div className="flex-1">
           <input
-            placeholder="Search BOMs by name or description..."
+            placeholder="Search product lists by name or description..."
             className="w-full border rounded px-3 py-2"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -105,7 +105,7 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
             ))}
           </select>
         </div>
-        <button className="px-3 py-2 bg-customBlue text-white rounded" onClick={() => navigate('/settings/bom-managment')}>+ Create New BOM</button>
+        <button className="px-3 py-2 bg-customBlue text-white rounded" onClick={() => navigate('/settings/bom-managment')}>+ Create New Product List</button>
       </div>
 
       <div className="space-y-3 max-h-[60vh] overflow-auto pr-1">
@@ -129,7 +129,7 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
                   </div>
                   <div className="text-xs text-gray-600 mt-2">{(bom as any).description || ''}</div>
                   <div className="text-xs text-gray-500 mt-2 flex gap-6">
-                    <span>Items: {items.length}</span>
+                    <span>Products: {items.length}</span>
                     <span>Value: {fmt(calcValue(bom))}</span>
                     {bom.createdAt && <span>Created: {fmtDate((bom as any).createdAt)}</span>}
                   </div>
@@ -153,10 +153,10 @@ const BomSelectModal: React.FC<BomSelectModalProps> = ({ open, onClose, onSelect
           );
         })}
         {!loading && filtered.length === 0 && (
-          <div className="text-sm text-gray-500">No BOMs found</div>
+          <div className="text-sm text-gray-500">No product lists found</div>
         )}
       </div>
-      <div className="mt-3 text-xs text-gray-500">{filtered.length} BOMs found</div>
+      <div className="mt-3 text-xs text-gray-500">{filtered.length} product lists found</div>
     </AntdModal>
   );
 };

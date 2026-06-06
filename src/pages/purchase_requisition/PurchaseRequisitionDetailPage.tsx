@@ -231,15 +231,15 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Items Table */}
+          {/* Products Table */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900">
-                  Requisition Items
+                  Requisition Products
                 </h2>
                 <span className="text-sm text-gray-600">
-                  {requisition.items?.length || 0} item(s)
+                  {requisition.items?.length || 0} product(s)
                 </span>
               </div>
             </div>
@@ -248,10 +248,10 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Item Code
+                      Product Code
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase">
-                      Description
+                      Medicine/Supply Name
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase">
                       UOM
@@ -358,7 +358,7 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
             <h3 className="text-lg font-bold mb-4">Summary</h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-blue-100">Total Items</span>
+                <span className="text-blue-100">Total Products</span>
                 <span className="text-2xl font-bold">
                   {requisition.items?.length || 0}
                 </span>

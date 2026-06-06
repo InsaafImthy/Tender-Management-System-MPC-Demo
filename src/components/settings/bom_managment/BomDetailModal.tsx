@@ -21,7 +21,7 @@ const BomDetailModal: React.FC<BomDetailModalProps> = ({ open, onClose, bom }) =
     <AntdModal open={open} onCancel={onClose} footer={null} width={800}
       title={<div className="flex items-center justify-between"><div className="text-[18px] font-semibold">{(bom as any).bomName}</div><div className="text-sm text-gray-600">{bom.category ? (bom as any).category?.name : ''}</div></div>}>
       <div className="text-sm text-gray-600 mb-2">{(bom as any).description || ''}</div>
-      <div className="text-xs text-gray-500 mb-4">Items: {items.length} • Total Value: {fmt(total)}</div>
+      <div className="text-xs text-gray-500 mb-4">Products: {items.length} - Total Value: {fmt(total)}</div>
       <div className="space-y-2 max-h-[60vh] overflow-auto">
         {items.map((it: any, idx: number) => (
           <div key={idx} className="grid grid-cols-12 gap-2 items-center text-sm bg-gray-50 rounded px-3 py-2">
@@ -32,7 +32,7 @@ const BomDetailModal: React.FC<BomDetailModalProps> = ({ open, onClose, bom }) =
             <div className="col-span-1 text-right font-medium">{fmt(Number(it.price))}</div>
           </div>
         ))}
-        {items.length === 0 && <div className="text-sm text-gray-500">No items</div>}
+        {items.length === 0 && <div className="text-sm text-gray-500">No products</div>}
       </div>
     </AntdModal>
   );

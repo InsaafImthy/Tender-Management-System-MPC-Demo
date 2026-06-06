@@ -43,12 +43,12 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
 
   const buildEditedBom = () => {
     if (!formData.bomName.trim()) {
-      message.error('Please enter BOM name');
+      message.error('Please enter product list name');
       return;
     }
 
     if (items.length === 0) {
-      message.error('Please add at least one item');
+      message.error('Please add at least one product');
       return;
     }
 
@@ -96,7 +96,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
 
   const handleCreateAsNew = () => {
     if (!hasChanges()) {
-      message.info('No changes detected to create a new BOM.');
+      message.info('No changes detected to create a new product list.');
       return;
     }
     const editedBom = buildEditedBom();
@@ -106,7 +106,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
 
   const handleAddItem = () => {
     if (!newItem.itemName?.trim()) {
-      message.error('Please enter item name');
+      message.error('Please enter medicine or supply name');
       return;
     }
 
@@ -139,7 +139,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
 
   const handleUpdateItem = () => {
     if (!newItem.itemName?.trim()) {
-      message.error('Please enter item name');
+      message.error('Please enter medicine or supply name');
       return;
     }
 
@@ -199,7 +199,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
 
   return (
     <Modal
-      title="Edit BOM"
+      title="Edit Product List"
       open={open}
       onCancel={onClose}
       width={800}
@@ -227,23 +227,23 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
           disabled={!hasChanges()}
           className={`ml-2 px-4 py-2 text-white rounded-md ${hasChanges() ? 'bg-green-600 hover:bg-green-700' : 'bg-green-600 opacity-50 cursor-not-allowed'}`}
         >
-          Create as new BOM
+          Create as new Product List
         </button>
       ]}
     >
       <div className="space-y-6">
-        {/* BOM Details */}
+        {/* Product List Details */}
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              BOM Name *
+              Product List Name *
             </label>
             <input
               type="text"
               value={formData.bomName}
               onChange={(e) => setFormData({ ...formData, bomName: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter BOM name"
+              placeholder="Enter product list name"
             />
           </div>
           
@@ -261,16 +261,16 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
           </div>
         </div>
 
-        {/* Items Section */}
+        {/* Products Section */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">BOM Items</h3>
+            <h3 className="text-lg font-semibold text-gray-800">Products</h3>
             <span className="text-sm text-gray-500">
               Total: {fmt(calculateTotal())}
             </span>
           </div>
 
-          {/* Items List */}
+          {/* Products List */}
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {items.map((item, index) => (
               <div key={index} className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
@@ -301,36 +301,36 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
             ))}
           </div>
 
-          {/* Add/Edit Item Form */}
+          {/* Add/Edit Product Form */}
           <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-blue-50">
             <h4 className="font-medium text-gray-800 mb-3">
-              {editingItemIndex !== null ? 'Edit Item' : 'Add New Item'}
+              {editingItemIndex !== null ? 'Edit Product' : 'Add New Product'}
             </h4>
             
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Item Code
+                  Product Code
                 </label>
                 <input
                   type="text"
                   value={newItem.itemCode || ''}
                   onChange={(e) => setNewItem({ ...newItem, itemCode: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter item code"
+                  placeholder="Enter product code"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Item Name *
+                  Medicine/Supply Name *
                 </label>
                 <input
                   type="text"
                   value={newItem.itemName || ''}
                   onChange={(e) => setNewItem({ ...newItem, itemName: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter item name"
+                  placeholder="Enter medicine or supply name"
                 />
               </div>
               
@@ -367,7 +367,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Price
+                  Unit Price
                 </label>
                 <input
                   type="number"
@@ -402,7 +402,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
                 onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={2}
-                placeholder="Enter item description"
+                placeholder="Enter product description"
               />
             </div>
             
@@ -414,7 +414,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
                     onClick={handleUpdateItem}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
-                    Update Item
+                    Update Product
                   </button>
                   <button
                     type="button"
@@ -431,7 +431,7 @@ const BomEditModal: React.FC<BomEditModalProps> = ({ open, onClose, onSave, onSa
                   className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
                 >
                   <PlusOutlined />
-                  Add Item
+                  Add Product
                 </button>
               )}
             </div>

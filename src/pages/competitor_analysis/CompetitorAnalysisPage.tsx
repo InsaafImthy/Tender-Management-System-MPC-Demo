@@ -51,72 +51,72 @@ const CompetitorAnalysisPage: React.FC = () => {
       const mockQuotations: ISupplierQuotation[] = [
         {
           id: '1',
-          itemCode: 'ITEM-001',
-          itemDescription: 'Steel Rod 12mm',
+          itemCode: 'MED-001',
+          itemDescription: 'Paracetamol 500mg Tablets',
           supplierId: 'SUP-001',
-          supplierName: 'ABC Steel Corp',
+          supplierName: 'Oman Pharma Supplies',
           quotedPrice: 250.00,
           currency: 'USD',
           submissionTime: '2024-01-15T10:30:00Z',
           status: 'Active',
-          itemCategory: 'Steel',
-          unitOfMeasure: 'kg',
+          itemCategory: 'Medicines',
+          unitOfMeasure: 'packs',
           validityPeriod: 30,
         },
         {
           id: '2',
-          itemCode: 'ITEM-001',
-          itemDescription: 'Steel Rod 12mm',
+          itemCode: 'MED-001',
+          itemDescription: 'Paracetamol 500mg Tablets',
           supplierId: 'SUP-002',
-          supplierName: 'XYZ Metals Ltd',
+          supplierName: 'Gulf Medical Trading',
           quotedPrice: 275.00,
           currency: 'USD',
           submissionTime: '2024-01-15T11:15:00Z',
           status: 'Active',
-          itemCategory: 'Steel',
-          unitOfMeasure: 'kg',
+          itemCategory: 'Medicines',
+          unitOfMeasure: 'packs',
           validityPeriod: 30,
         },
         {
           id: '3',
-          itemCode: 'ITEM-001',
-          itemDescription: 'Steel Rod 12mm',
+          itemCode: 'MED-001',
+          itemDescription: 'Paracetamol 500mg Tablets',
           supplierId: 'SUP-003',
-          supplierName: 'Global Steel Inc',
+          supplierName: 'Muscat Healthcare Distribution',
           quotedPrice: 240.00,
           currency: 'USD',
           submissionTime: '2024-01-15T14:20:00Z',
           status: 'Active',
-          itemCategory: 'Steel',
-          unitOfMeasure: 'kg',
+          itemCategory: 'Medicines',
+          unitOfMeasure: 'packs',
           validityPeriod: 30,
         },
         {
           id: '4',
-          itemCode: 'ITEM-002',
-          itemDescription: 'Concrete Mix C25',
+          itemCode: 'MED-002',
+          itemDescription: 'Sterile Syringes 5ml',
           supplierId: 'SUP-001',
-          supplierName: 'ABC Steel Corp',
+          supplierName: 'Oman Pharma Supplies',
           quotedPrice: 85.00,
           currency: 'USD',
           submissionTime: '2024-01-16T09:45:00Z',
           status: 'Active',
-          itemCategory: 'Concrete',
-          unitOfMeasure: 'm³',
+          itemCategory: 'Medical Consumables',
+          unitOfMeasure: 'boxes',
           validityPeriod: 30,
         },
         {
           id: '5',
-          itemCode: 'ITEM-002',
-          itemDescription: 'Concrete Mix C25',
+          itemCode: 'MED-002',
+          itemDescription: 'Sterile Syringes 5ml',
           supplierId: 'SUP-004',
-          supplierName: 'BuildCorp Materials',
+          supplierName: 'Salalah Clinical Supplies',
           quotedPrice: 92.00,
           currency: 'USD',
           submissionTime: '2024-01-16T10:30:00Z',
           status: 'Active',
-          itemCategory: 'Concrete',
-          unitOfMeasure: 'm³',
+          itemCategory: 'Medical Consumables',
+          unitOfMeasure: 'boxes',
           validityPeriod: 30,
         },
       ];
@@ -227,12 +227,12 @@ const CompetitorAnalysisPage: React.FC = () => {
       // Generate tender-wide data
       const tenderMatrixData: ITenderMatrix = {
         tenderId: 'TENDER-001',
-        tenderName: 'Steel Construction Materials Tender',
+        tenderName: 'Pharmaceutical Supplies Tender',
         items: comparisons.map(comp => ({
           itemCode: comp.itemCode,
           itemDescription: comp.itemDescription,
           itemCategory: comp.itemCategory,
-          unitOfMeasure: 'kg',
+          unitOfMeasure: comp.quotations[0]?.unitOfMeasure || 'packs',
           quotations: comp.quotations.reduce((acc, q) => {
             acc[q.supplierId] = {
               price: q.quotedPrice,
@@ -289,7 +289,7 @@ const CompetitorAnalysisPage: React.FC = () => {
       // Generate tender analytics
       const tenderAnalyticsData: ITenderAnalytics = {
         tenderId: 'TENDER-001',
-        tenderName: 'Steel Construction Materials Tender',
+        tenderName: 'Pharmaceutical Supplies Tender',
         supplierPerformance: tenderMatrixData.suppliers.map(supplier => ({
           supplierId: supplier.supplierId,
           supplierName: supplier.supplierName,
@@ -320,9 +320,9 @@ const CompetitorAnalysisPage: React.FC = () => {
       // Generate supplier tender summary (removed - supplier functionality disabled)
       // const supplierTenderSummaryData: ISupplierTenderSummary = {
       //   supplierId: 'SUP-001',
-      //   supplierName: 'ABC Steel Corp',
+      //   supplierName: 'Oman Pharma Supplies',
       //   tenderId: 'TENDER-001',
-      //   tenderName: 'Steel Construction Materials Tender',
+      //   tenderName: 'Pharmaceutical Supplies Tender',
       //   itemsRanked: rankings.filter(r => r.supplierId === 'SUP-001'),
       //   overallSummary: {
       //     totalItemsQuoted: rankings.filter(r => r.supplierId === 'SUP-001').length,
@@ -351,7 +351,7 @@ const CompetitorAnalysisPage: React.FC = () => {
 
   const itemOptions = useMemo(() => {
     const items = [...new Set(quotations.map(q => ({ label: q.itemCode, value: q.itemCode })))];
-    return [{ label: 'All Items', value: '' }, ...items];
+    return [{ label: 'All Products', value: '' }, ...items];
   }, [quotations]);
 
   const categoryOptions = useMemo(() => {
@@ -435,7 +435,7 @@ const CompetitorAnalysisPage: React.FC = () => {
                     : "text-muted hover:text-slate-900 hover:bg-gray-50"
                 }`}
               >
-                Item-wise Analysis
+                Product-wise Analysis
                 {viewMode === 'item-wise' && (
                   <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-emerald-500"></div>
                 )}
@@ -483,7 +483,7 @@ const CompetitorAnalysisPage: React.FC = () => {
 
         {/* Tab Content */}
         <div className="space-y-4">
-          {/* Item-wise Analysis Tabs */}
+          {/* Product-wise Analysis Tabs */}
           {viewMode === 'item-wise' && (
             <>
               {activeTab === 'quotations' && (

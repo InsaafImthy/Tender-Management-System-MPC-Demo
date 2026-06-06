@@ -6,13 +6,13 @@ export const currencies = [
 ];
 
 export const commonUnits = [
-    {label: "Pcs", value: 0},
-    {label: "Feet", value: 1},
-    {label: "Meters", value: 2},
-    {label: "Pounds", value: 3},
+    {label: "Packs", value: 0},
+    {label: "Strips", value: 1},
+    {label: "Bottles", value: 2},
+    {label: "Vials", value: 3},
     {label: "Kilograms", value: 4},
-    {label: "Square Feet", value: 5},
-    {label: "Cubic Yards", value: 6},
+    {label: "Cartons", value: 5},
+    {label: "Liters", value: 6},
     {label: "Hours", value: 7},
 ]
 
@@ -78,7 +78,7 @@ export const quotesColumns = ["vendorName", "amount", "attachmentComponent"];
 
 export const project_column_labels = {
   projectId: "ID",
-  projectName: "Project Name",
+  projectName: "Pharmacy Program",
   departmentName: "Department",
   approvedBudgetLabel: "Approved Budget",
   status: "Status",
@@ -108,12 +108,12 @@ export const  delivery_details_sorting_fields = {
   supplierName: "Supplier Name",
   deliveryDate: "Delivery Date",
   deliveryLocation: "Delivery Location",
-  projectSite: "Project Site"
+  projectSite: "Pharmacy/Warehouse Location"
 };
 
 export const project_sorting_fields = {
   projectId: "ID",
-  projectName: "Project Name",
+  projectName: "Pharmacy Program",
   approvedBudget: "Approved Budget",
   status: "Status",
 };

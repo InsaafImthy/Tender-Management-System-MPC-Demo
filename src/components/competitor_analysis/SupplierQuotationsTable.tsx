@@ -129,13 +129,13 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Items</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Products</label>
             <SelectField
             id="item"
               options={itemOptions}
               value={filters.items?.[0] || ''}
               onChange={(value: string) => onFiltersChange({ ...filters, items: value ? [value] : [] })}
-              placeholder="All Items"
+              placeholder="All Products"
             />
           </div>
           <div>
@@ -176,7 +176,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
                 onClick={() => handleSort('itemCode')}
               >
                 <div className="flex items-center space-x-1">
-                  <span>Item Code</span>
+                  <span>Product Code</span>
                   {sortField === 'itemCode' && (
                     <span className="text-blue-500">
                       {sortDirection === 'asc' ? '↑' : '↓'}
@@ -189,7 +189,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
                 onClick={() => handleSort('itemDescription')}
               >
                 <div className="flex items-center space-x-1">
-                  <span>Item Description</span>
+                  <span>Medicine/Supply Description</span>
                   {sortField === 'itemDescription' && (
                     <span className="text-blue-500">
                       {sortDirection === 'asc' ? '↑' : '↓'}

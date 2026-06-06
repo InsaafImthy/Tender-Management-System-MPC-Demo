@@ -217,13 +217,13 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
               </p>
             </div>
 
-            {/* Rfp Items */}
+            {/* RFP Products */}
             <div className="mb-6">
               <ViewTable
                 columns={["itemCode", "itemName", "quantity"]}
                 columnLabels={{
-                  itemCode: "Id",
-                  itemName: "Item",
+                  itemCode: "Product Code",
+                  itemName: "Medicine/Supply Name",
                   quantity: "Quantity",
                 }}
                 items={requestData?.rfpItems}

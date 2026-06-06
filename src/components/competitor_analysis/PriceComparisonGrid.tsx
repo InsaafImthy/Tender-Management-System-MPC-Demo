@@ -40,7 +40,7 @@ const PriceComparisonGrid: React.FC<PriceComparisonGridProps> = ({ priceComparis
           <thead className="bg-slate-50 sticky top-0">
             <tr>
               <th className="px-6 py-3 text-left text-table-header">
-                Item Details
+                Product Details
               </th>
               <th className="px-6 py-3 text-left text-table-header">
                 Supplier
@@ -59,7 +59,7 @@ const PriceComparisonGrid: React.FC<PriceComparisonGridProps> = ({ priceComparis
           <tbody className="bg-white divide-y divide-slate-200">
             {priceComparisons.map((comparison) => (
               <React.Fragment key={comparison.itemCode}>
-                {/* Item Header Row */}
+                {/* Product Header Row */}
                 <tr className="bg-slate-50">
                   <td colSpan={5} className="px-6 py-3">
                     <div className="flex items-center justify-between">
@@ -102,7 +102,7 @@ const PriceComparisonGrid: React.FC<PriceComparisonGridProps> = ({ priceComparis
                   .map((quotation) => (
                     <tr key={quotation.id} className="hover:bg-slate-50">
                       <td className="px-6 py-4 whitespace-nowrap text-body text-slate-500">
-                        {/* Empty for item details - already shown in header */}
+                        {/* Empty for product details - already shown in header */}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">

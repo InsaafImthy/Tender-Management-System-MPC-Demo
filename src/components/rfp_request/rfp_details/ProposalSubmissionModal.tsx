@@ -100,8 +100,8 @@ const ProposalSubmissionModal: React.FC<ProposalSubmissionModalProps> = ({ rfp, 
                 <ViewTable
                   columns={["itemCode", "itemName", "quantity", "amount"]}
                   columnLabels={{ 
-                    itemCode: "Item Code", 
-                    itemName: "Item Name", 
+                    itemCode: "Product Code", 
+                    itemName: "Medicine/Supply Name", 
                     quantity: "Qty", 
                     amount: "Amount" 
                   }}

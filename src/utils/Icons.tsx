@@ -1414,9 +1414,9 @@ export const LoginPageLeftSide: React.FC<IconProps> = ({ className }) => (
             fontFamily="system-ui, -apple-system, sans-serif"
           >
             <tspan x="0" dy="0">
-              The energy{" "}
+              Pharmacy{" "}
             </tspan>
-            <tspan fill="#FF5F02">transition</tspan>
+            <tspan fill="#FF5F02">tendering</tspan>
           </text>
 
           <text
@@ -1428,15 +1428,15 @@ export const LoginPageLeftSide: React.FC<IconProps> = ({ className }) => (
             opacity="0.9"
           >
             <tspan x="0" dy="0">
-              Our vision is to be a leading globally-integrated PV developer &
-              IPP, delivering
+              Manage medicine, medical supply, and distribution tenders with
+              compliant
             </tspan>
             <tspan x="0" dy="24">
-              superior and sustainable impact and performance. We decarbonise
-              electricity
+              supplier evaluations, approval workflows, and reliable delivery
+              tracking
             </tspan>
             <tspan x="0" dy="24">
-              generation and therefore contribute to a better world for all.
+              for pharmacy procurement teams.
             </tspan>
           </text>
         </g>

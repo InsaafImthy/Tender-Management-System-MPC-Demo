@@ -56,13 +56,12 @@ export const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
           {/* Text content */}
           <div className="absolute bottom-0 left-0 right-0 p-12 text-white z-10">
             <h1 className="text-4xl font-bold mb-6 leading-tight whitespace-nowrap">
-              The energy <span className="text-[#FF5F02]">transition</span>
+              Pharmacy <span className="text-[#FF5F02]">tendering</span>
             </h1>
             <p className="text-sm leading-relaxed opacity-90 text-justify">
-              Our vision is to be a leading globally-integrated PV developer &
-              IPP, delivering superior and sustainable impact and performance.
-              We decarbonise electricity generation and therefore contribute to
-              a better world for all.
+              Manage medicine, medical supply, and distribution tenders with
+              clear supplier evaluations, compliant approvals, and reliable
+              delivery tracking for pharmacy procurement teams.
             </p>
           </div>
         </div>

@@ -13,7 +13,7 @@ import BomUpsertForm from './BomUpsertForm.tsx';
 import BomDetailModal from './BomDetailModal';
 
 const columns = [
-  { key: 'bomName', label: 'BOM Name' },
+  { key: 'bomName', label: 'Product List Name' },
   { key: 'categoryName', label: 'Category' },
 ];
 
@@ -43,13 +43,13 @@ const BomManagment: React.FC = () => {
     try {
       if (confirmAction?.type === 'delete') {
         await deleteBomAsync(confirmAction.bom.id ?? 0);
-        notification.success({ message: 'BOM deleted successfully' });
+        notification.success({ message: 'Product list deleted successfully' });
         setupBoms();
         setIsConfirmModalOpen(false);
       }
     } catch (err: any) {
       setIsConfirmModalOpen(false);
-      notification.error({ message: 'Failed to delete this BOM', description: err.message });
+      notification.error({ message: 'Failed to delete this product list', description: err.message });
     }
   };
 
@@ -78,22 +78,22 @@ const BomManagment: React.FC = () => {
               <span className="text-white text-2xl font-bold">📦</span>
             </div>
             <div>
-              <h1 className="text-heading-2">BOM Management</h1>
-              <p className="text-body-small text-muted">Define and manage Bills of Materials</p>
+              <h1 className="text-heading-2">Product List Management</h1>
+              <p className="text-body-small text-muted">Define and manage medicine and medical supply lists</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md border border-blue-200">
-              <span className="text-button text-accent">{boms.length} BOMs</span>
+              <span className="text-button text-accent">{boms.length} Product Lists</span>
             </div>
-            <CreateButton name='Create BOM' onClick={() => setIsCreateModalOpen(true)} />
+            <CreateButton name='Create Product List' onClick={() => setIsCreateModalOpen(true)} />
           </div>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
         <SettingsTable
-          title="BOMs"
+          title="Product Lists"
           columns={columns}
           data={boms}
           setIsSortModalOpen={setSortModalOpen}
@@ -138,7 +138,7 @@ const BomManagment: React.FC = () => {
           <Button key="confirm" type="primary" danger onClick={handleConfirmAction}>Delete</Button>
         ]}
       >
-        <p>Are you sure you want to delete this BOM?</p>
+        <p>Are you sure you want to delete this product list?</p>
       </AntdModal>
 
       <BomDetailModal open={detailOpen} onClose={() => setDetailOpen(false)} bom={selectedBom as any} />

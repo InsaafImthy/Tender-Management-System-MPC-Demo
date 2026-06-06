@@ -101,7 +101,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
 
     if (checklistItems.length > 0) {
       const confirmed = window.confirm(
-        `This will replace all ${checklistItems.length} existing items. Continue?`
+        `This will replace all ${checklistItems.length} existing products. Continue?`
       );
       if (!confirmed) {
         event.target.value = "";
@@ -134,7 +134,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
       }));
 
       setchecklistItems(newItems);
-      message.success(`Imported ${newItems.length} items successfully.`);
+      message.success(`Imported ${newItems.length} products successfully.`);
       event.target.value = "";
     } catch (error) {
       console.error("Error parsing file:", error);
@@ -233,8 +233,8 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
           <DeliveryDetailsIconMain />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold">Confirm Delivery</h1>
-          <p className="text-gray-600">Record receipt of delivered materials</p>
+          <h1 className="text-2xl font-semibold">Confirm Pharmacy Delivery</h1>
+          <p className="text-gray-600">Record receipt of medicines and medical supplies</p>
         </div>
       </div>
 
@@ -309,7 +309,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                 setDeliveryData({ ...deliveryData, deliveryLocation: val })
               }
               disabled={isIdavailable}
-              placeholder="Enter Delivery Location"
+              placeholder="Enter pharmacy or warehouse delivery location"
               type="text"
             />
           </div>
@@ -324,18 +324,18 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
           />
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Project Site <span className="text-red-500">*</span>
+              Pharmacy/Warehouse Location <span className="text-red-500">*</span>
             </label>
             <TextField
               required
               id="projectSite"
-              field="Project Site"
+              field="Pharmacy/Warehouse Location"
               value={deliveryData.projectSite}
               setValue={(val: string) =>
                 setDeliveryData({ ...deliveryData, projectSite: val })
               }
               disabled={isIdavailable}
-              placeholder="Enter  project site"
+              placeholder="Enter pharmacy or warehouse location"
               type="text"
             />
           </div>
@@ -344,7 +344,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
       {/* Excel Upload */}
       {!isIdavailable && (
         <div className="mt-8 p-6 border border-gray-200 rounded-xl shadow-sm flex justify-between items-center">
-          <h3 className="text-lg font-semibold">Upload Items</h3>
+          <h3 className="text-lg font-semibold">Upload Product Items</h3>
           <input
             type="file"
             id="excel-upload"
@@ -366,8 +366,8 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3">Item Code</th>
-              <th className="px-4 py-3">Item Name</th>
+              <th className="px-4 py-3">Product Code</th>
+              <th className="px-4 py-3">Medicine/Supply Name</th>
               <th className="px-4 py-3">Qty Ordered</th>
               <th className="px-4 py-3">Qty Received</th>
               <th className="px-4 py-3">Unit</th>
@@ -438,7 +438,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, itemCode: e.target.value })
                     }
-                    placeholder="Code"
+                    placeholder="Product code"
                     className="border rounded p-2 w-full"
                   />
                 </td>
@@ -449,7 +449,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, itemName: e.target.value })
                     }
-                    placeholder="Name"
+                    placeholder="Medicine or supply name"
                     className="border rounded p-2 w-full"
                   />
                 </td>
@@ -521,7 +521,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     className="border rounded p-2 w-full"
                   >
                     <option value="">Select</option>
-                    <option value={1}>Ok</option>
+                    <option value={1}>Accepted</option>
                     <option value={2}>Damaged</option>
                     <option value={0}>Rejected</option>
                   </select>

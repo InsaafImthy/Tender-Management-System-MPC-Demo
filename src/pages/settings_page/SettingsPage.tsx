@@ -19,7 +19,7 @@ type SettingsSection =
   | 'Budget allocation'
   | 'Criteria management'
   | 'Questionnaire management'
-  | 'BOM management'
+  | 'Product list management'
 
 interface SettingsRoute {
   name: SettingsSection;
@@ -40,7 +40,7 @@ const SettingsPage = () => {
     { name: 'Approval workflow', path: '/settings/workflow-managment' },
     { name: 'Criteria management', path: '/settings/criteria-managment' },
     { name: 'Questionnaire management', path: '/settings/questionnaire-managment' },
-    { name: 'BOM management', path: '/settings/bom-managment' },
+    { name: 'Product list management', path: '/settings/bom-managment' },
   ];
 
   const getIcon = (section: SettingsSection) => {
@@ -53,7 +53,7 @@ const SettingsPage = () => {
       case 'Criteria management': return '📋';
       case 'Budget allocation': return '💰';
       case 'Questionnaire management': return '📝';
-      case 'BOM management': return '📦';
+      case 'Product list management': return '📦';
       default: return '⚙️';
     }
   };
@@ -105,7 +105,7 @@ const SettingsPage = () => {
         return <CriteriaManagment />;
       case 'Questionnaire management':
         return <QuestionnaireManagment />;
-      case 'BOM management':
+      case 'Product list management':
         return <BomManagment />;
       default:
         return <UserManagement />;

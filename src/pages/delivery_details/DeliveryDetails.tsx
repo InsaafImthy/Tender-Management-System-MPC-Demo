@@ -39,7 +39,7 @@ const column_details = {
   supplierName: "Supplier Name",
   deliveryDate: "Delivery Date",
   deliveryLocation: "Delivery Location",
-  projectSite: "Project Site",
+  projectSite: "Pharmacy/Warehouse Location",
 };
 
 const DeliveryDetails = () => {
@@ -113,16 +113,16 @@ const DeliveryDetails = () => {
                 </span>
               </div>
               <div>
-                <h1 className="text-heading-2">Delivery Details</h1>
+                <h1 className="text-heading-2">Pharmacy Delivery Details</h1>
                 <p className="text-body-small text-muted mt-1">
-                  Track delivery timelines and monitor shipment status in real
+                  Track medicine and medical supply deliveries in real
                   time.
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <CreateButton
-                name="Delivery Details"
+                name="Add Delivery"
                 onClick={handleAddDelivery}
               />
             </div>
@@ -145,7 +145,7 @@ const DeliveryDetails = () => {
           type="tendors"
           rowNavigationPath="tendors"
           NoDataTitle={"No Delivery Details Available"}
-          NoDataDescription={"No delivery detils are available yet."}
+          NoDataDescription={"No pharmacy delivery details are available yet."}
           IsIcon={false}
           dots={true}
           setDeleteOption={(item: IUDeliveryData) =>
