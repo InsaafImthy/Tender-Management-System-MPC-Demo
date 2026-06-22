@@ -68,7 +68,7 @@ const SelectField = ({
       {/* Trigger */}
       <div
         className={`w-full p-1.5 px-3 border text-sm rounded cursor-pointer flex items-center justify-between ${
-          disabled ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed" : "border-gray-300"
+          disabled ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed" : "app-control hover:border-violet-300"
         }`}
         onClick={() => !disabled && setIsOpen((prev) => !prev)}
         aria-haspopup="listbox"
@@ -81,15 +81,15 @@ const SelectField = ({
 
       {/* Dropdown */}
       {isOpen && !disabled && (
-        <div className="absolute w-full mt-1 bg-white border border-gray-300 rounded shadow-lg z-40 max-h-48 overflow-y-auto">
+        <div className="absolute w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-[0_18px_45px_rgba(15,23,42,0.14)] z-40 max-h-48 overflow-y-auto">
           {/* Search Input (Fixed at the top) */}
           {search && (
-            <div className="sticky top-0 bg-white z-50 border-b border-gray-200 p-2">
+            <div className="sticky top-0 bg-white z-50 border-b border-slate-100 p-2">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-2 text-sm border border-gray-300 rounded focus:outline-none"
+                className="w-full p-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
                 placeholder="Search..."
               />
             </div>
@@ -100,8 +100,8 @@ const SelectField = ({
             filteredOptions.map((option, index) => (
               <div
                 key={index}
-                className={`px-3 py-2 hover:bg-gray-100 text-sm cursor-pointer ${
-                  option.value === value ? "bg-gray-200" : ""
+                className={`px-3 py-2 hover:bg-violet-50 hover:text-violet-800 text-sm cursor-pointer ${
+                  option.value === value ? "bg-violet-50 text-violet-800 font-semibold" : ""
                 }`}
                 role="option"
                 aria-selected={option.value === value ? "true" : "false"}

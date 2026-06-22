@@ -100,14 +100,14 @@ const DeliveryDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="admin-page">
       <CommonTitleCard />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">
+        <div className="admin-page-header mb-6">
+          <div className="admin-page-header-row">
+            <div className="admin-title-cluster">
+              <div className="admin-title-icon">
                 <span className="text-white text-2xl font-bold">
                   <DeliveryDetailsIconMain />
                 </span>
@@ -120,7 +120,7 @@ const DeliveryDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="admin-title-actions">
               <CreateButton
                 name="Add Delivery"
                 onClick={handleAddDelivery}
@@ -128,33 +128,32 @@ const DeliveryDetails = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Table Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden mx-8">
-        <Table
-          title={""}
-          columns={columns}
-          columnLabels={column_details}
-          subtitle={""}
-          items={deliveryList}
-          totalCount={totalCount}
-          setSearchQuery={setSearchQuery}
-          setFilter={setFilter}
-          setIsSortModalOpen={setIsSortModalOpen}
-          type="tendors"
-          rowNavigationPath="tendors"
-          NoDataTitle={"No Delivery Details Available"}
-          NoDataDescription={"No pharmacy delivery details are available yet."}
-          IsIcon={false}
-          dots={true}
-          setDeleteOption={(item: IUDeliveryData) =>
-            handleDeleteDeliveryData(item)
-          }
-          onView={(item: IUDeliveryData) =>
-            navigate(`/create-delivery-details/${item.Id}`)
-          }
-        />
+        {/* Table Section */}
+        <div className="admin-panel">
+          <Table
+            title={"Delivery Details"}
+            columns={columns}
+            columnLabels={column_details}
+            subtitle={"Track and manage delivery records"}
+            items={deliveryList}
+            totalCount={totalCount}
+            setSearchQuery={setSearchQuery}
+            setFilter={setFilter}
+            setIsSortModalOpen={setIsSortModalOpen}
+            type="tendors"
+            rowNavigationPath="tendors"
+            NoDataTitle={"No Delivery Details Available"}
+            NoDataDescription={"No pharmacy delivery details are available yet."}
+            IsIcon={false}
+            dots={true}
+            setDeleteOption={(item: IUDeliveryData) =>
+              handleDeleteDeliveryData(item)
+            }
+            onView={(item: IUDeliveryData) =>
+              navigate(`/create-delivery-details/${item.Id}`)
+            }
+          />
+        </div>
       </div>
       {/* Sort Modal */}
         {isSortModalOpen && (

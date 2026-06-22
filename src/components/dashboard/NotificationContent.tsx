@@ -33,8 +33,8 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
       await deleteNotificationAsync([filteredNotifications[index].id])
       console.log("deleted");
       trigger();
-    } catch (err) {
-
+    } catch {
+      setEnableOptions(null);
     }
   }
 
@@ -79,23 +79,23 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
   });
 
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-gray-50 to-white" style={{ minWidth: "450px", width:"500px" }}>
+    <div className="w-full h-full flex flex-col bg-slate-50" style={{ minWidth: "450px", width:"500px" }}>
       {/* Modern Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white border-b border-slate-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-violet-700 rounded-xl flex items-center justify-center shadow-sm">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Notifications</h2>
-              <p className="text-sm text-gray-500">Stay updated with your latest activities</p>
+              <h2 className="text-xl font-bold text-slate-950">Notifications</h2>
+              <p className="text-sm text-slate-500">Stay updated with your latest activities</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            <div className="bg-violet-50 text-violet-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-violet-100">
               {filteredNotifications.length} {filteredNotifications.length === 1 ? 'notification' : 'notifications'}
             </div>
           </div>
@@ -103,13 +103,13 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
       </div>
 
       {/* Filter Tabs */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
-        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+      <div className="bg-white border-b border-slate-200 px-6 py-3">
+        <div className="flex space-x-1 bg-slate-100 p-1 rounded-lg">
           <button
             onClick={() => handleFilterChange('all')}
             className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${filter === 'all'
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
+              ? "bg-white text-violet-700 shadow-sm"
+              : "text-slate-600 hover:text-violet-800"
               }`}
           >
             All
@@ -117,8 +117,8 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
           <button
             onClick={() => handleFilterChange('unread')}
             className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${filter === 'unread'
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
+              ? "bg-white text-violet-700 shadow-sm"
+              : "text-slate-600 hover:text-violet-800"
               }`}
           >
             Unread
@@ -126,8 +126,8 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
           <button
             onClick={() => handleFilterChange('read')}
             className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${filter === 'read'
-              ? "bg-white text-blue-600 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
+              ? "bg-white text-violet-700 shadow-sm"
+              : "text-slate-600 hover:text-violet-800"
               }`}
           >
             Read
@@ -137,17 +137,19 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
 
       {/* Notification List */}
       <div className="flex-grow overflow-y-auto" ref={tableContainerRef} onClick={() => {
-        enableOptions != null && setEnableOptions(null);
+        if (enableOptions != null) {
+          setEnableOptions(null);
+        }
       }}>
         {filteredNotifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full px-6 py-12">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-20 h-20 bg-violet-50 border border-violet-100 rounded-full flex items-center justify-center mb-4">
+              <svg className="w-8 h-8 text-violet-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications found</h3>
-            <p className="text-sm text-gray-500 text-center max-w-sm">
+            <h3 className="text-lg font-semibold text-slate-950 mb-2">No notifications found</h3>
+            <p className="text-sm text-slate-500 text-center max-w-sm">
               You're all caught up! New notifications will appear here when they arrive.
             </p>
           </div>
@@ -156,16 +158,20 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
             {filteredNotifications.map((notification, i) => (
               <div
                 key={notification.id}
-                className={`group relative bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200 cursor-pointer ${!notification.isRead ? 'ring-2 ring-blue-100 bg-blue-50/30' : ''
+                className={`group relative bg-white rounded-xl border border-slate-200 hover:border-violet-200 hover:shadow-md transition-all duration-200 cursor-pointer ${!notification.isRead ? 'ring-2 ring-violet-100 bg-violet-50/40' : ''
                   }`}
-                onClick={() => { enableOptions == null && handleNotificationClick(notification) }}
+                onClick={() => {
+                  if (enableOptions == null) {
+                    handleNotificationClick(notification);
+                  }
+                }}
               >
                 <div className="p-4">
                   <div className="flex items-start space-x-3">
                     {/* Notification Icon */}
                     <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${!notification.isRead
-                      ? 'bg-blue-100 text-blue-600'
-                      : 'bg-gray-100 text-gray-500'
+                      ? 'bg-violet-100 text-violet-700'
+                      : 'bg-slate-100 text-slate-500'
                       }`}>
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -178,15 +184,15 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
                             {!notification.isRead && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-violet-700 rounded-full"></div>
                             )}
-                            <h4 className="text-sm font-semibold text-gray-900 truncate">
+                            <h4 className="text-sm font-semibold text-slate-950 truncate">
                               {notification.title}
                             </h4>
                           </div>
 
-                          <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
+                          <div className="flex items-center space-x-2 text-xs text-slate-500 mb-2">
+                            <span className="bg-slate-100 text-slate-700 px-2 py-1 rounded-full">
                               {notification.description && notification.description.length > 150
                                 ? `${notification.description.slice(0, 150)}...`
                                 : notification.description}
@@ -197,7 +203,7 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
 
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <span className="text-xs text-gray-500">
+                              <span className="text-xs text-slate-500">
                                 {new Date(notification.createdAt).toLocaleDateString()}
                               </span>
                               {/* <span className="text-xs font-medium text-green-600">
@@ -213,7 +219,7 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
                         {/* Options Menu */}
                         <div className="flex-shrink-0 ml-2">
                           <button
-                            className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                            className="p-1 text-slate-400 hover:text-violet-800 rounded-lg hover:bg-violet-50 transition-colors duration-200"
                             onClick={(e) => {
                               setEnableOptions(i);
                               e.stopPropagation();
@@ -225,7 +231,7 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
                           </button>
 
                           {/* Dropdown Menu */}
-                          <div className={`absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 ${i === enableOptions ? "block" : "hidden"
+                          <div className={`absolute right-0 top-8 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-10 ${i === enableOptions ? "block" : "hidden"
                             }`}>
                             <button
                               onClick={(e) => {

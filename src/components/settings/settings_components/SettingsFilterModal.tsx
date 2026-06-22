@@ -117,17 +117,20 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-5 rounded shadow-lg w-96">
-        <h3 className="text-lg font-semibold mb-3 text-gray-600">Apply Filters</h3>
-        <div className="space-y-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 backdrop-blur-sm">
+      <div className="app-surface w-full max-w-md p-5 shadow-[0_24px_70px_rgba(15,23,42,0.28)]">
+        <div className="mb-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-600">Filters</p>
+          <h3 className="mt-1 text-lg font-semibold text-slate-950">Apply Filters</h3>
+        </div>
+        <div className="space-y-4">
           {/* User Filters */}
           {type === "user" && (
             <>
               <div>
-                <label className="block text-sm font-medium mb-1">Status</label>
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Status</label>
                 <select
-                  className="w-full px-2 py-1 border rounded text-sm"
+                  className="app-control h-11 w-full text-sm"
                   value={status}
                   onChange={(e) => {
                     setStatus(e.target.value);
@@ -151,9 +154,9 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Roles</label>
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Roles</label>
                 {roles && <select
-                  className="w-full px-2 py-1 border rounded text-sm"
+                  className="app-control h-11 w-full text-sm"
                   value={selectedRole}
                   onChange={(e) => {
                     setSelectedRole(e.target.value);
@@ -170,9 +173,9 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Department</label>
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Department</label>
                 {departments && <select
-                  className="w-full px-2 py-1 border rounded text-sm"
+                  className="app-control h-11 w-full text-sm"
                   value={selectedDepartment}
                   onChange={(e) => {
                     setSelectedDepartment(e.target.value);
@@ -194,9 +197,9 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
           {type === "workflow" && (
             <>
             <div>
-                <label className="block text-sm font-medium mb-1">Department</label>
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Department</label>
                 {departments && <select
-                  className="w-full px-2 py-1 border rounded text-sm"
+                  className="app-control h-11 w-full text-sm"
                   value={selectedDepartment}
                   onChange={(e) => {
                     setSelectedDepartment(e.target.value);
@@ -212,9 +215,9 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
                 </select>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">ExpenditureType</label>
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Expenditure Type</label>
                 {expenditureTypes && <select
-                  className="w-full px-2 py-1 border rounded text-sm"
+                  className="app-control h-11 w-full text-sm"
                   value={selectedExpenditureType}
                   onChange={(e) => {
                     setSelectedExpenditureType(e.target.value);
@@ -230,12 +233,12 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
                 </select>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Budget Range</label>
-                <div className="flex space-x-2">
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Budget Range</label>
+                <div className="grid grid-cols-2 gap-2">
                   <input
                     type="number"
                     placeholder="Min"
-                    className="w-1/2 px-2 py-1 border rounded text-sm"
+                    className="app-control h-11 w-full text-sm"
                     value={minBudget}
                     onChange={(e) => {
                       setMinBudget(e.target.value);
@@ -245,7 +248,7 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
                   <input
                     type="number"
                     placeholder="Max"
-                    className="w-1/2 px-2 py-1 border rounded text-sm"
+                    className="app-control h-11 w-full text-sm"
                     value={maxBudget}
                     onChange={(e) => {
                       setMaxBudget(e.target.value);
@@ -261,9 +264,9 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
           {type === "budgetallocation" && (
             <>
               <div>
-                <label className="block text-sm font-medium mb-1">Department</label>
+                <label className="mb-1.5 block text-sm font-semibold text-slate-700">Department</label>
                 {departments && <select
-                  className="w-full px-2 py-1 border rounded text-sm"
+                  className="app-control h-11 w-full text-sm"
                   value={selectedDepartment}
                   onChange={(e) => {
                     setSelectedDepartment(e.target.value);
@@ -281,9 +284,9 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
             </>
           )}
 
-          <div className="mt-4 flex space-x-2">
+          <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-slate-200 pt-4">
             <button 
-              className="px-4 py-2 bg-blue-500 text-white rounded text-sm" 
+              className="app-button-primary min-w-[128px]"
               onClick={() => { 
                 setFilter(tempfilter); 
                 setIsFilterModalOpen(false); 
@@ -292,13 +295,13 @@ const SettingsFilterModal: React.FC<SettingsFilterModalProp> = ({
               Apply Filters
             </button>
             <button 
-              className="px-4 py-2 bg-gray-300 rounded text-sm" 
+              className="app-button-secondary min-w-[96px]"
               onClick={() => setIsFilterModalOpen(false)}
             >
               Cancel
             </button>
             <button 
-              className="px-4 py-2 bg-red-500 text-white rounded text-sm" 
+              className="inline-flex min-h-[44px] min-w-[96px] items-center justify-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-200"
               onClick={resetFilters}
             >
               Reset

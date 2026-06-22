@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import procurementLogo from "../../assets/procurement_logo/procurement-logo.png";
+import procurementLogo from "../../assets/procurement_logo/Muscat-Pharmacy-logo.png";
 import {
   BellIcon,
   ClipboardIcon,
@@ -28,8 +28,9 @@ const Navbar = ({ notifications,trigger }: NavbarProp) => {
   // Navigation items
   const navItems: NavItem[] = [
     { to: "/", title: "Dashboard", icon: HomeIcon },
-    { to: "/requests", title: "Requests", icon: ClipboardIcon },
-    { to: "/spend_analysys", title: "Approved", icon: DocumentTextIcon },
+    { to: "/rfps", title: "Requests", icon: ClipboardIcon },
+    { to: "/vendors", title: "Vendors", icon: DocumentTextIcon },
+    { to: "/vendor-portal", title: "Vendor Portal", icon: DocumentTextIcon },
     { to: "/settings/user-managment", title: "Settings", icon: SettingsIcon },
   ];
 
@@ -50,22 +51,24 @@ const Navbar = ({ notifications,trigger }: NavbarProp) => {
       to={to || "#"} // Default to "#" if no `to` provided
       title={title}
       onClick={onClick}
-      className="flex items-center space-x-2 px-4 py-2 text-black hover:bg-gray-200 rounded-md transition-colors duration-100"
+      className="flex items-center space-x-3 px-4 py-3 text-slate-700 hover:bg-violet-50 hover:text-violet-800 rounded-lg transition-all duration-200"
     >
-      <Icon className="w-6 h-6" />
-      <span className="text-sm font-medium">{title}</span>
+      <Icon className="w-5 h-5" />
+      <span className="text-sm font-semibold">{title}</span>
     </NavLink>
   );
 
   return (
-    <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10">
-      <div className="flex items-center justify-between p-4">
+    <div className="fixed top-0 left-0 w-full bg-white/95 shadow-[0_12px_35px_rgba(15,23,42,0.08)] border-b border-slate-200/80 backdrop-blur-xl z-10">
+      <div className="flex items-center justify-between px-4 py-3">
         {/* Logo */}
-        <img src={procurementLogo} alt="Logo" className="w-10 h-10" />
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-violet-100 bg-violet-50 shadow-sm">
+          <img src={procurementLogo} alt="Logo" className="w-8 h-8" />
+        </div>
 
         {/* Menu Icon for Mobile */}
         <button
-          className="p-2 rounded-md hover:bg-gray-200"
+          className="p-2 rounded-lg text-slate-600 hover:bg-violet-50 hover:text-violet-800 transition-all duration-200"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           <MenuIcon className="w-6 h-6" />
@@ -74,7 +77,7 @@ const Navbar = ({ notifications,trigger }: NavbarProp) => {
 
       {/* Dropdown Menu for Mobile */}
       {isDropdownOpen && (
-        <div className="bg-white shadow-md p-4">
+        <div className="bg-white/95 border-t border-slate-100 shadow-xl p-4">
           {/* Navigation Links */}
           <div className="space-y-2">
             {navItems.map(({ to, title, icon }) => (

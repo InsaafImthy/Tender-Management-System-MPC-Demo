@@ -34,6 +34,7 @@ import CompetitorAnalysisPage from '../pages/competitor_analysis/CompetitorAnaly
 import PurchaseRequisitionPage from '../pages/purchase_requisition/PurchaseRequisitionPage';
 import PurchaseRequisitionForm from '../components/purchase_requisition/pr_form/PurchaseRequisitionForm';
 import LiveBiddingPage from '../pages/live_bidding_page/LiveBiddingPage';
+import AdminVendorPortalRoutes from '../components/AdminVendorPortal/routes/AdminVendorPortalRoutes';
 
 interface procurementContextProp {
   countryCodes: ICountryCode[] | null;
@@ -51,6 +52,7 @@ const RouteComponent: React.FC = () => {
   const [countryCodes, setCountryCodes] = useState<ICountryCode[]>([]);
   // State for mobile detection
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
 
   // State for user login status
   // TODO: Update this state via Login component or auth system
@@ -193,9 +195,18 @@ const RouteComponent: React.FC = () => {
             path="*"
             element={
               <div className="flex min-h-screen">
-                {isMobile ? <Navbar notifications={notifications} trigger={() => { }} /> : <Sidebar notifications={notifications} trigger={() => { }} />}
+                {isMobile ? (
+                  <Navbar notifications={notifications} trigger={() => { }} />
+                ) : (
+                  <Sidebar
+                    notifications={notifications}
+                    trigger={() => { }}
+                    isExpanded={isSidebarExpanded}
+                    onExpandedChange={setIsSidebarExpanded}
+                  />
+                )}
                 <div
-                  className={`flex-1 min-h-screen bg-bgBlue ${isMobile ? 'mt-20' : 'ml-[78px]'
+                  className={`flex-1 min-h-screen bg-bgBlue transition-[margin] duration-300 ease-in-out ${isMobile ? 'mt-20' : isSidebarExpanded ? 'ml-[260px]' : 'ml-[82px]'
                     }`}
                 >
                   {userLoggedIn ? (
@@ -228,6 +239,7 @@ const RouteComponent: React.FC = () => {
                       <Route path="/purchase-requistition" element={<PurchaseRequisitionPage />} />
                       <Route path="/purchase-requistition/create" element={<PurchaseRequisitionForm/>} />
                       <Route path="/rfps/:id/live-bidding" element={<LiveBiddingPage />} />
+                      <Route path="/vendor-portal/*" element={<AdminVendorPortalRoutes />} />
                     </Routes>
                   ) : (
                     <div className="flex items-center justify-center h-full">

@@ -1,4 +1,4 @@
 export const Urls = {
-    defaultUrl : "https://localhost:7067",
+    defaultUrl : "https://4.188.243.158:7081",
     company:"aufait"
 }

@@ -65,12 +65,12 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
                 {
                   label: "Estimated Budget",
                   data: details?.budgets || [12000, 15000, 18000, 22000, 25000],
-                  borderColor: "#3B82F6",
-                  backgroundColor: "rgba(59, 130, 246, 0.1)",
+                  borderColor: "#6D28D9",
+                  backgroundColor: "rgba(109, 40, 217, 0.10)",
                   borderWidth: 3,
                   fill: true,
                   tension: 0.4,
-                  pointBackgroundColor: "#3B82F6",
+                  pointBackgroundColor: "#6D28D9",
                   pointBorderColor: "#ffffff",
                   pointBorderWidth: 3,
                   pointRadius: 6,
@@ -79,12 +79,12 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
                 {
                   label: "Actual Spend",
                   data: details?.spend || [10000, 13000, 16000, 19000, 21000],
-                  borderColor: "#BFDBFE",
-                  backgroundColor: "rgb(59 130 246 / 0.15)",
+                  borderColor: "#A78BFA",
+                  backgroundColor: "rgb(167 139 250 / 0.14)",
                   borderWidth: 3,
                   fill: true,
                   tension: 0.4,
-                  pointBackgroundColor: "#BFDBFE", 
+                  pointBackgroundColor: "#A78BFA",
                   pointBorderColor: "#ffffff", 
                   pointBorderWidth: 3,
                   pointRadius: 6,
@@ -182,7 +182,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   }, [budgetDetails]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border-0 p-6 h-[350px] overflow-hidden relative">
+    <div className="app-surface p-6 h-[350px] overflow-hidden relative">
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
@@ -193,16 +193,16 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
           </div>
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-3">
-              <div className="w-4 h-4 bg-blue-500 rounded-full shadow-sm"></div>
+              <div className="w-3 h-3 bg-violet-700 rounded-full shadow-sm"></div>
               <span className="text-label text-muted">Estimated</span>
             </div>
             <div className="flex items-center space-x-3">
-              <div className="w-4 h-4 bg-blue-200 rounded-full shadow-sm"></div>
+              <div className="w-3 h-3 bg-violet-300 rounded-full shadow-sm"></div>
               <span className="text-label text-muted">Actual</span>
             </div>
           </div>
         </div>
-        <div className="relative h-[240px] rounded-2xl p-4">
+        <div className="relative h-[240px] rounded-xl p-4 bg-slate-50/70 border border-slate-100">
           <canvas
             ref={chartRef}
             className="w-full h-full"

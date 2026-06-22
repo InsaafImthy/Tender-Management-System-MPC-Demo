@@ -321,15 +321,15 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="admin-page">
       <CommonTitleCard />
 
       {/* Header Section */}
-      <div className="bg-white shadow-lg border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">
+      <div className="admin-content pb-0">
+        <div className="admin-page-header">
+          <div className="admin-page-header-row">
+            <div className="admin-title-cluster">
+              <div className="admin-title-icon">
                 <span className="text-white text-2xl font-bold">
                   <ClipboardMainIcon />
                 </span>
@@ -345,9 +345,9 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <div className="px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-                <span className="text-sm font-semibold text-blue-700">
+            <div className="admin-title-actions">
+              <div className="admin-count-badge">
+                <span>
                   Step 1 of 5
                 </span>
               </div>
@@ -357,7 +357,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Progress Steps */}
           {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
@@ -445,8 +445,8 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
           </div>
 
           {/* Form Actions */}
-          <div className="mt-8 p-8 bg-white rounded-2xl shadow-lg border border-gray-200">
-            <div className="flex items-center justify-between">
+          <div className="mt-8 app-surface p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center space-x-6">
                 <div className="flex items-center space-x-3">
                   <div>
@@ -465,7 +465,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
                   onClick={() => {
                     navigate(id ? `/rfps/${id}` : "/rfps");
                   }}
-                  className="px-8 py-3 h-auto border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-200 font-semibold"
+                  className="px-8 py-3 h-auto border-slate-200 text-slate-700 hover:bg-violet-50 hover:text-violet-800 transition-all duration-200 font-semibold"
                   size="large"
                 >
                   Cancel
@@ -477,7 +477,7 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
                     console.log("Button clicked!");
                     // Let the form's onSubmit handle the submission
                   }}
-                  className="px-10 py-3 h-auto bg-gradient-to-r from-blue-400 to-[#1365AA] hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                  className="px-10 py-3 h-auto bg-violet-700 hover:bg-violet-800 text-white font-semibold shadow-[0_10px_22px_rgba(109,40,217,0.22)] transition-all duration-200"
                   loading={isLoading}
                   size="large"
                 >

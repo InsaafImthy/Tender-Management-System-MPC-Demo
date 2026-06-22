@@ -98,20 +98,22 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
-        <Spin size="large" />
+      <div className="admin-page flex items-center justify-center">
+        <div className="app-surface px-8 py-6">
+          <Spin size="large" />
+        </div>
       </div>
     );
   }
 
   if (!requisition) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+      <div className="admin-page flex items-center justify-center px-6">
+        <div className="app-surface max-w-md p-8 text-center">
+          <h2 className="mb-3 text-2xl font-bold text-slate-950">
             Requisition Not Found
           </h2>
-          <Button onClick={() => navigate("/purchase-requisitions")}>
+          <Button className="app-button-secondary" onClick={() => navigate("/purchase-requisitions")}>
             Back to Requisitions
           </Button>
         </div>
@@ -120,16 +122,17 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
+    <div className="admin-page">
       <CommonTitleCard />
+      <div className="admin-content">
 
       {/* Header */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="admin-page-header">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate("/purchase-requisitions")}
-            className="flex items-center"
+            className="app-button-secondary"
           >
             Back to Requisitions
           </Button>
@@ -140,6 +143,7 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
                 navigate(`/purchase-requisitions/edit/${requisition.id}`)
               }
               type="primary"
+              className="app-button-primary"
             >
               Edit
             </Button>
@@ -148,8 +152,8 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
 
         <div className="flex items-start justify-between">
           <div>
-            <div className="flex items-center gap-4 mb-2">
-              <h1 className="text-3xl font-bold text-gray-900">
+            <div className="mb-2 flex flex-wrap items-center gap-4">
+              <h1 className="text-3xl font-bold text-slate-950">
                 {requisition.requisitionTitle}
               </h1>
               <span
@@ -160,43 +164,43 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
                 {getStatusLabel(requisition.status || 0)}
               </span>
             </div>
-            <p className="text-gray-600 text-lg">
+            <p className="text-lg text-slate-600">
               {requisition.requisitionNumber || `PR-${requisition.id}`}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900">
+          <div className="app-surface overflow-hidden">
+            <div className="border-b border-slate-200 bg-slate-50 px-8 py-6">
+              <h2 className="text-xl font-bold text-slate-950">
                 Requisition Details
               </h2>
             </div>
             <div className="p-8 space-y-4">
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-semibold text-gray-600">
+                  <label className="text-sm font-semibold text-slate-500">
                     Department
                   </label>
-                  <p className="text-base text-gray-900 mt-1">
+                  <p className="mt-1 text-base font-medium text-slate-950">
                     {requisition.department?.departmentName || "N/A"}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-600">
+                  <label className="text-sm font-semibold text-slate-500">
                     Requested By
                   </label>
-                  <p className="text-base text-gray-900 mt-1">
+                  <p className="mt-1 text-base font-medium text-slate-950">
                     {requisition.requestedBy || "N/A"}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-600">
+                  <label className="text-sm font-semibold text-slate-500">
                     Priority
                   </label>
                   <div className="mt-1">
@@ -210,20 +214,20 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-600">
+                  <label className="text-sm font-semibold text-slate-500">
                     Required Date
                   </label>
-                  <p className="text-base text-gray-900 mt-1">
+                  <p className="mt-1 text-base font-medium text-slate-950">
                     {formatDate(requisition.requiredDate)}
                   </p>
                 </div>
               </div>
               {requisition.notes && (
-                <div className="pt-4 border-t">
-                  <label className="text-sm font-semibold text-gray-600">
+                <div className="border-t border-slate-200 pt-4">
+                  <label className="text-sm font-semibold text-slate-500">
                     Notes / Justification
                   </label>
-                  <p className="text-base text-gray-700 mt-2 bg-gray-50 p-4 rounded-lg">
+                  <p className="mt-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-base text-slate-700">
                     {requisition.notes}
                   </p>
                 </div>
@@ -232,81 +236,81 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
           </div>
 
           {/* Products Table */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-200">
+          <div className="app-surface overflow-hidden">
+            <div className="border-b border-slate-200 bg-slate-50 px-8 py-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-slate-950">
                   Requisition Products
                 </h2>
-                <span className="text-sm text-gray-600">
+                <span className="admin-count-badge">
                   {requisition.items?.length || 0} product(s)
                 </span>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-slate-50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-[0.08em]">
                       Product Code
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-[0.08em]">
                       Medicine/Supply Name
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-[0.08em]">
                       UOM
                     </th>
-                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase">
+                    <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-[0.08em]">
                       Quantity
                     </th>
-                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase">
+                    <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-[0.08em]">
                       Unit Cost
                     </th>
-                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase">
+                    <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-[0.08em]">
                       Total
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-slate-200 bg-white">
                   {requisition.items?.map((item, index) => (
-                    <tr key={index} className="hover:bg-blue-50">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    <tr key={index} className="transition hover:bg-violet-50/50">
+                      <td className="px-6 py-4 text-sm font-semibold text-slate-950">
                         {item.itemCode}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
+                      <td className="px-6 py-4 text-sm font-medium text-slate-900">
                         {item.itemName}
                         {item.description && (
-                          <div className="text-xs text-gray-500 mt-1">
+                          <div className="mt-1 text-xs text-slate-500">
                             {item.description}
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-slate-600">
                         {getUnitLabel(item.unit)}
                       </td>
                       <td className="px-6 py-4 text-sm text-right">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-sm font-semibold text-violet-700">
                           {item.requestedQuantity.toLocaleString()}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-right font-medium">
                         {fmt(item.estimatedCost)}
                       </td>
-                      <td className="px-6 py-4 text-sm text-right font-bold text-gray-900">
+                      <td className="px-6 py-4 text-sm text-right font-bold text-slate-950">
                         {fmt(item.requestedQuantity * item.estimatedCost)}
                       </td>
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="bg-gray-50">
+                <tfoot className="bg-slate-50">
                   <tr>
                     <td
                       colSpan={5}
-                      className="px-6 py-4 text-right text-sm font-bold text-gray-900"
+                      className="px-6 py-4 text-right text-sm font-bold text-slate-950"
                     >
                       Total Estimated Cost:
                     </td>
-                    <td className="px-6 py-4 text-right text-lg font-bold text-green-700">
+                    <td className="px-6 py-4 text-right text-lg font-bold text-emerald-700">
                       {fmt(calculateTotal())}
                     </td>
                   </tr>
@@ -319,34 +323,34 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Timeline */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900">Timeline</h3>
+          <div className="app-surface overflow-hidden">
+            <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+              <h3 className="text-lg font-bold text-slate-950">Timeline</h3>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="text-xs font-semibold text-gray-600 uppercase">
+                <label className="text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
                   Created
                 </label>
-                <p className="text-sm text-gray-900 mt-1">
+                <p className="mt-1 text-sm font-medium text-slate-950">
                   {formatDate(requisition.createdAt || "")}
                 </p>
               </div>
               {requisition.updatedAt && (
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 uppercase">
+                  <label className="text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
                     Last Updated
                   </label>
-                  <p className="text-sm text-gray-900 mt-1">
+                  <p className="mt-1 text-sm font-medium text-slate-950">
                     {formatDate(requisition.updatedAt)}
                   </p>
                 </div>
               )}
               <div>
-                <label className="text-xs font-semibold text-gray-600 uppercase">
+                <label className="text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
                   Required By
                 </label>
-                <p className="text-sm text-gray-900 mt-1 font-semibold text-orange-600">
+                <p className="mt-1 text-sm font-semibold text-amber-600">
                   {formatDate(requisition.requiredDate)}
                 </p>
               </div>
@@ -354,17 +358,17 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
           </div>
 
           {/* Summary Card */}
-          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 text-white">
+          <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-600 to-purple-700 p-6 text-white shadow-[0_22px_60px_rgba(109,40,217,0.28)]">
             <h3 className="text-lg font-bold mb-4">Summary</h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-blue-100">Total Products</span>
+                <span className="text-violet-100">Total Products</span>
                 <span className="text-2xl font-bold">
                   {requisition.items?.length || 0}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-blue-100">Total Quantity</span>
+                <span className="text-violet-100">Total Quantity</span>
                 <span className="text-2xl font-bold">
                   {requisition.items?.reduce(
                     (sum, item) => sum + item.requestedQuantity,
@@ -372,9 +376,9 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
                   ) || 0}
                 </span>
               </div>
-              <div className="border-t border-blue-400 pt-3 mt-3">
+              <div className="border-t border-violet-300/50 pt-3 mt-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-blue-100">Est. Total Cost</span>
+                  <span className="text-violet-100">Est. Total Cost</span>
                   <span className="text-2xl font-bold">
                     {fmt(calculateTotal())}
                   </span>
@@ -383,6 +387,7 @@ const PurchaseRequisitionDetailPage: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

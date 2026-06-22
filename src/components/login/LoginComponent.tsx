@@ -77,12 +77,12 @@ export const LoginComponent: React.FC<LoginComponentProps> = ({setUserLoggedIn})
     >
       {/* Username Field */}
       <div className="space-y-2">
-        <label htmlFor="login-username" className="block text-sm font-semibold text-gray-700 mb-2">
+        <label htmlFor="login-username" className="block text-sm font-semibold text-slate-700 mb-2">
           Username or Email
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
@@ -91,7 +91,7 @@ export const LoginComponent: React.FC<LoginComponentProps> = ({setUserLoggedIn})
             type="text"
             value={loginData.username}
             onChange={(e) => handleChange("username", e.target.value.trim())}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+            className="w-full pl-10 pr-4 py-3 app-control rounded-lg focus:outline-none bg-slate-50 focus:bg-white"
             placeholder="Enter your username or email"
             required
           />
@@ -100,12 +100,12 @@ export const LoginComponent: React.FC<LoginComponentProps> = ({setUserLoggedIn})
 
       {/* Password Field */}
       <div className="space-y-2">
-        <label htmlFor="login-password" className="block text-sm font-semibold text-gray-700 mb-2">
+        <label htmlFor="login-password" className="block text-sm font-semibold text-slate-700 mb-2">
           Password
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
@@ -114,7 +114,7 @@ export const LoginComponent: React.FC<LoginComponentProps> = ({setUserLoggedIn})
             type="password"
             value={loginData.password}
             onChange={(e) => handleChange("password", e.target.value.trim())}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+            className="w-full pl-10 pr-4 py-3 app-control rounded-lg focus:outline-none bg-slate-50 focus:bg-white"
             placeholder="Enter your password"
             required
           />
@@ -127,16 +127,16 @@ export const LoginComponent: React.FC<LoginComponentProps> = ({setUserLoggedIn})
           <input
             id="remember-me"
             type="checkbox"
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            className="h-4 w-4 text-violet-700 focus:ring-violet-500 border-slate-300 rounded"
           />
-          <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600">
+          <label htmlFor="remember-me" className="ml-2 text-sm text-slate-600">
             Remember me
           </label>
         </div>
         <button
           type="button"
           onClick={() => navigate('/forgot-password')}
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+          className="text-sm text-violet-700 hover:text-violet-900 font-semibold transition-colors duration-200"
         >
           Forgot password?
         </button>
@@ -147,7 +147,7 @@ export const LoginComponent: React.FC<LoginComponentProps> = ({setUserLoggedIn})
         id="login-btn"
         type="submit"
         disabled={isLoading}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none disabled:shadow-lg"
+        className="w-full app-button-primary py-3 disabled:bg-slate-400 disabled:shadow-none disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <>

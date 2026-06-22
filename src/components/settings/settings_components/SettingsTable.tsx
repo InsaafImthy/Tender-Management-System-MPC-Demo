@@ -76,20 +76,20 @@ interface TableProps extends Partial<IDot> {
 // };
 
 const getStatusBadge = (status: string) => {
-    let statusClasses = "py-1 text-xs border rounded-full flex justify-center";
+    let statusClasses = "inline-flex items-center justify-center px-3 py-1.5 text-xs border rounded-full font-semibold";
 
     switch (status.toLowerCase()) {
         case "active":
-            statusClasses += " bg-green-100 text-green-700 border-green-500";
+            statusClasses += " bg-emerald-50 text-emerald-700 border-emerald-200";
             break;
         case "inactive":
-            statusClasses += " bg-red-100 text-red-700 border-red-500";
+            statusClasses += " bg-rose-50 text-rose-700 border-rose-200";
             break;
         case "pending":
-            statusClasses += " bg-yellow-100 text-yellow-700 border-yellow-500";
+            statusClasses += " bg-amber-50 text-amber-700 border-amber-200";
             break;
         default:
-            statusClasses += " bg-gray-100 text-gray-700 border-gray-500";
+            statusClasses += " bg-slate-50 text-slate-700 border-slate-200";
     }
 
     return <div className={statusClasses}>{status}</div>;
@@ -179,59 +179,59 @@ const SettingsTable: React.FC<TableProps> = ({
     };
 
     return (
-        <div className="overflow-x-auto bg-white rounded-md shadow w-full">
-            <div className="bg-white p-3">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-[18px] font-semibold mr-4">{title}</h2>
-                    <div className="flex space-x-2">
-                        {setSearchQuery && <div className="relative w-[219px] h-[30px] flex items-center">
-                            <MagnifyingGlass className="absolute size-4 left-3 top-1/2 transform -translate-y-1/2 text-[#1E1F21] z-10" />
+        <div className="overflow-hidden bg-white rounded-xl w-full">
+            <div className="bg-white">
+                <div className="flex flex-col gap-4 border-b border-slate-200 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+                    <h2 className="text-xl font-semibold text-slate-950 mr-4">{title}</h2>
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        {setSearchQuery && <div className="relative w-full sm:w-[280px] h-11 flex items-center">
+                            <MagnifyingGlass className="absolute size-5 left-4 top-1/2 transform -translate-y-1/2 text-slate-500 z-10" />
                             <input
                                 type="text"
                                 placeholder="Search..."
-                                className="w-full pl-10 pr-3 py-1.5 rounded-[6px] bg-[#EFF4F9] text-sm focus:outline-none flex items-center"
+                                className="w-full h-11 pl-12 pr-4 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>}
                         {filter && setIsFilterModalOpen && <button
-                            className="px-3 py-2 w-[75px] h-[30px] flex text-xs items-center justify-center bg-[#EFF4F9] rounded-[6px] hover:bg-blue-200"
+                            className="app-button-secondary h-11 px-4"
                             onClick={() => setIsFilterModalOpen && setIsFilterModalOpen(true)}
                         >
-                            <FilterIcon className="size-6 mr-2" /> Filter
+                            <FilterIcon className="size-5" /> Filter
                         </button>}
                         {filter && setIsSortModalOpen && <button
-                            className="px-3 py-2 w-[75px] h-[30px] text-xs flex items-center justify-center bg-[#EFF4F9] rounded-[6px] hover:bg-blue-200"
+                            className="app-button-secondary h-11 px-4"
                             onClick={() => setIsSortModalOpen && setIsSortModalOpen(true)}
                         >
-                            <SortIcon className="size-3 mr-2" /> Sort
+                            <SortIcon className="size-4" /> Sort
                         </button>}
                     </div>
                 </div>
-                <div ref={tableContainerRef} className="overflow-auto max-h-[380px]">
+                <div ref={tableContainerRef} className="overflow-auto max-h-[460px] scrollbar-thin">
                     <table className="min-w-full border-collapse table-auto">
-                        <thead className="sticky top-0 bg-white z-5">
+                        <thead className="sticky top-0 bg-slate-50 z-5">
                             <tr>
                                 {columns.map((column) => (
-                                    <th key={column.key} className="px-1 py-2 border-b text-[12px] text-gray-600 text-left text-md">
+                                    <th key={column.key} className="px-5 py-3.5 border-b border-slate-200 text-xs font-semibold uppercase tracking-wide text-slate-500 text-left">
                                         {column.label}
                                     </th>
                                 ))}
-                                {dots && <th className="px-2 py-2 border-b text-[12px] text-gray-600 text-left text-md"></th>}
+                                {dots && <th className="px-5 py-3.5 border-b border-slate-200 text-xs font-semibold uppercase tracking-wide text-slate-500 text-left"></th>}
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-slate-100">
                             {data.length > 0 ? (
                                 data.map((item, index) => (
-                                    <tr key={index} onClick={() => onRowClick?.(item)} className="cursor-pointer hover:bg-gray-100">
+                                    <tr key={index} onClick={() => onRowClick?.(item)} className="cursor-pointer hover:bg-violet-50/60 transition-colors duration-150">
                                         {columns.map((col) => (
-                                            <td key={col.key} className={`px-1 py-2 ${index < data.length - 1 && "border-b"} text-[12px]`}>
+                                            <td key={col.key} className="px-5 py-3.5 text-sm font-medium text-slate-800">
                                                 {col.key === "status" ? getStatusBadge(item[col.key]) : item[col.key]}
                                             </td>
                                         ))}
                                         {(dots || item["dot"]) && (
-                                            <td className={`px-6 py-2 ${index < data.length - 1 && "border-b"} text-xs`} onClick={(e) => e.stopPropagation()}>
-                                                <button onClick={(e) => toggleDropdown(index, e)} className="focus:outline-none">
-                                                    <EllipsisVerticalIcon className="w-4 h-4 stroke-gray-600" />
+                                            <td className="px-5 py-3.5 text-xs" onClick={(e) => e.stopPropagation()}>
+                                                <button onClick={(e) => toggleDropdown(index, e)} className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-violet-50 hover:text-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-100">
+                                                    <EllipsisVerticalIcon className="w-4 h-4" />
                                                 </button>
                                             </td>
                                         )}
@@ -239,8 +239,14 @@ const SettingsTable: React.FC<TableProps> = ({
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={columns.length} className="px-4 py-2 border-b text-center">
-                                        No data found
+                                    <td colSpan={columns.length + (dots ? 1 : 0)} className="px-5 py-14 text-center">
+                                        <div className="mx-auto max-w-sm">
+                                            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-violet-100 bg-violet-50 text-violet-700">
+                                                <MagnifyingGlass className="size-5" />
+                                            </div>
+                                            <p className="text-sm font-semibold text-slate-900">No data found</p>
+                                            <p className="mt-1 text-sm text-slate-500">Try adjusting your search or filters.</p>
+                                        </div>
                                     </td>
                                 </tr>
                             )}

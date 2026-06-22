@@ -64,22 +64,29 @@ const SettingsSortModal: React.FC<SettingsSortModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-5 rounded shadow-lg">
-        <h3 className="text-lg font-semibold mb-3 text-gray-600">Sort By</h3>
-        <div className="space-y-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 backdrop-blur-sm">
+      <div className="app-surface w-full max-w-sm p-5 shadow-[0_24px_70px_rgba(15,23,42,0.28)]">
+        <div className="mb-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-600">Sort</p>
+          <h3 className="mt-1 text-lg font-semibold text-slate-950">Sort By</h3>
+        </div>
+        <div className="space-y-2">
           {sortColumns[type].map((column) => (
             <button
               key={column.key}
-              className="w-full px-4 py-2 text-left text-sm border-b hover:bg-blue-100"
+              className={`w-full rounded-xl border px-4 py-3 text-left text-sm font-semibold transition ${
+                sortOptions.field === column.key
+                  ? "border-violet-200 bg-violet-50 text-violet-700 shadow-sm"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-violet-200 hover:bg-violet-50/70 hover:text-violet-700"
+              }`}
               onClick={() => applySorting(column.key)}
             >
               {column.label} {sortOptions.field === column.key ? `(${sortOptions.direction})` : ""}
             </button>
           ))}
-          <div className="mt-4">
+          <div className="mt-5 flex justify-end">
             <button
-              className="px-4 py-2 bg-gray-300 rounded text-sm"
+              className="app-button-secondary min-w-[104px]"
               onClick={() => setIsSettingsSortModalOpen(false)}
             >
               Close

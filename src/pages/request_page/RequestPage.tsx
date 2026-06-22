@@ -231,16 +231,16 @@ function RequestPage() {
   const tabs = ["All RFPs", "My RFPs", "Assigned"];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-bgBlue">
       <CommonTitleCard />
       <div className="max-w-7xl mx-auto px-6 py-8">
         {!showLoader ? (
           <>
             {/* Header Section */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 mb-4">
-              <div className="flex items-center justify-between">
+            <div className="app-surface-soft p-5 mb-4">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-14 h-14 bg-violet-700 rounded-xl flex items-center justify-center shadow-[0_14px_28px_rgba(109,40,217,0.24)]">
                     <span className="text-white text-2xl font-bold"><ClipboardMainIcon/></span>
                   </div>
                   <div>
@@ -250,8 +250,8 @@ function RequestPage() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md border border-blue-200">
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="px-4 py-2 bg-violet-50 rounded-lg border border-violet-100">
                     <span className="text-button text-accent">
                       {rfpRequests.length} Total RFPs
                     </span>
@@ -261,25 +261,22 @@ function RequestPage() {
               </div>
             </div>
             {/* Tab Navigation */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-4">
-              <div className="flex items-center space-x-8">
+            <div className="app-surface p-3 mb-4">
+              <div className="flex flex-wrap items-center gap-2">
                 {tabs.map((tab, index) => (
                   <div key={tab} className="flex items-center">
                     <button
                       onClick={() => setupTab(tab)}
-                      className={`relative px-6 py-3 text-button rounded-lg transition-all duration-200 ${
+                      className={`relative px-5 py-2.5 text-button rounded-lg transition-all duration-200 ${
                         statusFilter === tab
-                          ? "bg-gradient-to-r from-blue-400 to-[#1365AA] !text-white shadow-lg transform -translate-y-0.5"
-                          : "text-muted hover:text-slate-900 hover:bg-gray-50"
+                          ? "bg-violet-700 !text-white shadow-[0_10px_22px_rgba(109,40,217,0.22)]"
+                          : "text-muted hover:text-violet-800 hover:bg-violet-50"
                       }`}
                     >
                       {tab}
-                      {statusFilter === tab && (
-                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-blue-500"></div>
-                      )}
                     </button>
                     {index !== tabs.length - 1 && (
-                      <div className="w-px h-6 bg-gray-300 mx-4"></div>
+                      <div className="hidden sm:block w-px h-6 bg-slate-200 mx-2"></div>
                     )}
                   </div>
                 ))}
@@ -287,7 +284,7 @@ function RequestPage() {
             </div>
 
             {/* Table Section */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="app-surface overflow-hidden">
               <Table
                 filter={filter}
                 setFilter={setFilter}

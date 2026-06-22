@@ -10,39 +10,39 @@ const ShowStatus: React.FC<ShowStatusProps> = ({ status, type }) => {
   const getStatusClass = () => {
     switch (status) {
       case 0:
-        return 'bg-orange-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       //approved
       case 1:
-        return 'bg-blue-100 text-blue-700 border-blue-500 max-w-16';
+        return 'bg-violet-50 text-violet-700 border-violet-200 max-w-16';
       //rejected
       case 2:
-        return 'bg-red-100 text-red-700 border-red-500';
+        return 'bg-rose-50 text-rose-700 border-rose-200';
       //sent for clarification
       case 3:
-        return 'bg-yellow-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       //sent for approval   
       case 4:
-        return 'bg-orange-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       //published
       case 5:
-        return 'bg-green-100 text-green-700 border-green-500';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
       //closed
       case 6:
-        return 'bg-green-100 text-green-700 border-green-500';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
       //pending
       case 7:
-        return 'bg-orange-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       //sent for open proposal
       case 8:
-        return 'bg-orange-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       //under evaluation
       case 9:
-        return 'bg-orange-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       //under award
       case 10:
-        return 'bg-orange-100 text-orange-700 border-orange-500 max-w-32';
+        return 'bg-amber-50 text-amber-700 border-amber-200 max-w-32';
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-500';
+        return 'bg-slate-50 text-slate-700 border-slate-200';
     }
   };
 
@@ -57,7 +57,7 @@ const ShowStatus: React.FC<ShowStatusProps> = ({ status, type }) => {
   };
 
   return (
-    <button className={`py-1 px-2 text-xs border rounded-full flex justify-center ${getStatusClass()}`}>
+    <button className={`py-1.5 px-3 text-xs border rounded-full flex justify-center font-semibold shadow-sm ${getStatusClass()}`}>
       {getStatusLabel()}
     </button>
   );

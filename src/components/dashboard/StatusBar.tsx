@@ -17,25 +17,17 @@ const StatusBar: React.FC<StatusBarProps> = ({ statuses }) => {
       {statuses.map((status, index) => (
         <div
           key={index}
-          className={`${
-            "bg-white hover:bg-gradient-to-br hover:from-blue-400 hover:to-[#1365AA] hover:text-white"
-          } rounded-2xl shadow-lg border-0 p-6 transition-all duration-300 relative overflow-hidden group`}
+          className="app-surface p-5 transition-all duration-300 relative overflow-hidden group hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-[0_20px_45px_rgba(76,29,149,0.12)]"
         >
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-sm font-medium opacity-90">
+              <div className="text-sm font-semibold text-slate-600">
                 {status.label}
               </div>
               <div
-                className={`w-8 h-8 rounded-full ${
-                  status.color + " group-hover:bg-white/30"
-                } flex items-center justify-center transition-all duration-300`}
+                className="w-10 h-10 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-700 transition-all duration-300 group-hover:bg-violet-700 group-hover:text-white"
               >
-                <span
-                  className={`text-sm ${
-                    status.textColor + " group-hover:text-white"
-                  }`}
-                >
+                <span className="text-sm">
                   {status.icon}
                 </span>
               </div>
@@ -43,9 +35,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ statuses }) => {
 
             <div className="mb-3">
               <div
-                className={`text-4xl font-bold ${
-                  "text-slate-900 group-hover:text-white"
-                } transition-colors duration-300`}
+                className="text-4xl font-bold text-slate-950 transition-colors duration-300"
               >
                 {status.value}
               </div>

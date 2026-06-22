@@ -64,11 +64,11 @@ const TextField = ({
 
   return (
     <div
-      className={`flex flex-col p-2 rounded border relative ${style} ${type === "number" ? style : ""}  ${type === "password" ? style : ""} ${disabled ? "bg-gray-100 border-gray-200 cursor-not-allowed" : "border-gray-300"
+      className={`flex flex-col p-2 rounded-lg app-control relative ${style} ${type === "number" ? style : ""}  ${type === "password" ? style : ""} ${disabled ? "bg-slate-100 border-slate-200 cursor-not-allowed" : ""
         }`}
     >
       {/* Optional Title */}
-      {title && <span className="text-xs text-gray-500 mb-1">{title}</span>}
+      {title && <span className="text-xs font-medium text-slate-500 mb-1">{title}</span>}
 
       {/* Conditionally render input or textarea */}
       {type === "textarea" ? (
@@ -81,7 +81,7 @@ const TextField = ({
           onChange={handleChange}
           onKeyDown={onKeyDown || undefined}
           disabled={disabled} // Handle disabled state
-          className={`border-none outline-none ${width} text-sm ${disabled ? "text-gray-400" : ""
+          className={`border-none outline-none bg-transparent ${width} text-sm placeholder:text-slate-400 ${disabled ? "text-slate-400" : "text-slate-800"
             }`}
           aria-label={title || placeholder}
         />
@@ -98,7 +98,7 @@ const TextField = ({
             onKeyDown={onKeyDown || undefined}
             disabled={disabled} // Handle disabled state
             min={disablePrevDates ? new Date().toISOString().split("T")[0] : undefined}
-            className={`border-none outline-none h-full ${width} text-sm ${disabled ? "text-gray-400" : ""
+            className={`border-none outline-none h-full bg-transparent ${width} text-sm placeholder:text-slate-400 ${disabled ? "text-slate-400" : "text-slate-800"
               }`}
             aria-label={title || placeholder}
           />
@@ -129,7 +129,7 @@ const TextField = ({
           onChange={(e) => (type === "number" ? handleNumberInput(e, handleChange) : handleChange(e))}
           // onKeyDown={onKeyDown || undefined}
           disabled={disabled}
-          className={`border-none outline-none h-full ${width} text-sm ${disabled ? "text-gray-400" : ""} ${type === "number" ? "hide-arrows" : ""}`}
+          className={`border-none outline-none h-full bg-transparent ${width} text-sm placeholder:text-slate-400 ${disabled ? "text-slate-400" : "text-slate-800"} ${type === "number" ? "hide-arrows" : ""}`}
           aria-label={title || placeholder}
           step={step ? "0.01" : undefined}
         />

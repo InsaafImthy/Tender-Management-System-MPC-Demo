@@ -226,27 +226,32 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="admin-page">
+      <div className="admin-content">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-400 to-[#1365AA] flex items-center justify-center text-white">
+      <div className="admin-page-header">
+        <div className="admin-page-header-row">
+        <div className="admin-title-cluster">
+        <div className="admin-title-icon">
           <DeliveryDetailsIconMain />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold">Confirm Pharmacy Delivery</h1>
-          <p className="text-gray-600">Record receipt of medicines and medical supplies</p>
+          <h1 className="text-2xl font-semibold text-slate-950">Confirm Pharmacy Delivery</h1>
+          <p className="text-sm text-slate-600">Record receipt of medicines and medical supplies</p>
+        </div>
+        </div>
         </div>
       </div>
 
       {/* Delivery Info */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <div className="flex justify-between">
-          <h3 className="text-base font-semibold mb-4">Delivery Information</h3>
+      <div className="app-surface p-6">
+        <div className="mb-5 flex items-center justify-between border-b border-slate-200 pb-4">
+          <h3 className="text-lg font-semibold text-slate-950">Delivery Information</h3>
           {isIdavailable && <EditIconMain onClick={handleEditclick} />}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               Delivery ID <span className="text-red-500">*</span>
             </label>
             <TextField
@@ -263,7 +268,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               PO Number <span className="text-red-500">*</span>
             </label>
             <TextField
@@ -280,7 +285,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               Supplier Name <span className="text-red-500">*</span>
             </label>
             <TextField
@@ -297,7 +302,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               Delivery Location <span className="text-red-500">*</span>
             </label>
             <TextField
@@ -323,7 +328,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
             disabled={isIdavailable}
           />
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               Pharmacy/Warehouse Location <span className="text-red-500">*</span>
             </label>
             <TextField
@@ -343,8 +348,8 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
       </div>
       {/* Excel Upload */}
       {!isIdavailable && (
-        <div className="mt-8 p-6 border border-gray-200 rounded-xl shadow-sm flex justify-between items-center">
-          <h3 className="text-lg font-semibold">Upload Product Items</h3>
+        <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-dashed border-violet-200 bg-violet-50/40 p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <h3 className="text-lg font-semibold text-slate-950">Upload Product Items</h3>
           <input
             type="file"
             id="excel-upload"
@@ -354,7 +359,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
           />
           <label
             htmlFor="excel-upload"
-            className="px-6 py-3 text-sm font-semibold text-white bg-blue-600 rounded-lg cursor-pointer"
+            className="app-button-primary cursor-pointer"
           >
             <UploadOutlined className="mr-2" />
             Upload File
@@ -362,33 +367,34 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
         </div>
       )}
       {/* Items Table */}
-      <div className="mt-8 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm mb-6">
-        <table className="w-full">
-          <thead className="bg-gray-50">
+      <div className="admin-panel mt-6 mb-6 overflow-hidden p-0">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[1040px]">
+          <thead className="bg-slate-50">
             <tr>
-              <th className="px-4 py-3">Product Code</th>
-              <th className="px-4 py-3">Medicine/Supply Name</th>
-              <th className="px-4 py-3">Qty Ordered</th>
-              <th className="px-4 py-3">Qty Received</th>
-              <th className="px-4 py-3">Unit</th>
-              <th className="px-4 py-3">Unit Price</th>
-              <th className="px-4 py-3">Total Price</th>
-              <th className="px-4 py-3">Condition</th>
-              <th className="px-4 py-3">Verify</th>
-              <th className="px-4 py-3 text-center">Actions</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Product Code</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Medicine/Supply Name</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Qty Ordered</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Qty Received</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Unit</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Unit Price</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Total Price</th>
+              <th className="px-4 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Condition</th>
+              <th className="px-4 py-4 text-center text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Verify</th>
+              <th className="px-4 py-4 text-center text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-200">
             {checklistItems.map((item, index) => (
-              <tr key={index} className="hover:bg-blue-50">
-                <td className="px-4 py-3">{item.itemCode}</td>
-                <td className="px-4 py-3">{item.itemName}</td>
-                <td className="px-4 py-3">{item.quantityOrdered}</td>
-                <td className="px-4 py-3">{item.quantityReceived}</td>
-                <td className="px-4 py-3">{item.unit}</td>
-                <td className="px-4 py-3">{item.unitPrice}</td>
-                <td className="px-4 py-3">{item.totalPrice}</td>
-                <td className="px-4 py-3">
+              <tr key={index} className="text-sm text-slate-700 transition hover:bg-violet-50/50">
+                <td className="px-4 py-4 font-semibold text-slate-950">{item.itemCode}</td>
+                <td className="px-4 py-4 font-medium text-slate-900">{item.itemName}</td>
+                <td className="px-4 py-4">{item.quantityOrdered}</td>
+                <td className="px-4 py-4">{item.quantityReceived}</td>
+                <td className="px-4 py-4">{item.unit}</td>
+                <td className="px-4 py-4">{item.unitPrice}</td>
+                <td className="px-4 py-4 font-semibold text-slate-950">{item.totalPrice}</td>
+                <td className="px-4 py-4">
                   {item.condition === 1
                     ? "Ok"
                     : item.condition === 2
@@ -398,7 +404,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     : "-"}
                 </td>
 
-                <td className="px-4 py-3 text-center">
+                <td className="px-4 py-4 text-center">
                   {/* Checkbox to mark verified */}
                   <input
                     type="checkbox"
@@ -407,18 +413,18 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                   />
                 </td>
 
-                <td className="px-4 py-3 text-center">
+                <td className="px-4 py-4 text-center">
                   {!isIdavailable && (
                     <>
                       <button
                         onClick={() => handleEditItem(index)}
-                        className="text-blue-600 mx-1"
+                        className="mx-1 rounded-lg p-2 text-violet-600 transition hover:bg-violet-50"
                       >
                         <EditOutlined />
                       </button>
                       <button
                         onClick={() => handleDeleteItem(index)}
-                        className="text-red-600 mx-1"
+                        className="mx-1 rounded-lg p-2 text-rose-600 transition hover:bg-rose-50"
                       >
                         <DeleteOutlined />
                       </button>
@@ -430,7 +436,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
 
             {/* Add/Edit Row */}
             {!isIdavailable && (
-              <tr className="bg-gray-50">
+              <tr className="bg-slate-50/80">
                 <td className="px-4 py-3">
                   <input
                     type="text"
@@ -439,7 +445,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                       setEditForm({ ...editForm, itemCode: e.target.value })
                     }
                     placeholder="Product code"
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -450,7 +456,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                       setEditForm({ ...editForm, itemName: e.target.value })
                     }
                     placeholder="Medicine or supply name"
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -463,7 +469,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                         quantityOrdered: +e.target.value,
                       })
                     }
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -476,7 +482,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                         quantityReceived: +e.target.value,
                       })
                     }
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -486,7 +492,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, unit: e.target.value })
                     }
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -496,7 +502,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, unitPrice: +e.target.value })
                     }
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -506,7 +512,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     onChange={(e) =>
                       setEditForm({ ...editForm, totalPrice: +e.target.value })
                     }
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   />
                 </td>
                 <td className="px-4 py-3">
@@ -518,7 +524,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                         condition: Number(e.target.value),
                       })
                     }
-                    className="border rounded p-2 w-full"
+                    className="app-control h-10 w-full text-sm"
                   >
                     <option value="">Select</option>
                     <option value={1}>Accepted</option>
@@ -540,7 +546,7 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                   {editingIndex === null ? (
                     <button
                       onClick={handleAddItem}
-                      className="bg-blue-500 text-white px-3 py-1 rounded"
+                      className="app-button-primary min-h-[36px] px-3 py-1 text-xs"
                     >
                       Add
                     </button>
@@ -548,13 +554,13 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
                     <>
                       <button
                         onClick={handleSaveItem}
-                        className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+                        className="min-h-[36px] rounded-lg bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 mr-2"
                       >
                         Save
                       </button>
                       <button
                         onClick={handleCancelEdit}
-                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                        className="min-h-[36px] rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                       >
                         Cancel
                       </button>
@@ -565,23 +571,25 @@ const DeliveryPage: React.FC<DeliveryTypeFormProps> = ({ type = "create" }) => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
       {/* Footer */}
       <div className="flex justify-end gap-3">
         <button
-          className="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-50"
+          className="app-button-secondary min-w-[104px]"
           onClick={handleCancelform}
         >
           {type === "create" ? "Cancel" : "Back"}
         </button>
         {!isIdavailable && (
           <button
-            className="px-4 py-2 rounded-md bg-[#1365AA] text-white"
+            className="app-button-primary min-w-[112px]"
             onClick={handleSave}
           >
             {type === "create" ? "Submit" : "Update"}
           </button>
         )}
+      </div>
       </div>
     </div>
   );

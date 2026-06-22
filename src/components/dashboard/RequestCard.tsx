@@ -144,18 +144,18 @@ const RequestCard: React.FC<RequestCardProps> = ({
   }, [labels, data, colors]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 h-[350px] flex flex-col relative overflow-hidden hover:shadow-xl transition-all duration-300">
+    <div className="app-surface p-6 h-[350px] flex flex-col relative overflow-hidden hover:border-violet-200 transition-all duration-300">
       <div className="relative z-10 flex-1 flex flex-col">
         {/* Header */}
         <div className="flex items-center space-x-3 mb-4">
-          <div className="p-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+          <div className="p-1.5 bg-violet-700 rounded-lg shadow-sm">
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Request Status</h2>
-            <p className="text-xs text-gray-500">Distribution overview</p>
+            <h2 className="text-lg font-bold text-slate-950">Request Status</h2>
+            <p className="text-xs text-slate-500">Distribution overview</p>
           </div>
         </div>
 
@@ -166,22 +166,17 @@ const RequestCard: React.FC<RequestCardProps> = ({
             <div className="relative">
               <canvas
                 ref={chartRef}
-                className="w-[160px] h-[160px] drop-shadow-lg"
+                className="w-[160px] h-[160px]"
                 width={160}
                 height={160}
               />
-              {/* Enhanced Chart glow effect */}
-              <div className="absolute inset-0 w-[160px] h-[160px] rounded-full bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-30 blur-xl"></div>
             </div>
           </div>
 
           {/* Legend Section */}
-          <div className="flex-1 w-full space-y-3 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            {labels.map((label, index) => {
-              const total = data.reduce((a, b) => a + b, 0);
-                total > 0 ? ((data[index] * 100) / total).toFixed(1) : 0;
-              return (
-                <div key={index} className="group flex items-center justify-between p-1 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+          <div className="flex-1 w-full space-y-3 max-h-[200px] overflow-y-auto scrollbar-thin">
+            {labels.map((label, index) => (
+                <div key={index} className="group flex items-center justify-between p-2 hover:bg-violet-50 rounded-lg transition-colors duration-200">
                   <div className="flex items-center space-x-3">
                     {/* Color Indicator */}
                     <div className="relative">
@@ -192,36 +187,31 @@ const RequestCard: React.FC<RequestCardProps> = ({
                     </div>
 
                     {/* Label */}
-                    <span className="text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors">{label}</span>
+                    <span className="text-xs font-medium text-slate-700 group-hover:text-violet-800 transition-colors">{label}</span>
                   </div>
 
                   {/* Value */}
                   <div className="text-right">
-                    <div className="text-base font-bold text-gray-900">
+                    <div className="text-base font-bold text-slate-950">
                       {`${data[index]?.toLocaleString()}` || "0"}
                     </div>
                     
                   </div>
                 </div>
-              );
-            })}
+              ))}
           </div>
         </div>
 
         {/* Footer with Total */}
-        <div className="mt-3 pt-3 border-t border-gray-100">
+        <div className="mt-3 pt-3 border-t border-slate-100">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-gray-600">Total Requests</span>
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-xs font-medium text-slate-600">Total Requests</span>
+            <span className="text-lg font-bold text-slate-950">
               {data.reduce((a, b) => a + b, 0).toLocaleString()}
             </span>
           </div>
         </div>
       </div>
-      
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-20 blur-xl"></div>
-      <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-pink-100 to-yellow-100 rounded-full opacity-20 blur-lg"></div>
     </div>
   );
 };

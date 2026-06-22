@@ -1,4 +1,19 @@
 #sidebar-main .active {
-    background-color: rgb(59, 130, 246) !important;
+    background-color: #6d28d9 !important;
     color: white !important;
+    box-shadow: 0 10px 22px rgba(109, 40, 217, 0.28);
+}
+
+#sidebar-main .active:hover {
+    background-color: #5b21b6 !important;
+    color: white !important;
+}
+
+#sidebar-main .sidebar-link:focus-visible {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 2px;
+}
+
+#sidebar-main .sidebar-link > span > div > div.absolute {
+    display: none;
 }

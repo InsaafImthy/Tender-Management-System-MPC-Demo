@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { LoginComponent } from "../../components/login/LoginComponent";
 import EnergyTransitionBg from "../../assets/login/ibvogt.png";
-import { IbVogtLogo } from "../../utils/Icons";
+import procurementLogo from "../../assets/procurement_logo/Muscat-Pharmacy-logo.png";
 
 interface LoginProps {
   setUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,8 +20,8 @@ export const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
   }, [navigate]);
 
   return (
-    <div className="w-screen h-screen bg-gray-50 flex items-center justify-center p-0">
-      <div className="flex w-full h-full bg-white shadow-2xl overflow-hidden">
+    <div className="w-screen h-screen bg-bgBlue flex items-center justify-center p-0">
+      <div className="flex w-full h-full bg-white overflow-hidden">
         {/* Left Side - Feature Showcase */}
         <div
           className="hidden lg:flex lg:w-2/5 relative overflow-hidden"
@@ -29,8 +29,8 @@ export const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
             backgroundImage: `url(${EnergyTransitionBg})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            margin: "14px",
-            borderRadius: "10px",
+            margin: "16px",
+            borderRadius: "14px",
           }}
         >
           {/* Dark gradient overlay */}
@@ -42,21 +42,10 @@ export const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
             }}
           />
 
-          {/* Orange glow effect */}
-          <div
-            className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-3xl opacity-40"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(255,95,2,0.6) 0%, rgba(255,95,2,0) 70%)",
-              mixBlendMode: "screen",
-            }}
-          />
-
-          {/* Text content */}
           {/* Text content */}
           <div className="absolute bottom-0 left-0 right-0 p-12 text-white z-10">
             <h1 className="text-4xl font-bold mb-6 leading-tight whitespace-nowrap">
-              Pharmacy <span className="text-[#FF5F02]">tendering</span>
+              Pharmacy <span className="text-violet-200">tendering</span>
             </h1>
             <p className="text-sm leading-relaxed opacity-90 text-justify">
               Manage medicine, medical supply, and distribution tenders with
@@ -70,7 +59,7 @@ export const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
         <div className="w-full lg:w-3/5 flex flex-col bg-white p-8 mt-8">
           {/* Logo */}
           <div className="p-8">
-            <IbVogtLogo />
+            <img src={procurementLogo} alt="IB Vogt Logo" className="w-32 h-auto" />
           </div>
 
           {/* Main Content */}
@@ -78,10 +67,10 @@ export const Login: React.FC<LoginProps> = ({ setUserLoggedIn }) => {
             <div className="w-full max-w-md">
               {/* Welcome Back Header */}
               <div className="mb-8 text-start">
-                <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-wide">
+                <h1 className="text-3xl font-bold text-slate-950 mb-3">
                   Sign in
                 </h1>
-                <p className="text-gray-600 text-base">
+                <p className="text-slate-600 text-base">
                   Please login to continue to your account.
                 </p>
               </div>

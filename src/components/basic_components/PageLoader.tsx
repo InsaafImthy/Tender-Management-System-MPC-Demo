@@ -3,7 +3,12 @@ import { Spin } from 'antd';
 
 const PageLoader:React.FC = () => {
   return (
-    <div style={{width:"100%",height:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}><Spin/></div>
+    <div className="flex min-h-[240px] w-full items-center justify-center">
+      <div className="app-surface flex items-center gap-3 px-5 py-4">
+        <Spin />
+        <span className="text-sm font-semibold text-slate-600">Loading</span>
+      </div>
+    </div>
   )
 }
 

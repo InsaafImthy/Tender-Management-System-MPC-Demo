@@ -286,12 +286,12 @@ const RolesPermissions: React.FC = () => {
   }, [trigger, filter]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-8">
+    <div className="admin-inner">
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">
+      <div className="admin-page-header">
+        <div className="admin-page-header-row">
+          <div className="admin-title-cluster">
+            <div className="admin-title-icon">
               <span className="text-white text-2xl font-bold">
                 <RolesManagementIcon />
               </span>
@@ -303,9 +303,9 @@ const RolesPermissions: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md border border-blue-200">
-              <span className="text-button text-accent">
+          <div className="admin-title-actions">
+            <div className="admin-count-badge">
+              <span>
                 {roles.length} Roles
               </span>
             </div>
@@ -313,8 +313,8 @@ const RolesPermissions: React.FC = () => {
               <button
                 className={`px-6 py-3 rounded-lg text-button font-medium transition-all duration-200 flex justify-end items-center text-sm ${
                   changesDone
-                    ? "bg-customBlue !text-white"
-                    : "bg-blue-300 !text-white cursor-not-allowed"
+                    ? "bg-violet-700 !text-white shadow-[0_10px_22px_rgba(109,40,217,0.22)]"
+                    : "bg-slate-300 !text-white cursor-not-allowed"
                 }`}
                 disabled={!changesDone}
                 onClick={() => handleSaveChangesForRole(selectedRole.roleid)}
@@ -327,7 +327,7 @@ const RolesPermissions: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+      <div className="app-surface p-6">
         <div className="flex justify-between items-center pb-6">
           <h2 className="text-heading-3">Role Permissions</h2>
         </div>
@@ -340,8 +340,8 @@ const RolesPermissions: React.FC = () => {
                 <div
                   key={role.roleid}
                   onClick={() => handleRoleSelect(role)}
-                  className={`px-3 py-1 rounded-lg text-sm border cursor-pointer ${
-                    isSelected ? "bg-blue-100 text-blue-600" : "text-black"
+                  className={`px-4 py-2 rounded-lg text-sm border cursor-pointer font-semibold transition-all duration-200 ${
+                    isSelected ? "bg-violet-50 text-violet-800 border-violet-100" : "text-slate-600 border-slate-200 hover:bg-violet-50 hover:text-violet-800"
                   }`}
                 >
                   {role.roleName}
@@ -354,7 +354,7 @@ const RolesPermissions: React.FC = () => {
         <div className="overflow-auto max-h-[350px]">
           <table className="min-w-full border-collapse table-auto">
             <thead className="sticky top-0 bg-white z-5">
-              <tr className="text-xs font-semibold text-gray-500">
+              <tr className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <th className="text-left py-3 w-1/3">Permissions</th>
                 <th className="text-center py-3 w-[13%]">Grant access</th>
               </tr>
@@ -363,9 +363,9 @@ const RolesPermissions: React.FC = () => {
               {permissions?.map((permission) => (
                 <tr
                   key={permission.permissionId}
-                  className="border-t border-gray-200"
+                  className="border-t border-slate-100 hover:bg-violet-50/40"
                 >
-                  <td className="py-3 text-sm text-gray-900">
+                  <td className="py-3 text-sm font-medium text-slate-900">
                     {permission.permissionName}
                   </td>
                   <td className="py-3 text-center">
@@ -379,8 +379,8 @@ const RolesPermissions: React.FC = () => {
                             ? selectedRole?.roleName?.toLowerCase() ==
                                 "superadmin" ||
                               userInfo?.role == selectedRole?.roleName
-                              ? "bg-blue-400"
-                              : "bg-blue-600"
+                              ? "bg-violet-300"
+                              : "bg-violet-700"
                             : "border border-gray-300"
                         }`}
                         onClick={() =>

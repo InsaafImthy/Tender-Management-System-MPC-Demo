@@ -180,14 +180,14 @@ const PurchaseRequisitionPage: React.FC = () => {
   ];
 
   return (
-    <div>
+    <div className="admin-page">
       <CommonTitleCard />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
+      <div className="admin-content">
         
 
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-6">
-          <div className="flex items-center justify-between">
+        <div className="admin-page-header mb-6">
+          <div className="admin-page-header-row">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
                 Purchase Requisitions
@@ -263,7 +263,7 @@ const PurchaseRequisitionPage: React.FC = () => {
       </div> */}
 
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+        <div className="admin-panel">
           <Table
             columns={[
               "requisitionNumber",

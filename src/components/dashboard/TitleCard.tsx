@@ -14,24 +14,26 @@ const TitleCard = ({ trigger }: { trigger: () => void }) => {
     }
 
     useEffect(()=>{
-        trigger && trigger();
+        if (trigger) {
+            trigger();
+        }
     },[])
 
 
     return (
-        <div className="">
+        <div className="app-surface-soft p-6">
             <div className="relative z-10">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-6 sm:space-y-0">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
                     <div className="flex items-center space-x-6">
                        
                         <div>
                             <h1 className="text-heading-1 !font-semibold">
-                                Hello <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-semibold">{getUserCredentials().name}</span>!
+                                Hello <span className="text-violet-800 font-semibold">{getUserCredentials().name}</span>!
                             </h1>
                             <p className="text-body-large text-muted mt-2">Welcome to Procurement management system</p>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-wrap items-center gap-3">
                         <CreateButton name="Create Tender" onClick={onCreateRequest} />
                         <PublishButton name="Publish Tenders" onClick={onPublishRfps} />
                     </div>

@@ -45,16 +45,16 @@ const SettingsPage = () => {
 
   const getIcon = (section: SettingsSection) => {
     switch (section) {
-      case 'User management': return '👥';
-      case 'Category management': return '📂';
-      case 'Manage department': return '🏢';
-      case 'Roles & permissions': return '🔐';
-      case 'Approval workflow': return '⚡';
-      case 'Criteria management': return '📋';
-      case 'Budget allocation': return '💰';
-      case 'Questionnaire management': return '📝';
-      case 'Product list management': return '📦';
-      default: return '⚙️';
+      case 'User management': return 'UM';
+      case 'Category management': return 'CM';
+      case 'Manage department': return 'MD';
+      case 'Roles & permissions': return 'RP';
+      case 'Approval workflow': return 'AW';
+      case 'Criteria management': return 'CR';
+      case 'Budget allocation': return 'BA';
+      case 'Questionnaire management': return 'QM';
+      case 'Product list management': return 'PL';
+      default: return 'ST';
     }
   };
 
@@ -115,14 +115,14 @@ const SettingsPage = () => {
   // Mobile version with tabs
   if (isMobile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-bgBlue">
         <CommonTitleCard/>
         
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mx-4 mt-6 mb-6">
+        <div className="admin-page-header mx-4 mt-6 mb-6">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-slate-600 to-gray-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl font-bold">⚙️</span>
+            <div className="w-12 h-12 bg-violet-700 rounded-xl flex items-center justify-center shadow-[0_14px_28px_rgba(109,40,217,0.24)]">
+              <span className="text-white text-sm font-bold">ST</span>
             </div>
             <div>
               <h1 className="text-heading-2">Settings</h1>
@@ -132,20 +132,20 @@ const SettingsPage = () => {
         </div>
 
         {/* Tab Navigation for Mobile */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mx-4 mb-6 overflow-hidden">
+        <div className="admin-tabs mx-4 mb-6 overflow-hidden">
           <div className="overflow-x-auto">
             <div className="flex whitespace-nowrap p-2">
               {navigationItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => handleNavigation(item)}
-                  className={`px-4 py-3 text-button rounded-lg transition-all duration-200 flex-shrink-0 mr-2 flex items-center space-x-2 ${
+                  className={`px-4 py-3 text-button rounded-lg transition-all duration-200 flex-shrink-0 mr-2 flex items-center space-x-2 focus:outline-none focus:ring-4 focus:ring-violet-100 ${
                     activeSection === item.name
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform -translate-y-0.5'
-                      : 'text-muted hover:text-slate-900 hover:bg-gray-50'
+                      ? 'bg-violet-700 text-white shadow-[0_10px_22px_rgba(109,40,217,0.22)]'
+                      : 'text-muted hover:text-violet-800 hover:bg-violet-50'
                   }`}
                 >
-                  <span className="text-lg">{getIcon(item.name as SettingsSection)}</span>
+                  <span className="text-xs font-bold">{getIcon(item.name as SettingsSection)}</span>
                   <span>{item.name}</span>
                 </button>
               ))}
@@ -155,7 +155,7 @@ const SettingsPage = () => {
 
         {/* Main Content for Mobile */}
         <div className="px-4 pb-6">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+          <div className="app-surface overflow-hidden">
             {renderContent()}
           </div>
         </div>
@@ -163,46 +163,20 @@ const SettingsPage = () => {
     );
   }
 
-  // Desktop version with sidebar
+  // Desktop version with top summary and content only.
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-bgBlue">
       <CommonTitleCard />
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-12 gap-8">
-          {/* Sidebar Navigation for Desktop */}
-          <div className="col-span-3">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sticky top-8">
-              <div className="flex items-center space-x-3 mb-8">
-                
-                <div>
-                  <h1 className="text-heading-3">Settings</h1>
-                  <p className="text-body-small text-muted">Configure system and user settings.</p>
-                </div>
-              </div>
-              <nav className="space-y-2">
-                {navigationItems.map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => handleNavigation(item)}
-                    className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 text-left space-x-3 ${
-                      activeSection === item.name 
-                        ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border border-blue-200 shadow-sm' 
-                        : 'text-muted hover:text-slate-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="text-label">{item.name}</span>
-                  </button>
-                ))}
-              </nav>
-            </div>
-          </div>
+        <div className="mb-6 app-surface p-6">
+          <h1 className="text-heading-3">Settings</h1>
+          <p className="mt-2 text-body-small text-muted">
+            Use the expanded sidebar to switch between settings sections.
+          </p>
+        </div>
 
-          {/* Main Content for Desktop */}
-          <div className="col-span-9">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden min-h-[600px]">
-              {renderContent()}
-            </div>
-          </div>
+        <div className="app-surface overflow-hidden min-h-[600px]">
+          {renderContent()}
         </div>
       </div>
     </div>

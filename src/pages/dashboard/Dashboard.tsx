@@ -77,8 +77,8 @@ function Dashboard() {
       ),
       label: "Total Tenders",
       value: 0,
-      color: "bg-blue-500/30",
-      textColor: "text-blue-900",
+      color: "bg-violet-100",
+      textColor: "text-violet-800",
     },
     {
       icon: (
@@ -104,8 +104,8 @@ function Dashboard() {
       ),
       label: "Closed Tenders",
       value: 0,
-      color: "bg-blue-500/30",
-      textColor: "text-blue-900",
+      color: "bg-violet-100",
+      textColor: "text-violet-800",
     },
     {
       icon: (
@@ -129,8 +129,8 @@ function Dashboard() {
       ),
       label: "Open Tenders",
       value: 0,
-      color: "bg-blue-500/30",
-      textColor: "text-blue-900",
+      color: "bg-violet-100",
+      textColor: "text-violet-800",
     },
     {
       icon: (
@@ -154,8 +154,8 @@ function Dashboard() {
       ),
       label: "Under Approval",
       value: 0,
-      color: "bg-blue-500/30",
-      textColor: "text-blue-900",
+      color: "bg-violet-100",
+      textColor: "text-violet-800",
     },
   ]);
 
@@ -215,8 +215,8 @@ function Dashboard() {
           ),
           label: "Total Tenders",
           value: statusCounts[0] + statusCounts[1] + statusCounts[2],
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
         {
           icon: (
@@ -242,8 +242,8 @@ function Dashboard() {
           ),
           label: "Closed Tenders",
           value: statusCounts[0],
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
         {
           icon: (
@@ -267,8 +267,8 @@ function Dashboard() {
           ),
           label: "Open Tenders",
           value: statusCounts[1],
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
         {
           icon: (
@@ -292,8 +292,8 @@ function Dashboard() {
           ),
           label: "Under Approval",
           value: statusCounts[2],
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
       ]);
 
@@ -349,8 +349,8 @@ function Dashboard() {
           ),
           label: "Total Tenders",
           value: statusCounts[0] + statusCounts[1] + statusCounts[2],
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
         {
           icon: (
@@ -376,8 +376,8 @@ function Dashboard() {
           ),
           label: "Closed Tenders",
           value: statusCounts[0] || 0,
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
         {
           icon: (
@@ -401,8 +401,8 @@ function Dashboard() {
           ),
           label: "Open Tenders",
           value: statusCounts[1] || 0,
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
         {
           icon: (
@@ -426,8 +426,8 @@ function Dashboard() {
           ),
           label: "Under Approval",
           value: statusCounts[2] || 0,
-          color: "bg-blue-500/30",
-          textColor: "text-blue-900",
+          color: "bg-violet-100",
+          textColor: "text-violet-800",
         },
       ]);
 
@@ -484,11 +484,11 @@ function Dashboard() {
   }, [filter]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-bgBlue">
       {showLoader ? (
         <PageLoader />
       ) : (
-        <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Header Section */}
           <div className="mb-6">
             <TitleCard trigger={() => setTrigger(true)} />
@@ -518,7 +518,7 @@ function Dashboard() {
                 <RequestCard
                   labels={["Closed", "Open", "Under Approval"]}
                   data={requestStatus || [0, 0, 0]}
-                  colors={["#1365AA", "#3B82F6", "#60A5FA"]}
+                  colors={["#4C1D95", "#7C3AED", "#C4B5FD"]}
                 />
               </div>
             </div>
@@ -527,10 +527,9 @@ function Dashboard() {
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
               {/* RFPs Table - Takes 3/4 width */}
               <div className="xl:col-span-3">
-                <div className="bg-white rounded-2xl shadow-lg border-0 overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-slate-50 to-gray-50 rounded-full -translate-y-20 translate-x-20"></div>
+                <div className="app-surface overflow-hidden relative">
                   <div className="relative z-10">
-                    <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-gray-50">
+                    <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                           <div>
@@ -567,7 +566,7 @@ function Dashboard() {
               <div className="xl:col-span-1">
                 <div className="space-y-4">
                   {/* Recent Activity Card */}
-                  <div className="bg-white rounded-2xl shadow-lg border-0 p-6 relative overflow-hidden">
+                  <div className="app-surface p-6 relative overflow-hidden">
                     <div className="relative z-10">
                       <div className="flex items-center mb-6">
                         <div>
@@ -578,8 +577,8 @@ function Dashboard() {
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <div className="flex items-start space-x-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-md transition-all duration-300">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
+                        <div className="flex items-start space-x-3 p-3 bg-violet-50 rounded-lg border border-violet-100 hover:shadow-sm transition-all duration-300">
+                          <div className="w-2.5 h-2.5 bg-violet-700 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-900">
                               New Tender created
@@ -589,8 +588,8 @@ function Dashboard() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-start space-x-3 p-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-100 hover:shadow-md transition-all duration-300">
-                          <div className="w-3 h-3 bg-emerald-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
+                        <div className="flex items-start space-x-3 p-3 bg-emerald-50 rounded-lg border border-emerald-100 hover:shadow-sm transition-all duration-300">
+                          <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-900">
                               Tender approved
@@ -600,8 +599,8 @@ function Dashboard() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-start space-x-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100 hover:shadow-md transition-all duration-300">
-                          <div className="w-3 h-3 bg-amber-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
+                        <div className="flex items-start space-x-3 p-3 bg-amber-50 rounded-lg border border-amber-100 hover:shadow-sm transition-all duration-300">
+                          <div className="w-2.5 h-2.5 bg-amber-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-900">
                               Tender under review
@@ -616,7 +615,7 @@ function Dashboard() {
                   </div>
 
                   {/* Quick Actions Card */}
-                  <div className="bg-white rounded-2xl shadow-lg border-0 p-6 relative overflow-hidden">
+                  <div className="app-surface p-6 relative overflow-hidden">
                     <div className="relative z-10">
                       <div className="flex items-center mb-6">
                         <div>
@@ -627,7 +626,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <button onClick={()=>navigate("/rfps/create-rfp")} className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg font-semibold">
+                        <button onClick={()=>navigate("/rfps/create-rfp")} className="w-full app-button-primary py-3">
                           <span className="mr-3 text-base">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -648,7 +647,7 @@ function Dashboard() {
                           </span>
                           Create New Tender
                         </button>
-                        <button className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-slate-100 to-gray-100 text-slate-700 rounded-xl hover:from-slate-200 hover:to-gray-200 transition-all duration-300 font-semibold">
+                        <button className="w-full app-button-secondary py-3">
                           <span className="mr-3 text-base">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -668,7 +667,7 @@ function Dashboard() {
                           </span>
                           View Reports
                         </button>
-                        <button className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-slate-100 to-gray-100 text-slate-700 rounded-xl hover:from-slate-200 hover:to-gray-200 transition-all duration-300 font-semibold">
+                        <button className="w-full app-button-secondary py-3">
                           <span className="mr-3 text-base">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"

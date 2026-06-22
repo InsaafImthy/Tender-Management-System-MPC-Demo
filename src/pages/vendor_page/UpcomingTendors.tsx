@@ -167,14 +167,14 @@ const UpcomingTendors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="admin-page">
       <CommonTitleCard />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">
+        <div className="admin-page-header mb-6">
+          <div className="admin-page-header-row">
+            <div className="admin-title-cluster">
+              <div className="admin-title-icon">
                 <span className="text-white text-2xl font-bold">
                   <UpcomingTendorsMainIcon />
                 </span>
@@ -186,19 +186,19 @@ const UpcomingTendors = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="admin-title-actions">
               <CreateButton name="Create Tendor" onClick={onCreateRequest} />
             </div>
           </div>
         </div>
 
         {/* Table Section */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+        <div className="admin-panel">
           <Table
-            title={""}
+            title={"Upcoming Tenders"}
             columns={columns}
             columnLabels={vendor_column_labels}
-            subtitle={""}
+            subtitle={"Create and review scheduled tenders"}
             items={tendorlist || []}
             totalCount={totalCount}
             setSearchQuery={setSearchQuery}

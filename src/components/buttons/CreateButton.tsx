@@ -8,18 +8,26 @@ interface CreateButtonProps{
     height?:string;
 }
 
-const CreateButton:React.FC<CreateButtonProps>=({name,onClick,width="146px",height="36px"})=>{
+const CreateButton:React.FC<CreateButtonProps>=({name,onClick,width="auto",height="44px"})=>{
     return(
-        <button onClick={onClick} className={`w-[${width}] p-3 h-[${height}] bg-customBlue text-white rounded-md flex justify-end items-center text-sm`}>
-            <AddIcon className="w-6 pr-2 h-6"/> {name}
+        <button
+            onClick={onClick}
+            style={{ width, height, minWidth: width === "auto" ? "156px" : undefined }}
+            className="app-button-primary whitespace-nowrap"
+        >
+            <AddIcon className="w-5 h-5 flex-shrink-0"/> {name}
         </button>
     )
 }
 
-export const PublishButton:React.FC<CreateButtonProps>=({name,onClick,width="146px",height="36px"})=>{
+export const PublishButton:React.FC<CreateButtonProps>=({name,onClick,width="auto",height="44px"})=>{
     return(
-        <button onClick={onClick} className={`w-[${width}] p-3 h-[${height}] bg-customBlue text-white rounded-md flex justify-end items-center text-sm`}>
-            <TickIcon className="w-6 pr-2 h-6"/> {name}
+        <button
+            onClick={onClick}
+            style={{ width, height, minWidth: width === "auto" ? "156px" : undefined }}
+            className="app-button-secondary whitespace-nowrap"
+        >
+            <TickIcon className="w-5 h-5 flex-shrink-0"/> {name}
         </button>
     )
 }

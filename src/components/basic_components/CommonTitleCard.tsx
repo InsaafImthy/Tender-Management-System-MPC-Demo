@@ -42,7 +42,7 @@ const CommonTitleCard = () => {
                     const response = await getCompanyById(userCredentials.companyId);
                     setCompanyDetails(response);
                     console.log('Company Details:', response);
-                } catch (error) {
+                } catch {
                     // console.error('Error fetching company details:', error);
                 } finally {
                     setLoading(false);
@@ -54,29 +54,29 @@ const CommonTitleCard = () => {
     }, [userCredentials?.companyId]);
 
     return (
-        <div className="w-full flex justify-between bg-white items-center pl-8 pt-2 pr-8 border-b-[1px]">
+        <div className="w-full flex justify-between bg-white/95 items-center px-8 py-3 border-b border-slate-200/80 shadow-sm backdrop-blur-xl">
             <div className="flex flex-col">
                 <p className="text-[18px] flex justify-start items-center">
-                    <span className="text-[18px] font-semibold">{companyDetails?.companyName}</span>
+                    <span className="text-[18px] font-semibold text-slate-950">{companyDetails?.companyName}</span>
                 </p>
             </div>
             <div>
                 <Card 
                     size="small" 
-                    className="bg-white/10 backdrop-blur-sm border-white/20"
+                    className="border-slate-200 shadow-sm"
                     bodyStyle={{ padding: '8px 12px' }}
                 >
                     <div className="flex items-center gap-3">
                         <Avatar 
                             size="small" 
                             icon={<UserOutlined />} 
-                            className="bg-blue-500"
+                            className="bg-violet-700"
                         />
                         <div className="flex flex-col">
-                            <span className="text-sm font-medium leading-tight">
+                            <span className="text-sm font-semibold text-slate-900 leading-tight">
                                 {userCredentials.name}
                             </span>
-                            <span className="text-xs opacity-80 leading-tight">
+                            <span className="text-xs text-slate-500 leading-tight">
                                 {userCredentials.role || 'User'}
                             </span>
                         </div>

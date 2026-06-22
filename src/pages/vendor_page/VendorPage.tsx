@@ -145,16 +145,16 @@ function VendorPage() {
   const tabs = ["All vendors", "Assigned"];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="admin-page">
       <CommonTitleCard />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         {!showLoader ? (
           <>
             {/* Header Section */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 mb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-xl flex items-center justify-center shadow-lg">
+            <div className="admin-page-header mb-4">
+              <div className="admin-page-header-row">
+                <div className="admin-title-cluster">
+                  <div className="admin-title-icon">
                     <span className="text-white text-2xl font-bold">
                       <VendorMainICon />
                     </span>
@@ -166,9 +166,9 @@ function VendorPage() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md border border-blue-200">
-                    <span className="text-button text-accent">
+                <div className="admin-title-actions">
+                  <div className="admin-count-badge">
+                    <span>
                       {vendors.length} Total Vendors
                     </span>
                   </div>
@@ -177,25 +177,22 @@ function VendorPage() {
               </div>
             </div>
             {/* Tab Navigation */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-4">
-              <div className="flex items-center space-x-8">
+            <div className="admin-tabs mb-4">
+              <div className="admin-tab-list">
                 {tabs.map((tab, index) => (
                   <div key={tab} className="flex items-center">
                     <button
                       onClick={() => setupTab(tab)}
-                      className={`relative px-6 py-3 text-button rounded-lg transition-all duration-200 ${
+                      className={`admin-tab ${
                         statusFilter === tab
-                          ? "bg-gradient-to-r from-blue-400 to-[#1365AA] !text-white shadow-lg transform -translate-y-0.5"
-                          : "text-muted hover:text-slate-900 hover:bg-gray-50"
+                          ? "admin-tab-active"
+                          : ""
                       }`}
                     >
                       {tab}
-                      {statusFilter === tab && (
-                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-emerald-500"></div>
-                      )}
                     </button>
                     {index !== tabs.length - 1 && (
-                      <div className="w-px h-6 bg-gray-300 mx-4"></div>
+                      <div className="hidden sm:block w-px h-6 bg-slate-200 mx-2"></div>
                     )}
                   </div>
                 ))}
@@ -203,7 +200,7 @@ function VendorPage() {
             </div>
 
             {/* Table Section */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="admin-panel">
               <Table
                 filter={filter}
                 setFilter={setFilter}

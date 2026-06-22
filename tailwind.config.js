@@ -16,11 +16,14 @@ export default {
         'screen-4k': '3840px',   
       },
       colors: {
-        customBlue: '#1A73E8',
+        customBlue: '#6D28D9',
+        customPurple: '#6D28D9',
+        customPurpleDark: '#4C1D95',
+        customPurpleLight: '#F4F0FF',
         customGreen: '#0F9670',
         customRed: '#DB5A63',
         customOrange: '#E79937',
-        bgBlue: '#F6F8FB',
+        bgBlue: '#F7F7FB',
       },
       fontFamily: {
         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],

@@ -119,17 +119,18 @@ export default function RfpPublishPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="admin-page">
       {showLoader && <PageLoader />}
-      <div className="max-w-7xl mx-auto px-4 pt-10 pb-4">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="admin-content">
+        <div className="admin-page-header mb-6">
+        <div className="admin-page-header-row">
           <div>
             <h1 className="text-heading-2">Approved RFPs</h1>
             <p className="text-body-small text-subtle">Select approved RFPs and publish them.</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="admin-title-actions">
             <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-700">Category</label>
+              <label className="text-sm font-semibold text-slate-700">Category</label>
               <div className="min-w-64">
                 <Select
                   allowClear
@@ -150,7 +151,7 @@ export default function RfpPublishPage() {
                   dropdownStyle={{ padding: 8, borderRadius: 12 }}
                   optionRender={(option) => (
                     <div className="flex items-start gap-2">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-blue-100 text-blue-700 text-xs">{String(option.data.label).charAt(0).toUpperCase()}</span>
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-violet-50 text-violet-700 text-xs font-bold">{String(option.data.label).charAt(0).toUpperCase()}</span>
                       <div className="leading-tight">
                         <div className="text-sm font-medium text-gray-900">{option.data.label}</div>
                         {option.data.description && (
@@ -164,41 +165,42 @@ export default function RfpPublishPage() {
               </div>
             </div>
             <button
-              className="px-4 py-2 rounded-md border bg-white hover:bg-gray-50"
+              className="app-button-secondary"
               onClick={toggleSelectAll}
             >{allSelected ? "Clear Selection" : "Select All"}</button>
             <button
-              className={`px-4 py-2 rounded-md text-white ${selectedIds.size ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"}`}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all duration-200 ${selectedIds.size ? "bg-violet-700 hover:bg-violet-800 shadow-[0_10px_22px_rgba(109,40,217,0.22)]" : "bg-slate-400 cursor-not-allowed"}`}
               disabled={selectedIds.size === 0}
               onClick={publishSelected}
             >Publish Now ({selectedIds.size})</button>
           </div>
         </div>
+        </div>
 
         {/* Inline table with selection checkboxes */}
-        <div className="bg-white rounded-2xl shadow">
+        <div className="admin-panel">
           <div className="overflow-auto max-h-[60vh]">
             <table className="min-w-full border-collapse">
-              <thead className="sticky top-0 bg-gradient-to-r from-gray-50 to-gray-100 z-10">
+              <thead className="sticky top-0 bg-slate-50 z-10">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
                     <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} />
                   </th>
                   {columns.map((c: ColumnKey) => (
-                    <th key={c} className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200">
+                    <th key={c} className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
                       {rfp_column_labels[c]}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-slate-100">
                 {items.map((item, idx) => (
-                  <tr key={item.id ?? idx} className="hover:bg-blue-50">
-                    <td className="px-6 py-4 text-sm">
+                  <tr key={item.id ?? idx} className="hover:bg-violet-50/60 transition-colors duration-150">
+                    <td className="px-5 py-4 text-sm">
                       <input type="checkbox" checked={selectedIds.has(item.id)} onChange={() => toggleRow(item.id)} />
                     </td>
                     {columns.map((col) => (
-                      <td key={col} className="px-6 py-4 text-sm">
+                      <td key={col} className="px-5 py-4 text-sm text-slate-800">
                         {col === "status" ? rfpStatuses.find((s) => s.value === item.status)?.label : item[col]}
                       </td>
                     ))}
@@ -206,7 +208,7 @@ export default function RfpPublishPage() {
                 ))}
                 {items.length === 0 && (
                   <tr>
-                    <td className="px-6 py-10 text-center text-sm text-gray-500" colSpan={columns.length + 1}>No approved RFPs</td>
+                    <td className="px-6 py-14 text-center text-sm text-slate-500" colSpan={columns.length + 1}>No approved RFPs</td>
                   </tr>
                 )}
               </tbody>

@@ -54,12 +54,12 @@ const ApprovalWorkflow: React.FC = () => {
   }, [activeTab, trigger]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-8">
+    <div className="admin-inner">
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">
+      <div className="admin-page-header">
+        <div className="admin-page-header-row">
+          <div className="admin-title-cluster">
+            <div className="admin-title-icon">
               <span className="text-white text-2xl font-bold"><ApprovalFlowIcon/></span>
             </div>
             <div>
@@ -67,8 +67,8 @@ const ApprovalWorkflow: React.FC = () => {
               <p className="text-body-small text-muted">Configure approval processes and workflows</p>
             </div>
           </div>
-          <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md border border-blue-200">
-            <span className="text-button text-accent">
+          <div className="admin-count-badge">
+            <span>
               Workflow Management
             </span>
           </div>
@@ -76,8 +76,8 @@ const ApprovalWorkflow: React.FC = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
-        <div className="flex flex-wrap gap-2">
+      <div className="admin-tabs">
+        <div className="admin-tab-list">
           {tabs.map((tab) => (
             <button
               key={tab.label}
@@ -85,10 +85,10 @@ const ApprovalWorkflow: React.FC = () => {
                 setActiveTab(tab);
                 seViewType("view");
               }}
-              className={`px-6 py-3 text-button rounded-xl transition-all duration-200 ${
+              className={`admin-tab ${
                 activeTab.label === tab.label
-                  ? "bg-gradient-to-r from-blue-400 to-[#1365AA] !text-white shadow-lg"
-                  : "text-muted hover:text-slate-900 hover:bg-gray-50"
+                  ? "admin-tab-active"
+                  : ""
               }`}
             >
               {tab.label}
@@ -98,7 +98,7 @@ const ApprovalWorkflow: React.FC = () => {
       </div>
 
       {/* Content Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+      <div className="app-surface p-6">
         {viewType === "view" ? (
           <ViewApprovalFlow
             label={activeTab.label}
@@ -110,8 +110,8 @@ const ApprovalWorkflow: React.FC = () => {
           />
         ) : viewType === "no-access" ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">🚫</span>
+            <div className="w-16 h-16 bg-violet-50 border border-violet-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-sm font-bold text-violet-700">NA</span>
             </div>
             <h3 className="text-heading-4 mb-2">Access Denied</h3>
             <p className="text-body text-muted">You don't have access to view this workflow</p>
