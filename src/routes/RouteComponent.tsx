@@ -53,6 +53,7 @@ const RouteComponent: React.FC = () => {
   // State for mobile detection
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [desktopSidebarOffset, setDesktopSidebarOffset] = useState(82);
 
   // State for user login status
   // TODO: Update this state via Login component or auth system
@@ -203,11 +204,13 @@ const RouteComponent: React.FC = () => {
                     trigger={() => { }}
                     isExpanded={isSidebarExpanded}
                     onExpandedChange={setIsSidebarExpanded}
+                    onDesktopOffsetChange={setDesktopSidebarOffset}
                   />
                 )}
                 <div
-                  className={`flex-1 min-h-screen bg-bgBlue transition-[margin] duration-300 ease-in-out ${isMobile ? 'mt-20' : isSidebarExpanded ? 'ml-[260px]' : 'ml-[82px]'
+                  className={`flex-1 min-h-screen bg-bgBlue transition-[margin] duration-300 ease-in-out ${isMobile ? 'mt-20' : ''
                     }`}
+                  style={isMobile ? undefined : { marginLeft: `${desktopSidebarOffset}px` }}
                 >
                   {userLoggedIn ? (
                     <Routes>
