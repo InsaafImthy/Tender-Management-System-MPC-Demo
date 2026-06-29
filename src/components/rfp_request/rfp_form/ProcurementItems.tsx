@@ -24,6 +24,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
   const [editingBom, setEditingBom] = useState<any>(null);
   const [mode, ] = useState<"items" | "bom">("bom");
   const [expandedBomIds, setExpandedBomIds] = useState<Record<string | number, boolean>>({});
+  const showDirectItems = mode === "items" || items.length > 0;
 
   const getUnitLabel = (unitValue: number) => {
     const unit = commonUnits.find((u) => u.value === unitValue);
@@ -252,7 +253,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
         )} */}
 
         {/* Items Table */}
-        {mode === "items" && (
+        {showDirectItems && (
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
             <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
@@ -308,6 +309,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                       <td className="px-6 py-4 text-center">
                         <div className="flex justify-center space-x-2">
                           <button
+                            type="button"
                             onClick={(e) => {
                               handleEditItem(index)
                               e.preventDefault();
@@ -319,6 +321,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                             <EditOutlined className="text-sm" />
                           </button>
                           <button
+                            type="button"
                             onClick={() => handleDeleteItem(index)}
                             className="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:text-red-800 hover:bg-red-100 rounded-lg transition-all duration-200"
                             title="Delete product"
@@ -375,6 +378,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                       <td className="px-6 py-4 text-center">
                         <div className="flex justify-center space-x-2">
                           <button
+                            type="button"
                             onClick={handleSaveItem}
                             className="inline-flex items-center justify-center w-10 h-10 text-white bg-green-500 hover:bg-green-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
                             title="Save product"
@@ -382,6 +386,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                             ✓
                           </button>
                           <button
+                            type="button"
                             onClick={handleCancelEdit}
                             className="inline-flex items-center justify-center w-10 h-10 text-white bg-gray-500 hover:bg-gray-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
                             title="Cancel"
@@ -439,6 +444,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                       <td className="px-6 py-4 text-center">
                         <div className="flex justify-center space-x-2">
                           <button
+                            type="button"
                             onClick={handleAddItem}
                             disabled={!editForm.itemName.trim()}
                             className="inline-flex items-center justify-center w-10 h-10 text-white bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
@@ -447,6 +453,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
                             Add
                           </button>
                           <button
+                            type="button"
                             onClick={() => setEditForm({ itemName: "", itemCode: "", quantity: 0 })}
                             className="inline-flex items-center justify-center w-10 h-10 text-white bg-gray-500 hover:bg-gray-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
                             title="Clear form"
@@ -464,7 +471,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
         )}
 
         {/* BOM Section */}
-        {mode === "bom" && (
+        {mode === "bom" && !showDirectItems && (
           <div className="mt-8 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
             <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-800">Product List</h3>
@@ -543,7 +550,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
         )}
 
         {/* Total Quantity */}
-        {mode === "items" && (items || []).length > 0 && (
+        {showDirectItems && (items || []).length > 0 && (
           <div className="mt-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl shadow-sm">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
@@ -562,7 +569,7 @@ const ProcurementItems: React.FC<ProcurementItemsProps> = ({ items = [], setItem
         )}
 
         {/* Empty State */}
-        {mode === "items" && (items || []).length === 0 && editingIndex === null && (
+        {showDirectItems && (items || []).length === 0 && editingIndex === null && (
           <div className="text-center py-12">
             <h3 className="text-lg font-medium text-gray-700 mb-2">No products added yet</h3>
             <p className="text-gray-500 mb-4">Use the form below to add medicines or medical supplies</p>

@@ -14,7 +14,7 @@ export interface IBom {
   id?: number;
   bomName: string;
   categoryId?: number;
-  category?: any;
+  category?: { id?: number; name?: string };
   description?: string;
   bomItemDtos: IBomItem[];
   totalAmount?: number;
@@ -29,13 +29,12 @@ export interface IBomListResponse {
 }
 
 export interface ICreateBomRequest {
-  name: string;
+  bomName: string;
   categoryId?: number;
   description?: string;
-  items: Omit<IBomItem, 'id'>[];
+  bomItemDtos: Omit<IBomItem, 'id'>[];
 }
 
 export interface IUpdateBomRequest extends ICreateBomRequest {
   id: number;
 }
-

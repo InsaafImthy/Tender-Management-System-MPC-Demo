@@ -14,6 +14,7 @@ export const createOrUpdateRfpAsync = async(data:any)=>{
         return response.data;
     }catch(err){
         console.log(err);
+        throw err;
     }
 }
 

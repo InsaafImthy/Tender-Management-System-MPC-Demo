@@ -102,20 +102,19 @@ const RequestDetailPage: React.FC = () => {
     getRequestDetailData();
   }, []);
 
-  const Newclass = rfpData?.status != 5 ? "space-y-3 desktop:max-w-[600px] px-3 py-3" : "";
+  const rightPaneClass =
+    rfpData?.status != 5 ? "space-y-3 px-4 py-4 md:px-6 md:py-6" : "px-4 py-4 md:px-6 md:py-6";
 
   return (
-    <div className="">
-      <div className="desktop-wide:flex desktop:flex-row desktop-wide:justify-center">
-        <CommonTitleCard />
+    <div className="min-h-screen bg-bgBlue">
+      <CommonTitleCard />
 
-        {/* Main Content */}
-        <div className="">
+      <div className="px-3 pb-28 pt-4 md:px-5 md:pt-5 xl:px-8">
+        <div className="mx-auto w-full max-w-[1800px]">
           {rfpData ? (
-            <>
-              <div className="flex flex-col h-full grid grid-cols-2 desktop:justify-between desktop-wide:justify-center">
-                {/* RFP Details Section */}
-                <div className="h-full flex items-center bg-white flex-col px-10 pt-6 border-r border-gray-200">
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)] 2xl:grid-cols-[minmax(0,1.35fr)_minmax(420px,0.85fr)]">
+              <div className="min-w-0">
+                <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_22px_48px_rgba(15,23,42,0.08)]">
                   <RfpDetailLeft
                     masterData={masterData}
                     requestData={rfpData}
@@ -124,11 +123,14 @@ const RequestDetailPage: React.FC = () => {
                     }}
                   />
                 </div>
+              </div>
 
-                {/* Approval Flow Section - Top */}
-                <div className={`w-full mx-auto rounded h-full ${Newclass}`}>
+              <div className="min-w-0">
+                <div
+                  className={`overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_22px_48px_rgba(15,23,42,0.08)] ${rightPaneClass}`}
+                >
                   {rfpData.status == 5 ||
-                    rfpData?.status == 9 ? (
+                  rfpData?.status == 9 ? (
                     <RfpDetailRight
                       rfp={rfpData}
                       trigger={() => {
@@ -161,77 +163,76 @@ const RequestDetailPage: React.FC = () => {
                   )}
                 </div>
               </div>
-            </>
+            </div>
           ) : (
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-8 shadow-[0_22px_48px_rgba(15,23,42,0.08)]">
               <PageLoader />
             </div>
           )}
         </div>
-
-        {/* Action Buttons */}
-        {(rfpData?.status == 1 ||
-          rfpData?.status == 5 ||
-          rfpData?.status == 9) &&
-          getUserCredentials().userId == rfpData?.createdBy.toString() && (
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-md z-9">
-              <div className="max-w-4xl mx-auto px-4 py-3">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    (async () => {
-                      if (rfpData?.status == 1) {
-                        await publishRfpAsync(rfpData?.id);
-                        notification.success({
-                          message: "RFP published successfully",
-                        });
-                      } else if (rfpData?.status == 9) {
-                        navigate(`/rfps/${id}/decision-form`);
-                      } else {
-                        if (!vendorProposals || vendorProposals.length == 0) {
-                          notification.warning({
-                            message: "No vendor proposal submitted"
-                          })
-                          return;
-                        }
-                        await openRfpProposalsAsync(rfpData?.id);
-                        notification.success({
-                          message: "RFP sent for open proposal",
-                        });
-                      }
-                      getRequestDetailData();
-                    })();
-                  }}
-                  className="flex justify-end"
-                >
-                  {rfpData?.status == 5 && rfpData?.isLiveBiddingOn == null && <Button
-                    type="primary"
-                    htmlType="button"
-                    className="px-6 py-2 text-sm font-medium mr-2"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsLiveBiddingModalOpen(true);
-                    }}
-                  >
-                    Schedule Live Bidding
-                  </Button>}
-                  {!rfpData?.rfpType && (
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="px-6 py-2 text-sm font-medium"
-                    >
-                      {rfpData?.status == 1
-                        ? "Publish now"
-                        : rfpData?.status == 9
-                          ? "Create DP"
-                          : "Request Approval to Open RFP"}
-                    </Button>)}
-                </form>
-              </div>
-            </div>
-          )}
       </div>
+
+      {(rfpData?.status == 1 ||
+        rfpData?.status == 5 ||
+        rfpData?.status == 9) &&
+        getUserCredentials().userId == rfpData?.createdBy.toString() && (
+          <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 bg-white/95 shadow-[0_-12px_30px_rgba(15,23,42,0.08)] backdrop-blur">
+            <div className="mx-auto w-full max-w-[1800px] px-3 py-3 md:px-5 xl:px-8">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  (async () => {
+                    if (rfpData?.status == 1) {
+                      await publishRfpAsync(rfpData?.id);
+                      notification.success({
+                        message: "RFP published successfully",
+                      });
+                    } else if (rfpData?.status == 9) {
+                      navigate(`/rfps/${id}/decision-form`);
+                    } else {
+                      if (!vendorProposals || vendorProposals.length == 0) {
+                        notification.warning({
+                          message: "No vendor proposal submitted"
+                        })
+                        return;
+                      }
+                      await openRfpProposalsAsync(rfpData?.id);
+                      notification.success({
+                        message: "RFP sent for open proposal",
+                      });
+                    }
+                    getRequestDetailData();
+                  })();
+                }}
+                className="flex flex-col gap-3 sm:flex-row sm:justify-end"
+              >
+                {rfpData?.status == 5 && rfpData?.isLiveBiddingOn == null && <Button
+                  type="primary"
+                  htmlType="button"
+                  className="h-11 w-full px-6 text-sm font-medium sm:w-auto"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsLiveBiddingModalOpen(true);
+                  }}
+                >
+                  Schedule Live Bidding
+                </Button>}
+                {!rfpData?.rfpType && (
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="h-11 w-full px-6 text-sm font-medium sm:w-auto"
+                  >
+                    {rfpData?.status == 1
+                      ? "Publish now"
+                      : rfpData?.status == 9
+                        ? "Create DP"
+                        : "Request Approval to Open RFP"}
+                  </Button>)}
+              </form>
+            </div>
+          </div>
+        )}
 
       {/* Live Bidding Schedule Modal */}
       <Modal

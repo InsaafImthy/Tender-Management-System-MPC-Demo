@@ -13,7 +13,15 @@ export const getAllBomsAsync = async (filter: IFilterDto): Promise<IBomListRespo
         Authorization: `Bearer ${getUserToken()}`
       }
     })
-    return {data:response?.data || [], count:response?.data?.length || 0};
+    const responseData = response?.data;
+    const data = Array.isArray(responseData)
+      ? responseData
+      : Array.isArray(responseData?.items)
+        ? responseData.items
+        : Array.isArray(responseData?.data)
+          ? responseData.data
+          : [];
+    return { data, count: responseData?.count ?? data.length };
   } catch (e) {
     console.log(e);
     throw e;
@@ -77,4 +85,3 @@ export const deleteBomAsync = async (id: number): Promise<void> => {
     throw e;
   }
 };
-

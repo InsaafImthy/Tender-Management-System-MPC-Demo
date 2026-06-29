@@ -26,13 +26,13 @@ const ViewTable: React.FC<TableProps> = ({
     console.log(items,"itemsitemsitems")
 
     return (
-        <div className="w-full rounded-[10px] overflow-hidden border border-gray-300">
+        <div className="w-full overflow-hidden rounded-[18px] border border-gray-300 bg-white">
             <div className="overflow-x-auto">
-                <table className="w-full table-auto text-sm text-left border-gray-300 rounded-[10px] overflow-hidden">
-                    <thead className="rounded-t-[10px] border-gray-300 border-b" >
+                <table className="min-w-full table-auto overflow-hidden rounded-[10px] border-gray-300 text-left text-sm">
+                    <thead className="border-b border-gray-300 bg-slate-50" >
                         <tr>
                             {columns.map((column,i) => (
-                                <th key={i} className="px-[16px] py-[10px] text-gray-600 font-bold text-[12px] max-w-[136px] desktop:min-w-[136px]">
+                                <th key={i} className="px-[16px] py-[12px] text-[12px] font-bold text-gray-600 sm:min-w-[136px]">
                                     {columnLabels[column]}
                                 </th>
                             ))}
@@ -47,7 +47,7 @@ const ViewTable: React.FC<TableProps> = ({
                                     className="group relative"
                                 >
                                     {columns.map((col) => (
-                                        <td key={col} className="px-4 py-2 border-b text-[14px] border-gray-300 px-[16px] py-[10px]">
+                                        <td key={col} className="border-b border-gray-300 px-[16px] py-[12px] text-[14px] text-slate-700 align-top">
                                             {item[col]}
                                         </td>
                                     ))}

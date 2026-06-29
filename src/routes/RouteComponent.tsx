@@ -208,7 +208,7 @@ const RouteComponent: React.FC = () => {
                   />
                 )}
                 <div
-                  className={`flex-1 min-h-screen bg-bgBlue transition-[margin] duration-300 ease-in-out ${isMobile ? 'mt-20' : ''
+                  className={`flex-1 min-w-0 min-h-screen bg-bgBlue transition-[margin] duration-300 ease-in-out ${isMobile ? 'mt-20' : ''
                     }`}
                   style={isMobile ? undefined : { marginLeft: `${desktopSidebarOffset}px` }}
                 >

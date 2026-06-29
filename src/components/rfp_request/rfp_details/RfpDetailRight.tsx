@@ -243,17 +243,17 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
 
   return (
     <>
-      <div className="w-full bg-white h-full">
+      <div className="h-full w-full bg-white">
         {!rfp?.rfpType ? (
-          <div className="w-full space-y-2 desktop:max-w-[700px] mx-auto rounded-lg h-full px-6 max-h-[900px] overflow-y-auto scrollbar">
-            <div className="flex items-center sticky top-0 bg-white z-10">
-              <div className="overflow-x-auto py-4 flex-1 scroll-smooth no-scrollbar">
-                <div className="pt-[24px] flex justify-start border-b ml-[10px]">
+          <div className="mx-auto flex h-full w-full flex-col space-y-4">
+            <div className="sticky top-0 z-10 -mx-1 bg-white/95 px-1 backdrop-blur">
+              <div className="overflow-x-auto scroll-smooth no-scrollbar">
+                <div className="flex min-w-max justify-start gap-6 border-b border-slate-200 pt-2">
                   {tabs.map((tab, index) => (
-                    <div className="flex items-center h-[37px]" key={tab}>
+                    <div className="flex h-[42px] items-center" key={tab}>
                       <div
                         onClick={() => setActiveTab(tab)}
-                        className={`relative h-full w-full text-sm text-start cursor-pointer font-semibold ${activeTab === tab
+                        className={`relative flex h-full items-center text-sm text-start cursor-pointer font-semibold ${activeTab === tab
                           ? "text-customBlue"
                           : "text-gray-500 hover:text-black"
                           }`}
@@ -267,7 +267,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                         ></span>
                       </div>
                       {index !== tabs.length - 1 && (
-                        <span className="mx-[12px] h-[37px] text-gray-400"></span>
+                        <span className="h-[37px] text-gray-400"></span>
                       )}
                     </div>
                   ))}
@@ -305,15 +305,15 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                   ) : (
                     <>
                       <div
-                        className={`border border-lightblue p-4 flex text-sm rounded-lg bg-[#EDF4FD] mb-[16px] flex-col`}
+                        className="mb-[16px] flex flex-col rounded-2xl border border-[#D4E5FB] bg-[#EDF4FD] p-4 text-sm"
                       >
-                        <div className="pr-[55px] group relative">
+                        <div className="group relative">
                           <span className="font-bold text-[16px] mb-[17.5px] flex">
                             <span>Evaluation Report</span>
                           </span>
                           <div className="flex flex-col">
                             {evaluationDocuments.map((d: any) => (
-                              <span>
+                              <span key={d.documentName}>
                                 <a
                                   className="text-[13px] flex items-end mb-5"
                                   href={
@@ -338,7 +338,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                                 </a>
                                 {rfp?.status != 6 && (
                                   <label htmlFor="upload-eval-file">
-                                    <span className="px-3 py-2 bg-white rounded-md border">
+                                    <span className="inline-flex rounded-md border bg-white px-3 py-2">
                                       Reupload
                                     </span>
                                   </label>
@@ -365,25 +365,27 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                           />
                         </div>
                       </div>
-                      <Table
-                        columnLabels={columnLabels}
-                        items={maskedProposals}
-                        columns={proposalTableColumns}
-                        title="Proposals"
-                        type="proposal"
-                        setIsModalOpenItem={async (val) => {
-                          const proposalTemp = await getProposalByIdAsync(
-                            val?.id
-                          );
-                          setIsModalOpenItem(proposalTemp);
-                        }}
-                        filter={filter}
-                        setFilter={setFilter}
-                        setSearchQuery={setSearchQuery}
-                        totalCount={10}
-                        IsIcon={false}
-                        subtitle=""
-                      />
+                      <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200">
+                        <Table
+                          columnLabels={columnLabels}
+                          items={maskedProposals}
+                          columns={proposalTableColumns}
+                          title="Proposals"
+                          type="proposal"
+                          setIsModalOpenItem={async (val) => {
+                            const proposalTemp = await getProposalByIdAsync(
+                              val?.id
+                            );
+                            setIsModalOpenItem(proposalTemp);
+                          }}
+                          filter={filter}
+                          setFilter={setFilter}
+                          setSearchQuery={setSearchQuery}
+                          totalCount={10}
+                          IsIcon={false}
+                          subtitle=""
+                        />
+                      </div>
                     </>
                   )}
                 </>
@@ -396,8 +398,8 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
             </div>
           </div>
         ) : (
-          <div className="bg-white w-full p-6">
-            <div className="flex justify-between">
+          <div className="w-full bg-white p-2 sm:p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h1 className="text-xl font-bold text-gray-900 mt-1">
                 Live Bidding
               </h1>
@@ -409,7 +411,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
                 <ArrowRightOutlined />
               </Button>
             </div>
-            <div className="w-full mt-8">
+            <div className="mt-8 w-full">
               <ItemCountCard
                 className="mb-[16px]"
                 item={{

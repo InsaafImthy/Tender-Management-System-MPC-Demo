@@ -1,6 +1,6 @@
-import { Button } from "antd";
+import { Button, notification } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 // import AddAttachment from "./AddAttachment";
 import GeneralInformation from "./GeneralInformation";
 import { getAllUsersByFilterAsync } from "../../../services/userService";
@@ -24,6 +24,7 @@ import ProcurementItems from "./ProcurementItems";
 import { getAllDocumentTypesAsync } from "../../../services/commonService";
 import { ClipboardMainIcon } from "../../../utils/Icons";
 import { IBom } from "../../../types/bomTypes";
+import { BOQRfpCreationHandoff } from "../../AdminVendorPortal/boq_intake/types";
 
 type RfpType = "create" | "edit";
 
@@ -69,6 +70,8 @@ const RfpValidationFields: Partial<Record<keyof IRfp, string>> = {
 
 function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const boqHandoff = (location.state as { boqHandoff?: BOQRfpCreationHandoff } | null)?.boqHandoff;
   const { id } = useParams();
   const [requestData, setRequestData] = useState<IRfp>(defaultRfpState);
   const [attachments, setAttachments] = useState<any[]>([]);
@@ -161,12 +164,25 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
           console.error(err);
         }
       } else {
+        const buyerOrganizationName = companies?.find(
+          (x: any) => x?.id.toString() === getUserCredentials().companyId
+        )?.companyName;
         setRequestData((prev) => ({
           ...prev,
-          buyerOrganizationName: companies?.find(
-            (x: any) => x?.id.toString() === getUserCredentials().companyId
-          )?.companyName,
+          ...(boqHandoff?.requestData ?? {}),
+          buyerOrganizationName,
+          rfpCategories: boqHandoff ? boqHandoff.categoryIds.map((categoryId) => ({ categoryId, rfpId: 0 })) : prev.rfpCategories,
         }));
+        if (boqHandoff) {
+          setProcurementItems(boqHandoff.procurementItems);
+          const documentType = documentTypes?.find((item: any) => {
+            const name = String(item?.documentTypeName ?? "").toLowerCase();
+            return name.includes("general") || name.includes("boq");
+          }) ?? documentTypes?.[0];
+          if (boqHandoff.sourceFile && documentType) {
+            setAttachments([{ attachment: boqHandoff.sourceFile, type: documentType.id }]);
+          }
+        }
       }
     } catch (err) {
       console.error(err);
@@ -315,6 +331,10 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
       if (isCreatedOrUpdated) navigate(id ? `/rfps/${id}` : "/rfps");
     } catch (err) {
       console.log(err);
+      notification.error({
+        message: id ? "Unable to update RFP" : "Unable to create RFP",
+        description: err instanceof Error ? err.message : "The RFP API request failed. Please review the form and try again.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -358,6 +378,21 @@ function RfpRequestFormComponent({ type = "create" }: RfpRequestFormProps) {
 
       {/* Main Content */}
       <div className="admin-content">
+        {type === "create" && boqHandoff && (
+          <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-sm">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="text-sm font-semibold">BOQ data loaded from {boqHandoff.sourceDocumentName}</div>
+                <div className="mt-1 text-xs text-emerald-700">
+                  {boqHandoff.procurementItems.length} products ready: {boqHandoff.productsReused} matched in the product master and {boqHandoff.productsCreated} created through the product API.
+                </div>
+              </div>
+              <span className="inline-flex w-fit rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold text-emerald-700">
+                {boqHandoff.sourceFile ? "Source PDF attached" : "Source PDF must be reattached"}
+              </span>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Progress Steps */}
           {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">

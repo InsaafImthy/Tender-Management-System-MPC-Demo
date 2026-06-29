@@ -171,54 +171,54 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
   return (
     <div className="space-y-4">
       {requestData && (
-        <div className="bg-white w-full border border-gray-200">
+        <div className="w-full bg-white">
           {/* Header Section */}
-          <div className="px-6 py-4 border-b w-full border-gray-200">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-lg flex items-center justify-center">
+          <div className="w-full border-b border-slate-200 px-4 py-5 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-400 to-[#1365AA] shadow-[0_14px_28px_rgba(19,101,170,0.18)]">
                     <span className="text-white text-sm"><ClipboardIcon /></span>
                   </div>
-                  <div>
-                    <h1 className="text-xl font-bold text-gray-900">
+                  <div className="min-w-0">
+                    <h1 className="text-xl font-bold leading-snug text-gray-900 sm:text-2xl">
                       {requestData.rfpTitle}
                     </h1>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
                         ID: {requestData?.tenderNumber || "-"}
                       </span>
                       <button
                         onClick={onEditRequest}
-                        className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                        className="inline-flex items-center rounded-full border border-violet-200 px-3 py-1 text-xs font-medium text-violet-700 transition hover:border-violet-300 hover:bg-violet-50"
                       >
-                        <PenIcon className="w-3 h-3 inline mr-1" /> Edit
+                        <PenIcon className="mr-1 inline h-3 w-3" /> Edit
                       </button>
                     </div>
                   </div>
-                  {requestData?.isLiveBiddingOn && <div onClick={() => navigate(`/rfps/${requestData?.id}/live-bidding`)} className="flex items-center px-3 py-1 border rounded-full bg-gray-100 cursor-pointer">
-                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                    <span className="ml-2 text-red-600 font-semibold">{"Live"}</span>
-                  </div>}
                 </div>
               </div>
-            </div>
+              {requestData?.isLiveBiddingOn && <div onClick={() => navigate(`/rfps/${requestData?.id}/live-bidding`)} className="inline-flex cursor-pointer items-center self-start rounded-full border border-red-100 bg-red-50 px-3 py-1.5">
+                <div className="h-3 w-3 rounded-full bg-red-500 animate-pulse"></div>
+                <span className="ml-2 text-sm font-semibold text-red-600">Live</span>
+              </div>}
+                </div>
           </div>
 
           {/* Content */}
-          <div className="p-6">
+          <div className="space-y-8 p-4 sm:p-6 lg:p-8">
             {/* Description */}
-            <div className="mb-6">
+            <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-2">
                 Description
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="max-w-4xl text-sm leading-7 text-gray-600">
                 {requestData.rfpDescription}
               </p>
             </div>
 
             {/* RFP Products */}
-            <div className="mb-6">
+            <div>
               <ViewTable
                 columns={["itemCode", "itemName", "quantity"]}
                 columnLabels={{
@@ -231,7 +231,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
             </div>
 
             {/* General Details */}
-            <div className="mb-4">
+            <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
                 <GeneralDetailIcon className="w-4 h-4 mr-2" /> General Details
               </h3>
@@ -266,7 +266,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
               </div>
 
               {/* Status and Requisition ID */}
-              <div className="bg-gray-50 rounded p-4 mb-4">
+              <div className="mb-4 rounded-2xl bg-slate-50 p-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">
@@ -284,14 +284,14 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
               </div>
 
               {/* Additional Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-gray-50 rounded p-3">
+              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="rounded-2xl bg-slate-50 p-3">
                   <p className="text-xs text-gray-500 mb-1">Closed / Open</p>
                   <p className="text-sm font-medium text-gray-900">
                     {requestData?.isOpen ? "Open" : "Closed"}
                   </p>
                 </div>
-                <div className="bg-gray-50 rounded p-3">
+                <div className="rounded-2xl bg-slate-50 p-3">
                   <p className="text-xs text-gray-500 mb-1">
                     Serial / Parallel
                   </p>
@@ -303,8 +303,8 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
 
               {/* Financial Details */}
               <div className="space-y-3">
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-gray-500">
                       Estimated Contract Value
                     </span>
@@ -315,8 +315,8 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                   </div>
                 </div>
                 {requestData?.bidValue && (
-                  <div className="bg-gray-50 rounded p-3">
-                    <div className="flex justify-between items-center">
+                  <div className="rounded-2xl bg-slate-50 p-3">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                       <span className="text-xs text-gray-500">Bid Value</span>
                       <span className="text-sm font-semibold text-gray-900">
                         {convertCurrencyLabel(requestData?.rfpCurrency)}
@@ -325,8 +325,8 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                     </div>
                   </div>
                 )}
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-gray-500">Tender Fee</span>
                     <span className="text-sm font-semibold text-gray-900">
                       {convertCurrencyLabel(requestData?.rfpCurrency)}
@@ -338,14 +338,14 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
             </div>
 
             {/* RFP Details */}
-            <div className="mb-4">
+            <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
                 <GeneralDetailIcon className="w-4 h-4 mr-2" /> RFP Details
               </h3>
 
               {/* Buyer Information */}
-              <div className="bg-gray-50 rounded p-4 mb-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="mb-4 rounded-2xl bg-slate-50 p-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Buyer Name</p>
                     <p className="text-sm font-medium text-gray-900">
@@ -369,8 +369,8 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
 
               {/* Timeline Information */}
               <div className="space-y-3">
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-gray-500">
                       Express Interest Last Date
                     </span>
@@ -381,8 +381,8 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                     </span>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-gray-500">
                       Clarification Date
                     </span>
@@ -393,16 +393,16 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                     </span>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-gray-500">Closing Date</span>
                     <span className="text-sm font-medium text-gray-900">
                       {dayjs(requestData?.closingDate).format("DD-MM-YYYY")}
                     </span>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded p-3">
-                  <div className="flex justify-between items-center">
+                <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-gray-500">Closing Time</span>
                     <span className="text-sm font-medium text-gray-900">
                       {dayjs(requestData?.closingDate).format("hh:mm A")}
@@ -413,7 +413,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
             </div>
 
             {/* Ownership Details */}
-            <div className="mb-4">
+            <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
                 <GeneralDetailIcon className="w-4 h-4 mr-2" /> Ownership
               </h3>
@@ -426,10 +426,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                 {owners.technical.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {owners.technical.map((user, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center bg-blue-100 rounded px-3 py-1"
-                      >
+                      <div key={idx} className="flex items-center rounded-full bg-blue-100 px-3 py-1.5">
                         <img
                           src={user.avatarUrl || userPhoto}
                           alt={user.name}
@@ -456,10 +453,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                 {owners.commercial.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {owners.commercial.map((user, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center bg-green-100 rounded px-3 py-1"
-                      >
+                      <div key={idx} className="flex items-center rounded-full bg-green-100 px-3 py-1.5">
                         <img
                           src={user.avatarUrl || userPhoto}
                           alt={user.name}
@@ -484,7 +478,7 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                   Supporting Documents
                 </h4>
                 {rfpDocuments.length > 0 ? (
-                  <div className="bg-gray-50 rounded p-3">
+                  <div className="rounded-2xl bg-slate-50 p-3">
                     <ViewTable
                       columns={["attachmentComponent", "type"]}
                       columnLabels={{

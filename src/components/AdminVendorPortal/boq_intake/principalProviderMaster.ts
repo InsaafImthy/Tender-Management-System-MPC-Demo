@@ -1,0 +1,73 @@
+import { PrincipalProvider } from "./types";
+
+export const principalProviders: PrincipalProvider[] = [
+  {
+    providerId: "PP-001",
+    providerName: "BD Diagnostics",
+    categoryCoverage: ["Laboratory / Diagnostics"],
+    brandsHandled: ["PHOENIX", "AST", "ID BROTH", "BD"],
+    country: "United States",
+    contactPerson: "Ahmed Al Balushi",
+    email: "ahmed.albalushi@bddiagnostics.om",
+    status: "Active",
+    preferredVendor: true,
+  },
+  {
+    providerId: "PP-002",
+    providerName: "Medtronic Oman",
+    categoryCoverage: ["Medical Equipment", "Surgical Consumables"],
+    brandsHandled: ["MONITOR", "VENTILATOR", "SURGICAL"],
+    country: "Ireland",
+    contactPerson: "Maya Fernandes",
+    email: "maya.fernandes@medtronic.om",
+    status: "Active",
+    preferredVendor: true,
+  },
+  {
+    providerId: "PP-003",
+    providerName: "Siemens Healthineers",
+    categoryCoverage: ["Medical Equipment", "Laboratory / Diagnostics"],
+    brandsHandled: ["X-RAY", "ULTRASOUND", "ECG", "IMAGING"],
+    country: "Germany",
+    contactPerson: "Khalid Al Harthy",
+    email: "khalid.harthy@siemens-healthineers.om",
+    status: "Active",
+    preferredVendor: true,
+  },
+  {
+    providerId: "PP-004",
+    providerName: "B. Braun",
+    categoryCoverage: ["Surgical Consumables", "Medical Consumables"],
+    brandsHandled: ["SUTURE", "SYRINGE", "NEEDLE", "DRESSING"],
+    country: "Germany",
+    contactPerson: "Sara Al Lawati",
+    email: "sara.allawati@bbraun.om",
+    status: "Active",
+    preferredVendor: false,
+  },
+  {
+    providerId: "PP-005",
+    providerName: "Gulf Medical Supplies",
+    categoryCoverage: ["Medical Equipment", "Mobility / Hospital Furniture", "Medical Consumables"],
+    brandsHandled: ["BED", "TROLLEY", "WHEELCHAIR", "GENERAL MEDICAL"],
+    country: "Oman",
+    contactPerson: "Nasser Al Riyami",
+    email: "nasser@gulfmedical.om",
+    status: "Active",
+    preferredVendor: true,
+  },
+  {
+    providerId: "PP-006",
+    providerName: "Oman Scientific Supplies",
+    categoryCoverage: ["Laboratory / Diagnostics", "Medical Consumables"],
+    brandsHandled: ["LABORATORY", "MATRIX", "BACTERIAL", "CONSUMABLES"],
+    country: "Oman",
+    contactPerson: "Rania Al Habsi",
+    email: "rania@omanscientific.om",
+    status: "Active",
+    preferredVendor: false,
+  },
+];
+
+export const getProvider = (providerId: string) =>
+  principalProviders.find((provider) => provider.providerId === providerId);

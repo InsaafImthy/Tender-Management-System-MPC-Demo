@@ -91,12 +91,17 @@ function RequestPage() {
       );
       //setShowLoader(false);
       setTotalCount(0);
-      let data: any = capex_request_responese.map((r: any) => ({
+      const apiItems = Array.isArray(capex_request_responese) ? capex_request_responese : [];
+      let data: any = apiItems.map((r: any) => ({
         ...r,
         estimatedContractValueLabel: `${convertCurrencyLabel(
           r.rfpCurrency as string
         )}${r.estimatedContractValue?.toFixed(2)}`,
       }));
+      if (filterDto.globalSearch) {
+        const query = String(filterDto.globalSearch).toLowerCase();
+        data = data.filter((item: any) => `${item.tenderNumber} ${item.rfpTitle} ${item.buyerName}`.toLowerCase().includes(query));
+      }
       setRfpRequests(data);
       setTrigger(false);
     } catch (err) {

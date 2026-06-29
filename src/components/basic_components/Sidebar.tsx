@@ -76,7 +76,6 @@ const Sidebar = ({
   ];
 
   const vendorPortalItems: SectionItem[] = [
-    { to: "/vendor-portal", title: "Overview" },
     { to: "/vendor-portal/boq-upload", title: "BOQ Import" },
     { to: "/vendor-portal/rfps", title: "Vendor RFPs" },
     { to: "/vendor-portal/invitations", title: "Vendor Interest" },

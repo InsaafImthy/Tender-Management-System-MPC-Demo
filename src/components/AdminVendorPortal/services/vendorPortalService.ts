@@ -2,6 +2,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import { Urls } from "../../../services/ApiConfig";
 import { getUserToken } from "../../../utils/common";
+import { IBom } from "../../../types/bomTypes";
 import {
   BoqImportItem,
   CategoryOption,
@@ -50,7 +51,7 @@ export const loadVendorPortalData = async () => {
       id: Number(item.id),
       name: String(item.name ?? item.categoryName ?? "Unlabelled category"),
     })).filter((item) => Number.isFinite(item.id)),
-    boms: asArray(value(1)),
+    boms: asArray<IBom>(value(1)),
     rfps: asArray<PortalRfp>(value(2)),
     interests: asArray<PortalInterest>(value(3)),
     proposals: asArray<PortalProposal>(value(4)),
