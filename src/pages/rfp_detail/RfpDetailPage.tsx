@@ -40,9 +40,7 @@ const RequestDetailPage: React.FC = () => {
 
   const getRequestDetailData = async () => {
     if (id) {
-      console.log(id, "requestId");
       const response = await getRfpByIdAsync(Number(id));
-      console.log(response);
       setRfpData(response);
       const categoriesResponse = await getAllCategoriesAsync();
       setMasterData((prev) => ({ ...prev, categories: categoriesResponse }));
@@ -217,7 +215,7 @@ const RequestDetailPage: React.FC = () => {
                 >
                   Schedule Live Bidding
                 </Button>}
-                {!rfpData?.rfpType && (
+                {rfpData?.rfpType == null && (
                   <Button
                     type="primary"
                     htmlType="submit"
