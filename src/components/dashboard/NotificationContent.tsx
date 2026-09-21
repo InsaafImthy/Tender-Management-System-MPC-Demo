@@ -207,7 +207,7 @@ const NotificationContent: React.FC<INotificationContent> = ({ data, closeModal,
                                 {new Date(notification.createdAt).toLocaleDateString()}
                               </span>
                               {/* <span className="text-xs font-medium text-green-600">
-                                {convertCurrencyLabel(notification.currency || "USD")} {notification.estimatedBudget?.toLocaleString()}
+                                {convertCurrencyLabel(notification.currency || "OMR")} {notification.estimatedBudget?.toLocaleString()}
                               </span> */}
                             </div>
                             {/* <div className="flex items-center space-x-2">

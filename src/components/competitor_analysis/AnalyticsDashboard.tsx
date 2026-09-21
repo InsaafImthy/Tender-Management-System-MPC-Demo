@@ -95,7 +95,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'OMR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);

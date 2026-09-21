@@ -213,13 +213,13 @@ const Table: React.FC<TableProps> = ({
 
       {/* Table Content */}
       <div ref={tableContainerRef} className="overflow-auto max-h-[520px] scrollbar-thin">
-        <table className="min-w-full border-collapse">
+        <table className="w-full min-w-[1024px] border-collapse">
           <thead className="sticky top-0 bg-slate-50 z-10">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column}
-                  className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200"
+                  className="whitespace-nowrap px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200"
                 >
                   {columnLabels[column]}
                 </th>
@@ -248,7 +248,7 @@ const Table: React.FC<TableProps> = ({
                         <ShowStatus status={item[col]} type={type} />
                       ) : col === "tenderNumber" ? (
                         <div className="flex items-center">
-                          <span className="font-semibold text-slate-950 text-sm">
+                          <span className="whitespace-nowrap font-semibold text-slate-950 text-sm">
                             {item[col]}
                           </span>
                         </div>
@@ -268,7 +268,7 @@ const Table: React.FC<TableProps> = ({
                               {item[col]?.charAt(0)?.toUpperCase() || "U"}
                             </span>
                           </div>
-                          <span className="text-slate-900 font-medium text-sm">
+                          <span className="whitespace-nowrap text-slate-900 font-medium text-sm">
                             {item[col]}
                           </span>
                         </div>

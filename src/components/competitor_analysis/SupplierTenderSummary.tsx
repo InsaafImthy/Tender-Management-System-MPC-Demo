@@ -29,7 +29,7 @@ const SupplierTenderSummary: React.FC<SupplierTenderSummaryProps> = ({
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'OMR',
       minimumFractionDigits: 2,
     }).format(price);
   };

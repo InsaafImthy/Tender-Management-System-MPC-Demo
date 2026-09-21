@@ -69,10 +69,10 @@ function UserProfilePage() {
   };
 
   return (
-    <div className="desktop-wide:flex desktop-wide:justify-center">
-      <div className="min-h-screen bg-gray-100 w-full overflow-x-hidden">
+    <div className="admin-page overflow-x-hidden">
+      <div className="admin-content">
         <Card
-          className="max-w-full mx-auto"
+          className="w-full"
           cover={
             <div className="h-[73px] bg-gradient-to-r from-blue-400 to-blue-300"></div>
           }

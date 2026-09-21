@@ -165,9 +165,9 @@ const SettingsPage = () => {
 
   // Desktop version with top summary and content only.
   return (
-    <div className="min-h-screen bg-bgBlue">
+    <div className="admin-page">
       <CommonTitleCard />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         <div className="mb-6 app-surface p-6">
           <h1 className="text-heading-3">Settings</h1>
           <p className="mt-2 text-body-small text-muted">

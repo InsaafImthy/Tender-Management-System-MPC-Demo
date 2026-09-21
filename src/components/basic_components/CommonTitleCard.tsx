@@ -54,7 +54,7 @@ const CommonTitleCard = () => {
     }, [userCredentials?.companyId]);
 
     return (
-        <div className="w-full flex justify-between bg-white/95 items-center px-8 py-3 border-b border-slate-200/80 shadow-sm backdrop-blur-xl">
+        <div className="hidden md:flex w-full justify-between bg-white/95 items-center px-4 sm:px-5 lg:px-6 py-3 border-b border-slate-200/80 shadow-sm backdrop-blur-xl">
             <div className="flex flex-col">
                 <p className="text-[18px] flex justify-start items-center">
                     <span className="text-[18px] font-semibold text-slate-950">{companyDetails?.companyName}</span>

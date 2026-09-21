@@ -337,18 +337,21 @@ const LiveBiddingPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-6">
+      <div className="admin-page">
         <CommonTitleCard />
-        <div className="bg-white rounded-lg border border-gray-200 p-8">
-          <PageLoader />
+        <div className="admin-content">
+          <div className="bg-white rounded-lg border border-gray-200 p-8">
+            <PageLoader />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className="admin-page">
       <CommonTitleCard />
+      <div className="admin-content">
 
       {/* Header */}
       <div className="mb-6">
@@ -586,6 +589,7 @@ const LiveBiddingPage: React.FC = () => {
           </div>
         }
       />
+      </div>
     </div>
   );
 };

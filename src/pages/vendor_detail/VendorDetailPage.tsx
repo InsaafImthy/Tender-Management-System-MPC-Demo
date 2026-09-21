@@ -92,14 +92,12 @@ const VendorDetailPage: React.FC = () => {
     }, [id])
 
     return (
-        <div className="desktop-wide:flex desktop-wide:justify-center">
-            <div>
-                <CommonTitleCard />
-                <div className="flex flex-col h-full desktop:flex-row desktop:justify-between desktop-wide:justify-center">
-                    {true ? <>
-                        <VendorDetailLeft vendorDetails={vendorData} />
-                        <VendorDetailRight vendorDetails={vendorData as any} trigger={() => { }} /></> : <PageLoader />}
-                </div>
+        <div className="admin-page">
+            <CommonTitleCard />
+            <div className="admin-content grid min-w-0 grid-cols-1 gap-4 desktop:grid-cols-[minmax(0,1fr)_minmax(360px,600px)]">
+                {true ? <>
+                    <VendorDetailLeft vendorDetails={vendorData} />
+                    <VendorDetailRight vendorDetails={vendorData as any} trigger={() => { }} /></> : <PageLoader />}
             </div>
         </div>
     )

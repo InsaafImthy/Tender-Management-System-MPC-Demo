@@ -87,7 +87,7 @@ const SupplierQuotationsTable: React.FC<SupplierQuotationsTableProps> = ({
     }
   };
 
-  const formatPrice = (price: number, currency: string = 'USD') => {
+  const formatPrice = (price: number, currency: string = 'OMR') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,

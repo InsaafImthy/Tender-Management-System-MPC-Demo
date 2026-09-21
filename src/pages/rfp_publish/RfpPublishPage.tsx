@@ -180,7 +180,7 @@ export default function RfpPublishPage() {
         {/* Inline table with selection checkboxes */}
         <div className="admin-panel">
           <div className="overflow-auto max-h-[60vh]">
-            <table className="min-w-full border-collapse">
+            <table className="w-full min-w-[1024px] border-collapse">
               <thead className="sticky top-0 bg-slate-50 z-10">
                 <tr>
                   <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">

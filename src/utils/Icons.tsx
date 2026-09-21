@@ -1593,9 +1593,9 @@ export const PurchaseIcon: React.FC<IconProps> = ({
       viewBox="0 0 24 24"
       fill="none"
       stroke={strokeColor}
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={`lucide lucide-chart-bar-big transition-colors duration-300 group-hover:stroke-white ${
         className ?? ""
       }`}

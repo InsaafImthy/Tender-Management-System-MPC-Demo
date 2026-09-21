@@ -72,7 +72,7 @@ const RfpDetails: React.FC<RfpDetailsProps> = ({
                 style="w-full"
                 value={
                   convertCurrencyWithLabel(
-                    currenciesWithLabel.find((x) => x.value === requestData?.rfpCurrency)?.value || "USD"
+                    currenciesWithLabel.find((x) => x.value === requestData?.rfpCurrency)?.value || "OMR"
                   ) as string
                 }
                 options={(currenciesWithLabel || []).map((x) => ({
@@ -96,7 +96,7 @@ const RfpDetails: React.FC<RfpDetailsProps> = ({
               <div className="flex">
                 <div className="border border-gray-300 rounded px-3 py-2 h-[34px] flex items-center bg-white text-sm">
                   {convertCurrencyLabel(
-                    currencies.find((x) => x.value === requestData?.rfpCurrency)?.value || "USD"
+                    currencies.find((x) => x.value === requestData?.rfpCurrency)?.value || "OMR"
                   )}
                 </div>
                 <div className="ml-2 flex-1">
@@ -126,7 +126,7 @@ const RfpDetails: React.FC<RfpDetailsProps> = ({
               <div className="flex">
                 <div className="border border-gray-300 rounded px-3 py-2 h-[34px] flex items-center bg-white text-sm">
                   {convertCurrencyLabel(
-                    currencies.find((x) => x.value === requestData?.rfpCurrency)?.value || "USD"
+                    currencies.find((x) => x.value === requestData?.rfpCurrency)?.value || "OMR"
                   )}
                 </div>
                 <div className="ml-2 flex-1">
@@ -186,7 +186,7 @@ const RfpDetails: React.FC<RfpDetailsProps> = ({
               <div className="flex">
                 <div className="border border-gray-300 rounded px-3 py-2 h-[34px] flex items-center bg-white text-sm">
                   {convertCurrencyLabel(
-                    currencies.find((x) => x.value === requestData?.rfpCurrency)?.value || "USD"
+                    currencies.find((x) => x.value === requestData?.rfpCurrency)?.value || "OMR"
                   )}
                 </div>
                 <div className="ml-2 flex-1">

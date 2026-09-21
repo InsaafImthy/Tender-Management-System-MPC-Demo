@@ -1,703 +1,167 @@
-import { useEffect, useState, useCallback } from "react";
-import Table from "../../components/basic_components/Table";
-import BudgetCard from "../../components/dashboard/BudgetCard";
-import StatusBar from "../../components/dashboard/StatusBar";
-import TitleCard from "../../components/dashboard/TitleCard";
-import { IFilterDto, statusDataProp } from "../../types/commonTypes";
-import RequestCard from "../../components/dashboard/RequestCard";
-import PageLoader from "../../components/basic_components/PageLoader";
-import { convertCurrencyLabel } from "../../utils/common";
-import { rfp_column_labels } from "../../utils/constants";
-import { getAllRfpsByFilterAsync } from "../../services/rfpService";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  BriefcaseBusiness,
+  CalendarClock,
+  ClipboardCheck,
+  Files,
+  Gavel,
+  Plus,
+  RefreshCw,
+  SlidersHorizontal,
+  TriangleAlert,
+} from "lucide-react";
+import DashboardFilters from "../../components/dashboard/DashboardFilters";
+import DashboardKpiCard from "../../components/dashboard/DashboardKpiCard";
+import DashboardTenderTable from "../../components/dashboard/DashboardTenderTable";
+import TenderStatusChart from "../../components/dashboard/TenderStatusChart";
+import TenderTrendChart from "../../components/dashboard/TenderTrendChart";
+import TenderValueByBuyerChart from "../../components/dashboard/TenderValueByBuyerChart";
+import UpcomingDeadlines from "../../components/dashboard/UpcomingDeadlines";
+import { INITIAL_DASHBOARD_FILTERS, useTenderDashboard } from "../../hooks/useTenderDashboard";
+import { DashboardFiltersState } from "../../types/dashboardTypes";
+import { formatDashboardCurrency } from "../../utils/dashboardAnalytics";
+import "./dashboard.css";
 
-const defaultFilter: IFilterDto = {
-  fields: [
-    {
-      columnName: "status",
-      value: 5,
-    },
-  ],
-  sortColumn: "CreatedAt",
-  sortDirection: "DESC",
-  pageNo: 1,
-  pageSize: 10,
-};
-
-function Dashboard() {
-  const commonColumns = [
-    "tenderNumber",
-    "rfpTitle",
-    "buyerName",
-    "estimatedContractValueLabel",
-    "status",
-  ];
-
-  const [requestStatus, setRequestStatus] = useState([0, 0, 0]);
-
-  // State definitions
-  const [dashboardData, setDashboardData] = useState({
-    newRequests: [] as any[],
-    // requestStatus: [0, 0, 0],
-    rfpRequests: [
-    ] as any[],
-    totalCount: 0,
-  });
-
-  const [budgetDetails, setBudgetDetails] = useState<any>({
-    years: ["2020", "2021", "2022", "2023", "2024"],
-    budgets: [0, 0, 0, 0, 0],
-    spend: [0, 0, 0, 0, 0],
-  });
+const Dashboard = () => {
   const navigate = useNavigate();
-  const [, setTrigger] = useState(false);
-  const [, setIsSortModalOpen] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState<IFilterDto>(defaultFilter);
-  const [statusData, setStatusData] = useState<statusDataProp[]>([
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          className="lucide lucide-file-pen-icon lucide-file-pen"
-        >
-          <path d="M12.5 22H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5" />
-          <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-          <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-        </svg>
-      ),
-      label: "Total Tenders",
-      value: 0,
-      color: "bg-violet-100",
-      textColor: "text-violet-800",
-    },
-    {
-      icon: (
-        <div className="small-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            className="lucide lucide-file-lock2-icon lucide-file-lock-2"
-          >
-            <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v1" />
-            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-            <rect width="8" height="5" x="2" y="13" rx="1" />
-            <path d="M8 13v-2a2 2 0 1 0-4 0v2" />
-          </svg>
+  const [filters, setFilters] = useState<DashboardFiltersState>(INITIAL_DASHBOARD_FILTERS);
+  const [areFiltersVisible, setAreFiltersVisible] = useState(false);
+  const { filteredTenders, filterOptions, metrics, loading, error, lastUpdated, refresh } = useTenderDashboard(filters);
+  const activeFilterCount = Object.values(filters).filter((value) => value !== "all").length;
+  const emptyPipelineCurrency = filters.currency !== "all"
+    ? filters.currency
+    : filterOptions.currencies.length === 1 ? filterOptions.currencies[0] : null;
+
+  if (loading) {
+    return (
+      <main className="dashboard-page">
+        <div className="dashboard-shell dashboard-loading" aria-label="Loading tender dashboard">
+          <div className="dashboard-skeleton dashboard-skeleton--header" />
+          <div className="dashboard-skeleton-grid">
+            {Array.from({ length: 5 }, (_, index) => <div className="dashboard-skeleton dashboard-skeleton--kpi" key={index} />)}
+          </div>
+          <div className="dashboard-skeleton-grid dashboard-skeleton-grid--charts">
+            <div className="dashboard-skeleton dashboard-skeleton--chart" />
+            <div className="dashboard-skeleton dashboard-skeleton--chart" />
+          </div>
         </div>
-      ),
-      label: "Closed Tenders",
-      value: 0,
-      color: "bg-violet-100",
-      textColor: "text-violet-800",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          className="lucide lucide-file-down-icon lucide-file-down"
-        >
-          <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-          <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-          <path d="M12 18v-6" />
-          <path d="m9 15 3 3 3-3" />
-        </svg>
-      ),
-      label: "Open Tenders",
-      value: 0,
-      color: "bg-violet-100",
-      textColor: "text-violet-800",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          className="lucide lucide-file-clock-icon lucide-file-clock"
-        >
-          <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-          <path d="M16 22h2a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3" />
-          <path d="M8 14v2.2l1.6 1" />
-          <circle cx="8" cy="16" r="6" />
-        </svg>
-      ),
-      label: "Under Approval",
-      value: 0,
-      color: "bg-violet-100",
-      textColor: "text-violet-800",
-    },
-  ]);
+      </main>
+    );
+  }
 
-  // Fetch all dashboard data
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      setTrigger(false);
-      setShowLoader(true);
-      const rfpResponse = await getAllRfpsByFilterAsync();
-      const requests = rfpResponse.map((r: any) => ({
-        ...r,
-        bidValueLabel: `${convertCurrencyLabel(
-          r.rfpCurrency as string
-        )}${r.bidValue?.toFixed(2)}`,
-      }));
-      const statusCounts = [0, 0, 0];
-      const approvedRequests: any[] = [];
-
-      // Process requests and count statuses
-      requests.forEach((request: any) => {
-        switch (request.status) {
-          case 6:
-            statusCounts[0]++;
-            if (approvedRequests) {
-              approvedRequests.push(request as any);
-            }
-            break;
-          case 5:
-            statusCounts[1]++;
-            break;
-          default:
-            statusCounts[2]++;
-            break;
-        }
-      });
-
-      // Update status data
-      setStatusData([
-        {
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-file-pen-icon lucide-file-pen"
-            >
-              <path d="M12.5 22H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5" />
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-            </svg>
-          ),
-          label: "Total Tenders",
-          value: statusCounts[0] + statusCounts[1] + statusCounts[2],
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-        {
-          icon: (
-            <div className="small-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="lucide lucide-file-lock2-icon lucide-file-lock-2"
-              >
-                <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v1" />
-                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                <rect width="8" height="5" x="2" y="13" rx="1" />
-                <path d="M8 13v-2a2 2 0 1 0-4 0v2" />
-              </svg>
+  if (error) {
+    return (
+      <main className="dashboard-page">
+        <div className="dashboard-shell">
+          <section className="dashboard-error" role="alert">
+            <TriangleAlert size={24} />
+            <div>
+              <h1>Dashboard data could not be loaded</h1>
+              <p>{error}</p>
             </div>
-          ),
-          label: "Closed Tenders",
-          value: statusCounts[0],
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-        {
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-file-down-icon lucide-file-down"
-            >
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M12 18v-6" />
-              <path d="m9 15 3 3 3-3" />
-            </svg>
-          ),
-          label: "Open Tenders",
-          value: statusCounts[1],
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-        {
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-file-clock-icon lucide-file-clock"
-            >
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M16 22h2a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3" />
-              <path d="M8 14v2.2l1.6 1" />
-              <circle cx="8" cy="16" r="6" />
-            </svg>
-          ),
-          label: "Under Approval",
-          value: statusCounts[2],
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-      ]);
-
-      // Process budget data
-      const budgetsByYear = approvedRequests.reduce(
-        (acc: { [key: string]: number }, budget: any) => {
-          const year = budget.createdAt.slice(0, 4);
-          acc[year] = (acc[year] || 0) + budget.estimatedContractValue;
-          return acc;
-        },
-        {}
-      );
-
-      const years = Object.keys(budgetsByYear).sort();
-      const spendByYear = years.reduce(
-        (acc: { [key: string]: number }, year) => {
-          acc[year] = approvedRequests
-            .filter((m: any) => m.closingDate?.slice(0, 4) === year)
-            .reduce((sum: number, m: any) => sum + (m.bidValue || 0), 0);
-          return acc;
-        },
-        {}
-      );
-
-      setBudgetDetails({
-        years,
-        budgets: years.map((year) => budgetsByYear[year]),
-        spend: years.map((year) => spendByYear[year]),
-      });
-
-      setRequestStatus(statusCounts);
-
-      // Update status data with actual values
-      setStatusData([
-        {
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-file-pen-icon lucide-file-pen"
-            >
-              <path d="M12.5 22H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5" />
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-            </svg>
-          ),
-          label: "Total Tenders",
-          value: statusCounts[0] + statusCounts[1] + statusCounts[2],
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-        {
-          icon: (
-            <div className="small-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="lucide lucide-file-lock2-icon lucide-file-lock-2"
-              >
-                <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v1" />
-                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                <rect width="8" height="5" x="2" y="13" rx="1" />
-                <path d="M8 13v-2a2 2 0 1 0-4 0v2" />
-              </svg>
-            </div>
-          ),
-          label: "Closed Tenders",
-          value: statusCounts[0] || 0,
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-        {
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-file-down-icon lucide-file-down"
-            >
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M12 18v-6" />
-              <path d="m9 15 3 3 3-3" />
-            </svg>
-          ),
-          label: "Open Tenders",
-          value: statusCounts[1] || 0,
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-        {
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-file-clock-icon lucide-file-clock"
-            >
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M16 22h2a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3" />
-              <path d="M8 14v2.2l1.6 1" />
-              <circle cx="8" cy="16" r="6" />
-            </svg>
-          ),
-          label: "Under Approval",
-          value: statusCounts[2] || 0,
-          color: "bg-violet-100",
-          textColor: "text-violet-800",
-        },
-      ]);
-
-      // Update dashboard data
-      setDashboardData({
-        newRequests: [],
-        rfpRequests: approvedRequests,
-        totalCount: statusCounts.reduce((a, b) => a + b, 0), // Total all requests
-      });
-    } catch (error: any) {
-      console.log("Error fetching dashboard data:", error);
-      // notification.error({
-      //   message: error.message,
-      // });
-    } finally {
-      setShowLoader(false);
-    }
-  }, []);
-
-  const getRfpRequestFilter = useCallback(async (filterData = filter) => {
-    try {
-      const response: any[] = await getAllRfpsByFilterAsync(filterData);
-      const filtered_requests = response.map((r) => ({
-        ...r,
-        estimatedContractValueLabel: `${convertCurrencyLabel(
-          r.rfpCurrency as string
-        )}${r.estimatedContractValue?.toFixed(2)}`,
-      }));
-      setDashboardData((prev) => ({
-        ...prev,
-        totalCount: 20,
-        rfpRequests: filtered_requests,
-      }));
-    } catch (error) {
-      console.error("Error fetching filtered Tenders", error);
-    }
-  }, []);
-
-  // Effects
-  useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
-
-  useEffect(() => {
-    const updatedFilter = {
-      ...filter,
-      globalSearch: searchQuery,
-    };
-    setFilter(updatedFilter);
-  }, [searchQuery]);
-
-  useEffect(() => {
-    getRfpRequestFilter(filter);
-  }, [filter]);
+            <button type="button" onClick={refresh}><RefreshCw size={16} /> Try again</button>
+          </section>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-bgBlue">
-      {showLoader ? (
-        <PageLoader />
-      ) : (
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          {/* Header Section */}
-          <div className="mb-6">
-            <TitleCard trigger={() => setTrigger(true)} />
-          </div>
-
-          {/* Main Dashboard Layout */}
-          <div className="space-y-6">
-            {/* Top Section - Status Cards and Key Metrics */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full">
-              <div className="col-span-4">
-                {/* StatusBar handles all 4 cards including Total RFPs */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <StatusBar statuses={statusData || []} />
-                </div>
-              </div>
+    <main className="dashboard-page">
+      <div className="dashboard-shell">
+        <header className="dashboard-header">
+          <div className="dashboard-header__top">
+            <div>
+              <h1>Tender Management Overview</h1>
+              <p>Portfolio performance, deadlines and tender activity</p>
             </div>
-
-            {/* Middle Section - Charts and Analytics */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-              {/* Budget Chart - Takes 2/3 width */}
-              <div className="xl:col-span-2 relative">
-                <BudgetCard budgetDetails={budgetDetails} />
-              </div>
-
-              {/* Request Status Chart - Takes 1/3 width */}
-              <div className="xl:col-span-1">
-                <RequestCard
-                  labels={["Closed", "Open", "Under Approval"]}
-                  data={requestStatus || [0, 0, 0]}
-                  colors={["#4C1D95", "#7C3AED", "#C4B5FD"]}
-                />
-              </div>
-            </div>
-
-            {/* Bottom Section - Main Content and Sidebar */}
-            <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
-              {/* RFPs Table - Takes 3/4 width */}
-              <div className="xl:col-span-3">
-                <div className="app-surface overflow-hidden relative">
-                  <div className="relative z-10">
-                    <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div>
-                            <h3 className="text-heading-3">Published Tenders</h3>
-                            <p className="text-body-small text-muted">
-                              Manage and view your Tender requests
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Table
-                      filter={filter}
-                      setFilter={setFilter}
-                      title={""}
-                      setIsSortModalOpen={setIsSortModalOpen}
-                      columns={commonColumns}
-                      items={dashboardData.rfpRequests || []}
-                      columnLabels={rfp_column_labels}
-                      setIsFilterModalOpen={() => { }}
-                      setSearchQuery={setSearchQuery}
-                      totalCount={20}
-                      type="rfps"
-                      rowNavigationPath="rfps"
-                      trigger={() => setTrigger(true)}
-                      subtitle={""}
-                      IsIcon={false}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Sidebar - Takes 1/4 width */}
-              <div className="xl:col-span-1">
-                <div className="space-y-4">
-                  {/* Recent Activity Card */}
-                  <div className="app-surface p-6 relative overflow-hidden">
-                    <div className="relative z-10">
-                      <div className="flex items-center mb-6">
-                        <div>
-                          <h3 className="text-heading-4">Recent Activity</h3>
-                          <p className="text-body-small text-muted">
-                            Latest updates
-                          </p>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex items-start space-x-3 p-3 bg-violet-50 rounded-lg border border-violet-100 hover:shadow-sm transition-all duration-300">
-                          <div className="w-2.5 h-2.5 bg-violet-700 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-slate-900">
-                              New Tender created
-                            </p>
-                            <p className="text-xs text-slate-500 mt-1 font-normal">
-                              2 hours ago
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start space-x-3 p-3 bg-emerald-50 rounded-lg border border-emerald-100 hover:shadow-sm transition-all duration-300">
-                          <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-slate-900">
-                              Tender approved
-                            </p>
-                            <p className="text-xs text-slate-500 mt-1 font-normal">
-                              5 hours ago
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start space-x-3 p-3 bg-amber-50 rounded-lg border border-amber-100 hover:shadow-sm transition-all duration-300">
-                          <div className="w-2.5 h-2.5 bg-amber-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-slate-900">
-                              Tender under review
-                            </p>
-                            <p className="text-xs text-slate-500 mt-1 font-normal">
-                              1 day ago
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quick Actions Card */}
-                  <div className="app-surface p-6 relative overflow-hidden">
-                    <div className="relative z-10">
-                      <div className="flex items-center mb-6">
-                        <div>
-                          <h3 className="text-heading-4">Quick Actions</h3>
-                          <p className="text-body-small text-muted">
-                            Common tasks
-                          </p>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <button onClick={()=>navigate("/rfps/create-rfp")} className="w-full app-button-primary py-3">
-                          <span className="mr-3 text-base">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              className="lucide lucide-circle-plus-icon lucide-circle-plus"
-                            >
-                              <circle cx="12" cy="12" r="10" />
-                              <path d="M8 12h8" />
-                              <path d="M12 8v8" />
-                            </svg>
-                          </span>
-                          Create New Tender
-                        </button>
-                        <button className="w-full app-button-secondary py-3">
-                          <span className="mr-3 text-base">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              className="lucide lucide-eye-icon lucide-eye"
-                            >
-                              <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                              <circle cx="12" cy="12" r="3" />
-                            </svg>
-                          </span>
-                          View Reports
-                        </button>
-                        <button className="w-full app-button-secondary py-3">
-                          <span className="mr-3 text-base">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              className="lucide lucide-settings-icon lucide-settings"
-                            >
-                              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
-                              <circle cx="12" cy="12" r="3" />
-                            </svg>
-                          </span>
-                          Settings
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="dashboard-header__actions">
+              <span className="dashboard-updated">
+                Updated {lastUpdated?.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) ?? "—"}
+              </span>
+              <button type="button" className="dashboard-icon-button" onClick={refresh} title="Refresh dashboard" aria-label="Refresh dashboard">
+                <RefreshCw size={16} />
+              </button>
+              <button
+                type="button"
+                className={`dashboard-button dashboard-button--filter${activeFilterCount > 0 ? " dashboard-button--filter-active" : ""}`}
+                onClick={() => setAreFiltersVisible((visible) => !visible)}
+                aria-expanded={areFiltersVisible}
+                aria-controls="dashboard-filter-panel"
+              >
+                <SlidersHorizontal size={15} />
+                Filters
+                {activeFilterCount > 0 && <span className="dashboard-filter-count" aria-label={`${activeFilterCount} active filters`}>{activeFilterCount}</span>}
+              </button>
+              <button type="button" className="dashboard-button dashboard-button--secondary" onClick={() => navigate("/rfps")}>
+                View all tenders
+              </button>
+              <button type="button" className="dashboard-button dashboard-button--primary" onClick={() => navigate("/rfps/create-rfp")}>
+                <Plus size={16} /> Create tender
+              </button>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+          <div
+            className={`dashboard-filter-panel${areFiltersVisible ? " dashboard-filter-panel--open" : ""}`}
+            id="dashboard-filter-panel"
+            aria-hidden={!areFiltersVisible}
+            inert={!areFiltersVisible}
+          >
+            <div className="dashboard-header__filters">
+              <DashboardFilters
+                filters={filters}
+                options={filterOptions}
+                onChange={setFilters}
+                onReset={() => setFilters(INITIAL_DASHBOARD_FILTERS)}
+              />
+              <span className="dashboard-result-count">{filteredTenders.length} tenders in view</span>
+            </div>
+          </div>
+        </header>
+
+        <section className="dashboard-kpi-grid" aria-label="Executive tender metrics">
+          <DashboardKpiCard
+            featured
+            label="Active pipeline value"
+            value={metrics.activePipelineCurrency
+              ? formatDashboardCurrency(metrics.activePipelineValue, metrics.activePipelineCurrency, true)
+              : metrics.activeTenders > 0 ? "Mixed" : emptyPipelineCurrency ? formatDashboardCurrency(0, emptyPipelineCurrency) : "—"}
+            detail={metrics.activePipelineCurrency ? `${metrics.activeTenders} non-terminal tenders` : metrics.activeTenders > 0 ? "Select one currency to total safely" : "No active tenders in view"}
+            icon={BriefcaseBusiness}
+          />
+          <DashboardKpiCard label="Active tenders" value={String(metrics.activeTenders)} detail="Excludes Closed and Rejected" icon={Files} />
+          <DashboardKpiCard label="Closing in 7 days" value={String(metrics.closingSoon)} detail="Includes tenders closing today" icon={CalendarClock} tone="warning" />
+          <DashboardKpiCard label="Under evaluation" value={String(metrics.underEvaluation)} detail="Awaiting evaluation outcome" icon={ClipboardCheck} />
+          <DashboardKpiCard label="Under award" value={String(metrics.underAward)} detail="In the award workflow" icon={Gavel} tone="positive" />
+        </section>
+
+        <section className="dashboard-primary-grid">
+          <TenderTrendChart points={metrics.monthlyTrend} currency={metrics.aggregateCurrency} periodLabel={metrics.trendPeriodLabel} />
+          <TenderStatusChart data={metrics.statusDistribution} total={metrics.totalTenders} />
+        </section>
+
+        <section className="dashboard-secondary-grid">
+          <TenderValueByBuyerChart data={metrics.buyerDistribution} mode={metrics.buyerDistributionMode} currency={metrics.aggregateCurrency} />
+          <UpcomingDeadlines items={metrics.upcomingDeadlines} />
+        </section>
+
+        <section className="dashboard-attention" aria-labelledby="attention-heading">
+          <span className="dashboard-attention__icon"><TriangleAlert size={16} /></span>
+          <h2 id="attention-heading">Needs attention</h2>
+          <div className="dashboard-attention__items">
+            <span className="dashboard-attention-item dashboard-attention-item--critical"><strong>{metrics.overdueTenders}</strong> overdue closings</span>
+            <span className="dashboard-attention__separator" aria-hidden="true">•</span>
+            <span className="dashboard-attention-item dashboard-attention-item--info"><strong>{metrics.underEvaluation}</strong> evaluations pending</span>
+            <span className="dashboard-attention__separator" aria-hidden="true">•</span>
+            <span className="dashboard-attention-item dashboard-attention-item--warning"><strong>{metrics.pendingApproval}</strong> pending approval</span>
+          </div>
+        </section>
+
+        <DashboardTenderTable tenders={metrics.recentTenders} />
+      </div>
+    </main>
   );
-}
+};
 
 export default Dashboard;

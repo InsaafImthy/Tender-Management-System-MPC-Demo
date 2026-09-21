@@ -69,7 +69,7 @@ const TenderMatrixView: React.FC<TenderMatrixViewProps> = ({
     return { items: filteredItems, suppliers: filteredSuppliers };
   }, [tenderMatrix, filters, sortBy, sortDirection]);
 
-  const formatPrice = (price: number, currency: string = 'USD') => {
+  const formatPrice = (price: number, currency: string = 'OMR') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,

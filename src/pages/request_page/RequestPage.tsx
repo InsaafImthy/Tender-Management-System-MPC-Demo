@@ -236,9 +236,9 @@ function RequestPage() {
   const tabs = ["All RFPs", "My RFPs", "Assigned"];
 
   return (
-    <div className="min-h-screen bg-bgBlue">
+    <div className="admin-page">
       <CommonTitleCard />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         {!showLoader ? (
           <>
             {/* Header Section */}

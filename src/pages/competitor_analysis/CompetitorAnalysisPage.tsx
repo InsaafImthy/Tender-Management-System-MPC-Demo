@@ -56,7 +56,7 @@ const CompetitorAnalysisPage: React.FC = () => {
           supplierId: 'SUP-001',
           supplierName: 'Oman Pharma Supplies',
           quotedPrice: 250.00,
-          currency: 'USD',
+          currency: 'OMR',
           submissionTime: '2024-01-15T10:30:00Z',
           status: 'Active',
           itemCategory: 'Medicines',
@@ -70,7 +70,7 @@ const CompetitorAnalysisPage: React.FC = () => {
           supplierId: 'SUP-002',
           supplierName: 'Gulf Medical Trading',
           quotedPrice: 275.00,
-          currency: 'USD',
+          currency: 'OMR',
           submissionTime: '2024-01-15T11:15:00Z',
           status: 'Active',
           itemCategory: 'Medicines',
@@ -84,7 +84,7 @@ const CompetitorAnalysisPage: React.FC = () => {
           supplierId: 'SUP-003',
           supplierName: 'Muscat Healthcare Distribution',
           quotedPrice: 240.00,
-          currency: 'USD',
+          currency: 'OMR',
           submissionTime: '2024-01-15T14:20:00Z',
           status: 'Active',
           itemCategory: 'Medicines',
@@ -98,7 +98,7 @@ const CompetitorAnalysisPage: React.FC = () => {
           supplierId: 'SUP-001',
           supplierName: 'Oman Pharma Supplies',
           quotedPrice: 85.00,
-          currency: 'USD',
+          currency: 'OMR',
           submissionTime: '2024-01-16T09:45:00Z',
           status: 'Active',
           itemCategory: 'Medical Consumables',
@@ -112,7 +112,7 @@ const CompetitorAnalysisPage: React.FC = () => {
           supplierId: 'SUP-004',
           supplierName: 'Salalah Clinical Supplies',
           quotedPrice: 92.00,
-          currency: 'USD',
+          currency: 'OMR',
           submissionTime: '2024-01-16T10:30:00Z',
           status: 'Active',
           itemCategory: 'Medical Consumables',
@@ -378,8 +378,8 @@ const CompetitorAnalysisPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bgBlue p-6">
-        <div className="max-w-7xl mx-auto">
+      <div className="admin-page">
+        <div className="admin-content">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
@@ -392,17 +392,17 @@ const CompetitorAnalysisPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="admin-page">
        {/* Header */}
-        <div className="mb-8">
+        <div>
           <CommonTitleCard />
         </div>
         
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="admin-content">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-xl flex items-center justify-center shadow-lg">
                 <AnalysisIconMain/>
               </div>
@@ -413,7 +413,7 @@ const CompetitorAnalysisPage: React.FC = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-wrap items-center gap-3">
               <div className="px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md border border-blue-200">
                 <span className="text-button text-accent">
                   {quotations.length} Total Quotations
@@ -425,8 +425,8 @@ const CompetitorAnalysisPage: React.FC = () => {
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-4">
-          <div className="flex items-center space-x-8">
-            <div className="flex items-center">
+          <div className="overflow-x-auto">
+            <div className="flex min-w-max items-center">
               <button
                 onClick={() => setViewMode('item-wise')}
                 className={`relative px-6 py-3 text-button rounded-lg transition-all duration-200 ${
@@ -463,7 +463,7 @@ const CompetitorAnalysisPage: React.FC = () => {
         {/* Tabs */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 mb-4">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
+            <nav className="flex min-w-max space-x-8 overflow-x-auto px-6">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}

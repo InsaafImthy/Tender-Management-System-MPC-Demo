@@ -103,7 +103,7 @@ const VendorDetailLeft: React.FC<VendorDetailLeftProp> = ({ vendorDetails }: Ven
     }, [vendorDetails])
 
     return (
-        <div className="h-full flex items-center bg-white flex-col px-10 pt-6 border-r border-gray-200">
+        <div className="h-full w-full min-w-0 flex items-center bg-white flex-col px-4 sm:px-6 lg:px-8 pt-6 border border-gray-200 rounded-xl overflow-hidden">
             {vendorDetails && <>
                 {/* Project Name,ID */}
                 <div className="mb-[16px]" style={{ width: "504px" }}>

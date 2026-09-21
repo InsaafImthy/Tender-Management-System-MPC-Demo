@@ -1,8 +1,5 @@
 export const currencies = [
-  { label: "$", value: "USD" },
-  { label: "€", value: "EUR" },
-  { label: "£", value: "GBP" },
-  { label: "₹", value: "INR" },
+  { label: "OMR", value: "OMR" },
 ];
 
 export const commonUnits = [
@@ -23,10 +20,7 @@ export const questionTypesList = [
 ]
 
 export const currenciesWithLabel = [
-  { label: "$ (USD)", value: "USD" },
-  { label: "€ (EUR)", value: "EUR" },
-  { label: "£ (GBP)", value: "GBP" },
-  { label: "₹ (INR)", value: "INR" },
+  { label: "OMR (Omani Rial)", value: "OMR" },
 ];
 
 export const defaultFilter = {

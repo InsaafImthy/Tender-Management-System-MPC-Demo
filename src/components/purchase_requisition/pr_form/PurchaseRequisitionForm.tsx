@@ -203,13 +203,13 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
 
   return (
     
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="admin-page">
       <CommonTitleCard />
 
       {/* Header Section */}
-      <div className="bg-white shadow-lg border-b border-gray-200 mx-8 rounded-lg">
-        <div className="max-w-7xl mx-auto px-6 py-8 mt-8">
-          <div className="flex items-center justify-between">
+      <div className="admin-content pb-0">
+        <div className="admin-page-header">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-[#1365AA] rounded-2xl flex items-center justify-center shadow-lg">
                 <span className="text-white text-2xl font-bold">
@@ -229,7 +229,7 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-wrap items-center gap-3">
               <div className="px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
                 <span className="text-sm font-semibold text-blue-700">
                   Purchase Requisition Form
@@ -241,7 +241,7 @@ const PurchaseRequisitionForm: React.FC<PurchaseRequisitionFormProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="admin-content">
         <form onSubmit={handleSubmitClick} className="space-y-8">
           {/* Form Sections */}
           <div className="space-y-8">

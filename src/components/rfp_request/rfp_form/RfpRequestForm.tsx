@@ -42,7 +42,7 @@ const defaultRfpState: IRfp = {
   departmentId: Number(getUserCredentials().departmentId || "0"),
   isOpen: true,
   isSerial: false,
-  rfpCurrency: "USD",
+  rfpCurrency: "OMR",
   bidValue: undefined,
   hideContractValueFromVendor: false,
   estimatedContractValue: undefined,

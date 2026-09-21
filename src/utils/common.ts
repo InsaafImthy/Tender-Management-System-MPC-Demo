@@ -9,12 +9,12 @@ export const getUserToken = (): string => {
 
 export const convertCurrencyLabel = (currencyType: string) => {
     const type = currencies.find(x => x.value === currencyType);
-    return type?.label;
+    return type?.label ?? "OMR";
 }
 
 export const convertCurrencyWithLabel = (currencyType: string) => {
     const type = currenciesWithLabel.find(x => x.value === currencyType);
-    return type?.label;
+    return type?.label ?? "OMR (Omani Rial)";
 }
 
 export function vendorStatusConverter(code: 0 | 1 | 2): string {
