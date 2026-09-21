@@ -244,7 +244,7 @@ const RfpDetailRight: React.FC<IRfpDetailRight> = ({
   return (
     <>
       <div className="h-full w-full bg-white">
-        {rfp?.rfpType == null ? (
+        {!rfp?.rfpType == null ? (
           <div className="mx-auto flex h-full w-full flex-col space-y-4">
             <div className="sticky top-0 z-10 -mx-1 bg-white/95 px-1 backdrop-blur">
               <div className="overflow-x-auto scroll-smooth no-scrollbar">

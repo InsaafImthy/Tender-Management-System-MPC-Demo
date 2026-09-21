@@ -223,7 +223,7 @@ const RequestDetailPage: React.FC = () => {
                 >
                   Schedule Live Bidding
                 </Button>}
-                {rfpData?.rfpType == null && (
+                {!rfpData?.rfpType && (
                   <Button
                     type="primary"
                     htmlType="submit"
