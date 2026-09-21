@@ -2,7 +2,16 @@ import axios from "axios"
 import { Urls } from "./ApiConfig"
 import { getUserToken } from "../utils/common"
 import { IFilterDto } from "../types/commonTypes"
-import { defaultFilter } from "../utils/constants"
+import { defaultFilter, RFP_STATUS } from "../utils/constants"
+import {
+    getDemoDecisionPaper,
+    getDemoRfpById,
+    getDemoRfps,
+    getDemoSelectedProposals,
+    isDemoRfpId,
+    publishDemoRfp,
+    updateDemoRfpStatus,
+} from "../data/finalProposalDemoData"
 
 export const createOrUpdateRfpAsync = async(data:any)=>{
     try{
@@ -33,6 +42,7 @@ export const sendFinalBidRequestAsync = async(rfpId:number)=>{
 }
 
 export const publishRfpAsync = async(rfpId:number)=>{
+    if (isDemoRfpId(rfpId)) return publishDemoRfp(rfpId);
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/RfpPublish?rfpId=${rfpId}`,null,{
             headers:{
@@ -46,6 +56,7 @@ export const publishRfpAsync = async(rfpId:number)=>{
 }
 
 export const openRfpProposalsAsync = async(rfpId:number)=>{
+    if (isDemoRfpId(rfpId)) return updateDemoRfpStatus(rfpId, RFP_STATUS.UNDER_RFP_OPEN);
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/OpenRfpProposal?rfpId=${rfpId}`,null,{
             headers:{
@@ -59,6 +70,8 @@ export const openRfpProposalsAsync = async(rfpId:number)=>{
 }
 
 export const getRfpByIdAsync = async(id:number)=>{
+    const demoRfp = getDemoRfpById(id);
+    if (demoRfp) return demoRfp;
     try{
         const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/${id}`,{
             headers:{
@@ -72,20 +85,37 @@ export const getRfpByIdAsync = async(id:number)=>{
 }
 
 export const getAllRfpsByFilterAsync = async(filterDto:IFilterDto = defaultFilter)=>{
+    const demoRfps = getDemoRfps(filterDto);
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/filter`,filterDto,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
-        return response.data;
+        const apiRfps = Array.isArray(response.data) ? response.data : [];
+        return [...demoRfps, ...apiRfps.filter((rfp:any) => !isDemoRfpId(Number(rfp.id)))];
     }catch(err){
         console.log(err);
+        return demoRfps;
     }
 }
 
 
 export const getAllProposalsByFilterAsync = async(filterDto:IFilterDto)=>{
+    const demoRfpId = Number(filterDto.fields.find(field => field.columnName.toLowerCase() === "rfpid")?.value);
+    if (isDemoRfpId(demoRfpId)) {
+        const demoRfp = getDemoRfpById(demoRfpId);
+        return getDemoSelectedProposals(demoRfpId).map(proposal => ({
+            ...proposal,
+            rfpId: demoRfpId,
+            rfpTitle: demoRfp?.rfpTitle,
+            tenderNumber: demoRfp?.tenderNumber,
+            vendorCode: "DEMO-APPROVED",
+            vendorName: "Demo Approved Proposal",
+            bidValidity: 90,
+            status: "Approved",
+        }));
+    }
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/GetAllRfpProposalsAsync`,filterDto,{
             headers:{
@@ -177,6 +207,8 @@ export const getAllRfpsClarification = async(rfpId:number,vendorId:number)=>{
 }
 
 export const getAllRfpIntrestByFilterAsync = async(filterDto:IFilterDto)=>{
+    const demoRfpId = Number(filterDto.fields.find(field => field.columnName.toLowerCase() === "rfpid")?.value);
+    if (isDemoRfpId(demoRfpId)) return [];
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/GetAllRfpIntrestsAsync`,filterDto,{
             headers:{
@@ -268,6 +300,7 @@ export const getRfpDecisionPapersAsync = async(id:number)=>{
 }
 
 export const getRfpDecisionPaperByRfpIdAsync = async(id:number)=>{
+    if (isDemoRfpId(id)) return getDemoDecisionPaper(id);
     try{
         const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/RfpDecisionPapers?rfpId=${id}`,{
             headers:{
@@ -281,6 +314,7 @@ export const getRfpDecisionPaperByRfpIdAsync = async(id:number)=>{
 }
 
 export const getAllSelectedProposalsByRfpIdAsync = async(rfpId:number)=>{
+    if (isDemoRfpId(rfpId)) return getDemoSelectedProposals(rfpId);
     try{
         const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/GetAllSelectedProposalsByRfpId/${rfpId}`,{
             headers:{

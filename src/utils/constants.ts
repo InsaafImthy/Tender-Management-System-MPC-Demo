@@ -125,18 +125,32 @@ export const milestoneStatuses = [
   { label: "On track", value: "on_track" },
 ];
 
+export const RFP_STATUS = {
+  PENDING: 0,
+  APPROVED: 1,
+  REJECTED: 2,
+  UNDER_CLARIFICATION: 3,
+  UNDER_APPROVAL: 4,
+  PUBLISHED: 5,
+  CLOSED: 6,
+  PENDING_PROPOSAL: 7,
+  UNDER_RFP_OPEN: 8,
+  UNDER_EVALUATION: 9,
+  UNDER_AWARD: 10,
+} as const;
+
 export const rfpStatuses = [
-  { label: "Pending", value: 0 },
-  { label: "Approved", value: 1 },
-  { label: "Rejected", value: 2 },
-  { label: "Under Clarification", value: 3 },
-  { label: "Under Approval", value: 4 },
-  { label: "Published", value: 5 },
-  { label: "Closed", value: 6 },
-  { label: "Pending", value: 7 },
-  { label: "Under RFP Open", value: 8 },
-  { label: "Under Evaluation", value: 9 },
-  { label: "Under Award", value: 10 },
+  { label: "Pending", value: RFP_STATUS.PENDING },
+  { label: "Approved", value: RFP_STATUS.APPROVED },
+  { label: "Rejected", value: RFP_STATUS.REJECTED },
+  { label: "Under Clarification", value: RFP_STATUS.UNDER_CLARIFICATION },
+  { label: "Under Approval", value: RFP_STATUS.UNDER_APPROVAL },
+  { label: "Published", value: RFP_STATUS.PUBLISHED },
+  { label: "Closed", value: RFP_STATUS.CLOSED },
+  { label: "Pending", value: RFP_STATUS.PENDING_PROPOSAL },
+  { label: "Under RFP Open", value: RFP_STATUS.UNDER_RFP_OPEN },
+  { label: "Under Evaluation", value: RFP_STATUS.UNDER_EVALUATION },
+  { label: "Under Award", value: RFP_STATUS.UNDER_AWARD },
 ];
 
 export const documentTypeConst = {

@@ -336,7 +336,7 @@ const Sidebar = ({
                 </div>
                 {isExpanded && (
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-slate-900">Procurement</p>
+                    <p className="truncate text-sm font-semibold text-slate-900">Tender Management</p>
                     <p className="truncate text-xs text-slate-500">Admin Portal</p>
                   </div>
                 )}

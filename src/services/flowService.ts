@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Urls } from "./ApiConfig";
 import { getUserToken } from "../utils/common";
+import { getDemoApprovalSteps, isDemoRfpId } from "../data/finalProposalDemoData";
 //import { IFlowDetails } from "../types/capexTypes";
 
   
@@ -87,6 +88,8 @@ export const getVendorApprovalFlowsByVendorIdAsync = async (id:string)=>{
 }
 
 export const getRpfApprovalFlowsByIdAsync = async (id:string,flowType:string = "rfpsubmission")=>{
+    const numericId = Number(id);
+    if (isDemoRfpId(numericId)) return getDemoApprovalSteps(numericId);
     try{
         let response = await axios.get(`${Urls.defaultUrl}/api/Approvals/ApprovelStepsByRfpIdAsync?rfpId=${id}&flowType=${flowType}`,{
             headers:{

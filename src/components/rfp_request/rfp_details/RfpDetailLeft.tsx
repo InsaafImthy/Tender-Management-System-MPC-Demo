@@ -188,12 +188,14 @@ const RfpDetailLeft: React.FC<RfpDetailLeftProp> = ({
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
                         ID: {requestData?.tenderNumber || "-"}
                       </span>
-                      <button
-                        onClick={onEditRequest}
-                        className="inline-flex items-center rounded-full border border-violet-200 px-3 py-1 text-xs font-medium text-violet-700 transition hover:border-violet-300 hover:bg-violet-50"
-                      >
-                        <PenIcon className="mr-1 inline h-3 w-3" /> Edit
-                      </button>
+                      {!requestData?.isDemoRecord && (
+                        <button
+                          onClick={onEditRequest}
+                          className="inline-flex items-center rounded-full border border-violet-200 px-3 py-1 text-xs font-medium text-violet-700 transition hover:border-violet-300 hover:bg-violet-50"
+                        >
+                          <PenIcon className="mr-1 inline h-3 w-3" /> Edit
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

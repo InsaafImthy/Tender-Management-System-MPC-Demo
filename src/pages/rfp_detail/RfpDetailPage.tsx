@@ -23,6 +23,8 @@ import Modal from "../../components/basic_components/Modal";
 import DateTimePicker from "../../components/basic_components/date_time_picker/DateTimePicker";
 import { getAllVendorsAsync } from "../../services/vendorService";
 import PeoplePicker from "../../components/basic_components/PeoplePicker";
+import FinalProposalAction from "../../features/finalProposal/FinalProposalAction";
+import { RFP_STATUS } from "../../utils/constants";
 
 const RequestDetailPage: React.FC = () => {
   const { id } = useParams();
@@ -101,7 +103,9 @@ const RequestDetailPage: React.FC = () => {
   }, []);
 
   const rightPaneClass =
-    rfpData?.status != 5 ? "space-y-3 px-4 py-4 md:px-6 md:py-6" : "px-4 py-4 md:px-6 md:py-6";
+    rfpData?.status !== RFP_STATUS.PUBLISHED
+      ? "space-y-3 px-4 py-4 md:px-6 md:py-6"
+      : "px-4 py-4 md:px-6 md:py-6";
 
   return (
     <div className="min-h-screen bg-bgBlue">
@@ -127,8 +131,11 @@ const RequestDetailPage: React.FC = () => {
                 <div
                   className={`overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_22px_48px_rgba(15,23,42,0.08)] ${rightPaneClass}`}
                 >
-                  {rfpData.status == 5 ||
-                  rfpData?.status == 9 ? (
+                  {rfpData.status === RFP_STATUS.APPROVED && (
+                    <FinalProposalAction rfp={rfpData} />
+                  )}
+                  {rfpData.status === RFP_STATUS.PUBLISHED ||
+                  rfpData?.status === RFP_STATUS.UNDER_EVALUATION ? (
                     <RfpDetailRight
                       rfp={rfpData}
                       trigger={() => {
@@ -137,14 +144,15 @@ const RequestDetailPage: React.FC = () => {
                       vendorProposals={vendorProposals}
                       setVendorProposals={setVendorProposals}
                     />
-                  ) : rfpData.status == 8 ? (
+                  ) : rfpData.status === RFP_STATUS.UNDER_RFP_OPEN ? (
                     <RfpProposalApproveReject
                       rfpDetails={rfpData}
                       trigger={() => {
                         getRequestDetailData();
                       }}
                     />
-                  ) : rfpData.status == 6 || rfpData.status == 10 ? (
+                  ) : rfpData.status === RFP_STATUS.CLOSED ||
+                    rfpData.status === RFP_STATUS.UNDER_AWARD ? (
                     <RfpAwardflow
                       rfpDetails={rfpData}
                       trigger={() => {
@@ -170,9 +178,9 @@ const RequestDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {(rfpData?.status == 1 ||
-        rfpData?.status == 5 ||
-        rfpData?.status == 9) &&
+      {(rfpData?.status === RFP_STATUS.APPROVED ||
+        rfpData?.status === RFP_STATUS.PUBLISHED ||
+        rfpData?.status === RFP_STATUS.UNDER_EVALUATION) &&
         getUserCredentials().userId == rfpData?.createdBy.toString() && (
           <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 bg-white/95 shadow-[0_-12px_30px_rgba(15,23,42,0.08)] backdrop-blur">
             <div className="mx-auto w-full max-w-[1800px] px-3 py-3 md:px-5 xl:px-8">
@@ -180,12 +188,12 @@ const RequestDetailPage: React.FC = () => {
                 onSubmit={(e) => {
                   e.preventDefault();
                   (async () => {
-                    if (rfpData?.status == 1) {
+                    if (rfpData?.status === RFP_STATUS.APPROVED) {
                       await publishRfpAsync(rfpData?.id);
                       notification.success({
                         message: "RFP published successfully",
                       });
-                    } else if (rfpData?.status == 9) {
+                    } else if (rfpData?.status === RFP_STATUS.UNDER_EVALUATION) {
                       navigate(`/rfps/${id}/decision-form`);
                     } else {
                       if (!vendorProposals || vendorProposals.length == 0) {
@@ -204,7 +212,7 @@ const RequestDetailPage: React.FC = () => {
                 }}
                 className="flex flex-col gap-3 sm:flex-row sm:justify-end"
               >
-                {rfpData?.status == 5 && rfpData?.isLiveBiddingOn == null && <Button
+                {rfpData?.status === RFP_STATUS.PUBLISHED && rfpData?.isLiveBiddingOn == null && <Button
                   type="primary"
                   htmlType="button"
                   className="h-11 w-full px-6 text-sm font-medium sm:w-auto"
@@ -221,9 +229,9 @@ const RequestDetailPage: React.FC = () => {
                     htmlType="submit"
                     className="h-11 w-full px-6 text-sm font-medium sm:w-auto"
                   >
-                    {rfpData?.status == 1
+                    {rfpData?.status === RFP_STATUS.APPROVED
                       ? "Publish now"
-                      : rfpData?.status == 9
+                      : rfpData?.status === RFP_STATUS.UNDER_EVALUATION
                         ? "Create DP"
                         : "Request Approval to Open RFP"}
                   </Button>)}
