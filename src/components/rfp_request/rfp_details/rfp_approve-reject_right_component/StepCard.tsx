@@ -6,7 +6,7 @@ import { IStep } from "../../../../types/approvalflowTypes";
 
 
 
-const StepCard: React.FC<{ step: IStep, trigger: () => void, flowType:"rfp" | "rfpproposal" | "rfpaward",proposalId?:number }> = ({ step, trigger, flowType, proposalId }) => {
+const StepCard: React.FC<{ step: IStep, trigger: () => void | Promise<void>, flowType:"rfp" | "rfpproposal" | "rfpaward",proposalId?:number }> = ({ step, trigger, flowType, proposalId }) => {
     console.log(step)
     return (
         <div className="bg-white rounded border border-gray-200 overflow-hidden mb-2 hover:shadow-sm transition-all duration-200">

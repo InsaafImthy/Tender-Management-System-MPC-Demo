@@ -6,16 +6,16 @@ import React, { useEffect, useState } from 'react';
 // import { handleFile } from '../../utils/common';
 // import userPhoto from "../../../assets/profile_photo/userPhoto.png"
 // import { IStep } from '../../../types/approvalflowTypes';
-import { getRpfApprovalFlowsByIdAsync } from '../../../services/flowService';
-import { getUserCredentials } from '../../../utils/common';
+import Cookies from 'js-cookie';
 import StepIndicator from './rfp_approve-reject_right_component/StepIndicator';
 import StepCard from './rfp_approve-reject_right_component/StepCard';
 import { GeneralDetailIcon } from '../../../utils/Icons';
+import { loadRfpApprovalSteps } from '../../../features/rfpApproval/loadRfpApprovalSteps';
 
 
 interface IRfpDetailRight {
     rfpDetails: any
-    trigger: () => void
+    trigger: () => void | Promise<void>
 }
 
 
@@ -76,21 +76,42 @@ interface IRfpDetailRight {
 
 const RfpProposalApproveReject: React.FC<IRfpDetailRight> = ({ rfpDetails, trigger }) => {
     const [stepsList, setStepsList] = useState<any[]>([])
+    const [workflowMessage, setWorkflowMessage] = useState("");
 
     const setupRfpProposalApproveReject = async () => {
-        const response: any[] = await getRpfApprovalFlowsByIdAsync(rfpDetails?.id, "rfpproposal");
-        const formatedSteps = response.map((item: any, i) => ({ ...item, current: (getUserCredentials().userId == item.approverId && (i == 0 || response[i - 1].status == 1)), status: item.status == 0 ? "pending" : item.status == 1 ? "approved" : "rejected" }));
-        setStepsList(formatedSteps);
+        try {
+            const result = await loadRfpApprovalSteps(
+                Number(rfpDetails?.id),
+                "rfpproposal",
+                Cookies.get("userId") || "",
+            );
+            setStepsList(result.steps);
+            setWorkflowMessage(
+                result.usedCachedDefinition
+                    ? "The backend workflow could not be refreshed. Showing the cached approval workflow."
+                    : result.steps.length === 0
+                      ? "No approval workflow is configured for this RFP."
+                      : "",
+            );
+        } catch (error) {
+            console.error("Unable to load proposal-opening approval workflow:", error);
+            setStepsList([]);
+            setWorkflowMessage("Unable to load the approval workflow and no cached workflow is available.");
+        }
     }
 
     useEffect(() => {
         setupRfpProposalApproveReject()
-        trigger && trigger()
     }, [rfpDetails.id])
 
     return (
         <div className="w-full space-y-2 desktop:max-w-[712px] mx-auto rounded-lg h-full px-6 max-h-[890px] overflow-y-auto scrollbar">
             <StepIndicator steps={stepsList} />
+            {workflowMessage && (
+                <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800">
+                    {workflowMessage}
+                </div>
+            )}
 
 
             <div className="w-full">
@@ -99,25 +120,15 @@ const RfpProposalApproveReject: React.FC<IRfpDetailRight> = ({ rfpDetails, trigg
 
             <div className="w-full">
                 {stepsList.map((step, index) => {
-                    // Find the index of the current step
-
-                    // Find the latest step with currentUser that comes after stepCurrent
-                    let currentIndex = -1;
-                    for (let i = 0; i < stepsList.length; i++) {
-                        if (stepsList[i].current) {
-                            currentIndex = i;
-                        }
-                    }
-
-                    // Show all steps up to (and including) the currentIndex in StepCard
-                    if (index <= currentIndex) {
+                    if (step.current || step.status !== "pending") {
                         return (
                             <StepCard
                                 flowType='rfpproposal'
-                                key={index}
+                                key={step.id ?? index}
                                 step={step || []}
-                                trigger={() => {
-                                    setupRfpProposalApproveReject();
+                                trigger={async () => {
+                                    await setupRfpProposalApproveReject();
+                                    trigger();
                                 }}
                             />
                         );
@@ -125,16 +136,7 @@ const RfpProposalApproveReject: React.FC<IRfpDetailRight> = ({ rfpDetails, trigg
 
                     // Show future steps in a plain div
                     return (
-                        (rfpDetails.status == 1 || rfpDetails.status == 2) && (rfpDetails.createdBy == getUserCredentials().userId) ?
-                            <StepCard
-                                flowType="rfpproposal"
-                                key={index}
-                                step={step || []}
-                                trigger={() => {
-                                    setupRfpProposalApproveReject();
-                                }}
-                            /> :
-                            <div key={index} className="text-gray-500 mb-4 bg-white px-2 py-2 rounded-md flex-col items-center justify-center">
+                            <div key={step.id ?? index} className="text-gray-500 mb-4 bg-white px-2 py-2 rounded-md flex-col items-center justify-center">
                                 {step.approverRole} <p className='text-xs'>{step.approverName} | {step.approverEmail}</p>
                             </div>
                     );

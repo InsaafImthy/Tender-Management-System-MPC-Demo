@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { notification, Spin } from "antd";
 import { IStep } from "../../../../types/approvalflowTypes";
-import { approveVendorAsync, rejectVendorAsync } from "../../../../services/flowService";
-import { getVendorCriteriasAsync } from "../../../../services/vendorService";
 import { Check, X } from "lucide-react";
+import {
+  approveRfpStepLocally,
+  rejectRfpStepLocally,
+} from "../../../../features/rfpApproval/localRfpApprovalStore";
 
 
 // const checklistData: ChecklistItem[] = [
@@ -21,7 +23,7 @@ import { Check, X } from "lucide-react";
 //   { id: 9, criteria: "Site visit", isChecked: true },
 //   { id: 10, criteria: "Factory inspection", isChecked: true },
 // ];
-const CurrentStep: React.FC<{ step: IStep; trigger: () => void, flowType:"rfp" | "rfpproposal" | "rfpaward", proposalId?:number }> = ({
+const CurrentStep: React.FC<{ step: IStep; trigger: () => void | Promise<void>, flowType:"rfp" | "rfpproposal" | "rfpaward", proposalId?:number }> = ({
   step,
   trigger,
   flowType,
@@ -31,7 +33,6 @@ const CurrentStep: React.FC<{ step: IStep; trigger: () => void, flowType:"rfp" |
   const [selectedAction, setSelectedAction] = useState<"approved" | "rejected">("approved");
   const [approveComment, setApproveComment] = useState("");
   const [showLoaderOnButton, setShowLoaderOnButton] = useState<boolean>(false);
-  const [checklistData, setChecklistData] = useState<any[]>([])
   const { id } = useParams();
 
 
@@ -47,7 +48,6 @@ const CurrentStep: React.FC<{ step: IStep; trigger: () => void, flowType:"rfp" |
   const handleSubmit = async () => {
     try {
       //const newErrors = { approveComment: "" };
-      let hasError = false;
       // if (selectedAction === "approved" && !approveComment.trim()) {
       //   newErrors.approveComment = "Comments are required for approval.";
       //   hasError = true;
@@ -60,35 +60,48 @@ const CurrentStep: React.FC<{ step: IStep; trigger: () => void, flowType:"rfp" |
 
       // setErrors(newErrors);
 
-      if (hasError) return;
-      setShowLoaderOnButton(true)
-      if (selectedAction === "approved") {
-        if(flowType == "rfpaward" && !proposalId)notification.warning({
-          message:"Please select proposal any proposal"
-        })
-        await approveVendorAsync({ stepId: step.id, approverEmail: step.approverEmail, comments: approveComment, vendorId: Number(id), criteriasCheckChanges: checklistData }, flowType, flowType == "rfpaward" ? proposalId : 0)
-
-      } else if (selectedAction === "rejected") {
-        await rejectVendorAsync({ stepId: step.id, approverEmail: step.approverEmail, comments: approveComment, vendorId: Number(id), criteriasCheckChanges: checklistData }, flowType)
+      const rfpId = Number(id);
+      if (!Number.isFinite(rfpId)) {
+        throw new Error("A valid RFP ID is required.");
       }
-      setShowLoaderOnButton(false)
-      trigger();
-    } catch (err) {
+      if (flowType === "rfpaward" && selectedAction === "approved" && !proposalId) {
+        notification.warning({
+          message: "Please select a vendor proposal",
+        });
+        return;
+      }
+
+      setShowLoaderOnButton(true)
+      const parsedUserId = Number(currentUserId);
+      const actionParams = {
+        rfpId,
+        flowType,
+        stepId: step.id,
+        comments: approveComment,
+        proposalId: flowType === "rfpaward" ? proposalId : undefined,
+        actingUserId: Number.isFinite(parsedUserId) ? parsedUserId : undefined,
+        approverName: step.approverName,
+        approverEmail: step.approverEmail,
+        approverRole: step.approverRole,
+      };
+      if (selectedAction === "approved") {
+        approveRfpStepLocally(actionParams);
+      } else if (selectedAction === "rejected") {
+        rejectRfpStepLocally(actionParams);
+      }
+      notification.success({
+        message: selectedAction === "approved" ? "Approval recorded" : "Rejection recorded",
+      });
+      await trigger();
+    } catch (err: unknown) {
+      notification.error({
+        message: "Unable to save approval action",
+        description: err instanceof Error ? err.message : "Local approval persistence failed.",
+      });
+    } finally {
       setShowLoaderOnButton(false)
     }
   };
-
-  const setupCurrentStepsData = async () => {
-    try {
-      const criterias_list = await getVendorCriteriasAsync(Number(id));
-      setChecklistData(criterias_list);
-    } catch (err) {
-
-    }
-  }
-  useEffect(() => {
-    setupCurrentStepsData();
-  }, [])
 
   return (
     <>

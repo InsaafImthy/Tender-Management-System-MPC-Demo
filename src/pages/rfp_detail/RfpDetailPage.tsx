@@ -188,26 +188,33 @@ const RequestDetailPage: React.FC = () => {
                 onSubmit={(e) => {
                   e.preventDefault();
                   (async () => {
-                    if (rfpData?.status === RFP_STATUS.APPROVED) {
-                      await publishRfpAsync(rfpData?.id);
-                      notification.success({
-                        message: "RFP published successfully",
-                      });
-                    } else if (rfpData?.status === RFP_STATUS.UNDER_EVALUATION) {
-                      navigate(`/rfps/${id}/decision-form`);
-                    } else {
-                      if (!vendorProposals || vendorProposals.length == 0) {
-                        notification.warning({
-                          message: "No vendor proposal submitted"
-                        })
-                        return;
+                    try {
+                      if (rfpData?.status === RFP_STATUS.APPROVED) {
+                        await publishRfpAsync(rfpData?.id);
+                        notification.success({
+                          message: "RFP published successfully",
+                        });
+                      } else if (rfpData?.status === RFP_STATUS.UNDER_EVALUATION) {
+                        navigate(`/rfps/${id}/decision-form`);
+                      } else {
+                        if (!vendorProposals || vendorProposals.length == 0) {
+                          notification.warning({
+                            message: "No vendor proposal submitted"
+                          })
+                          return;
+                        }
+                        await openRfpProposalsAsync(rfpData?.id);
+                        notification.success({
+                          message: "RFP sent for open proposal",
+                        });
                       }
-                      await openRfpProposalsAsync(rfpData?.id);
-                      notification.success({
-                        message: "RFP sent for open proposal",
+                      getRequestDetailData();
+                    } catch (error) {
+                      notification.error({
+                        message: "Unable to update the RFP",
+                        description: error instanceof Error ? error.message : "The backend request failed.",
                       });
                     }
-                    getRequestDetailData();
                   })();
                 }}
                 className="flex flex-col gap-3 sm:flex-row sm:justify-end"

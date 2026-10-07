@@ -8,7 +8,6 @@ import {
   Loader2,
   PencilLine,
 } from "lucide-react";
-import { getRpfApprovalFlowsByIdAsync } from "../../services/flowService";
 import {
   getAllSelectedProposalsByRfpIdAsync,
   getRfpDecisionPaperByRfpIdAsync,
@@ -23,6 +22,7 @@ import type {
   FinalProposalRfpSource,
   SelectedProposalSource,
 } from "./finalProposalTypes";
+import { loadRfpApprovalStepDefinitions } from "../rfpApproval/loadRfpApprovalSteps";
 
 interface FinalProposalActionProps {
   rfp: FinalProposalRfpSource;
@@ -49,7 +49,9 @@ const FinalProposalAction = ({ rfp }: FinalProposalActionProps) => {
       await Promise.all([
         getAllSelectedProposalsByRfpIdAsync(rfp.id),
         getRfpDecisionPaperByRfpIdAsync(rfp.id),
-        getRpfApprovalFlowsByIdAsync(String(rfp.id), "rfpaward").catch(() => []),
+        loadRfpApprovalStepDefinitions(rfp.id, "rfpaward")
+          .then((result) => result.steps)
+          .catch(() => []),
       ]);
 
     if (!Array.isArray(selectedProposalsResponse)) {

@@ -12,6 +12,13 @@ import {
     publishDemoRfp,
     updateDemoRfpStatus,
 } from "../data/finalProposalDemoData"
+import {
+    applyLocalRfpStatus,
+    getLocalRfpStatusOverrides,
+    resetRfpApprovalFlow,
+    restartRejectedRfpApprovalFlow,
+    setLocalRfpStatusOverride,
+} from "../features/rfpApproval/localRfpApprovalStore"
 
 export const createOrUpdateRfpAsync = async(data:any)=>{
     try{
@@ -20,6 +27,11 @@ export const createOrUpdateRfpAsync = async(data:any)=>{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
+        const rfpIdValue = data instanceof FormData ? data.get("id") : data?.id;
+        const rfpId = Number(rfpIdValue);
+        if (Number.isFinite(rfpId) && rfpId > 0) {
+            restartRejectedRfpApprovalFlow(rfpId, "rfp", RFP_STATUS.UNDER_APPROVAL);
+        }
         return response.data;
     }catch(err){
         console.log(err);
@@ -42,61 +54,98 @@ export const sendFinalBidRequestAsync = async(rfpId:number)=>{
 }
 
 export const publishRfpAsync = async(rfpId:number)=>{
-    if (isDemoRfpId(rfpId)) return publishDemoRfp(rfpId);
+    if (isDemoRfpId(rfpId)) {
+        const result = publishDemoRfp(rfpId);
+        setLocalRfpStatusOverride(rfpId, RFP_STATUS.PUBLISHED);
+        return result;
+    }
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/RfpPublish?rfpId=${rfpId}`,null,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
+        setLocalRfpStatusOverride(rfpId, RFP_STATUS.PUBLISHED);
         return response.data;
     }catch(err){
         console.log(err);
+        throw err;
     }
 }
 
 export const openRfpProposalsAsync = async(rfpId:number)=>{
-    if (isDemoRfpId(rfpId)) return updateDemoRfpStatus(rfpId, RFP_STATUS.UNDER_RFP_OPEN);
+    if (isDemoRfpId(rfpId)) {
+        const result = updateDemoRfpStatus(rfpId, RFP_STATUS.UNDER_RFP_OPEN);
+        resetRfpApprovalFlow(rfpId, "rfpproposal");
+        setLocalRfpStatusOverride(rfpId, RFP_STATUS.UNDER_RFP_OPEN);
+        return result;
+    }
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/OpenRfpProposal?rfpId=${rfpId}`,null,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
+        resetRfpApprovalFlow(rfpId, "rfpproposal");
+        setLocalRfpStatusOverride(rfpId, RFP_STATUS.UNDER_RFP_OPEN);
         return response.data;
     }catch(err){
         console.log(err);
+        throw err;
     }
 }
 
 export const getRfpByIdAsync = async(id:number)=>{
     const demoRfp = getDemoRfpById(id);
-    if (demoRfp) return demoRfp;
+    if (demoRfp) return applyLocalRfpStatus(demoRfp);
     try{
         const response = await axios.get(`${Urls.defaultUrl}/api/Rfps/${id}`,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
-        return response.data;
+        return response.data ? applyLocalRfpStatus(response.data) : response.data;
     }catch(err){
         console.log(err);
     }
 }
 
 export const getAllRfpsByFilterAsync = async(filterDto:IFilterDto = defaultFilter)=>{
-    const demoRfps = getDemoRfps(filterDto);
+    const statusFields = filterDto.fields.filter(
+        (field) => field.columnName.toLowerCase() === "status",
+    );
+    const hasLocalStatusOverrides = getLocalRfpStatusOverrides().length > 0;
+    const effectiveFilter = hasLocalStatusOverrides && statusFields.length > 0
+        ? {
+            ...filterDto,
+            fields: filterDto.fields.filter(
+                (field) => field.columnName.toLowerCase() !== "status",
+            ),
+        }
+        : filterDto;
+    const demoRfps = getDemoRfps(effectiveFilter);
     try{
-        const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/filter`,filterDto,{
+        const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/filter`,effectiveFilter,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
         const apiRfps = Array.isArray(response.data) ? response.data : [];
-        return [...demoRfps, ...apiRfps.filter((rfp:any) => !isDemoRfpId(Number(rfp.id)))];
+        const effectiveRfps = [...demoRfps, ...apiRfps.filter((rfp:any) => !isDemoRfpId(Number(rfp.id)))]
+            .map((rfp:any) => applyLocalRfpStatus(rfp));
+        return statusFields.length > 0
+            ? effectiveRfps.filter((rfp:any) =>
+                statusFields.every((field) => Number(rfp.status) === Number(field.value)),
+            )
+            : effectiveRfps;
     }catch(err){
         console.log(err);
-        return demoRfps;
+        const effectiveDemoRfps = demoRfps.map((rfp) => applyLocalRfpStatus(rfp));
+        return statusFields.length > 0
+            ? effectiveDemoRfps.filter((rfp) =>
+                statusFields.every((field) => Number(rfp.status) === Number(field.value)),
+            )
+            : effectiveDemoRfps;
     }
 }
 
@@ -273,16 +322,23 @@ export const getAllEvaluationReportsAsync = async(rfpId:number)=>{
     }
 }
 
-export const createOrUpdateRfpDecisionPaperAsync = async(data:any)=>{
+export const createOrUpdateRfpDecisionPaperAsync = async(data:any, transitionToAward = false)=>{
     try{
         const response = await axios.post(`${Urls.defaultUrl}/api/Rfps/RfpDecisionPapers`,data,{
             headers:{
                 Authorization:`Bearer ${getUserToken()}`
             }
         })
+        const rfpIdValue = data instanceof FormData ? data.get("rfpId") : data?.rfpId;
+        const rfpId = Number(rfpIdValue);
+        if (transitionToAward && Number.isFinite(rfpId) && rfpId > 0) {
+            resetRfpApprovalFlow(rfpId, "rfpaward");
+            setLocalRfpStatusOverride(rfpId, RFP_STATUS.UNDER_AWARD);
+        }
         return response.data;
     }catch(err){
         console.log(err);
+        throw err;
     }
 }
 

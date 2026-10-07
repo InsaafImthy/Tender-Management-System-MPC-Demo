@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 // import { handleFile } from '../../utils/common';
 // import userPhoto from "../../../assets/profile_photo/userPhoto.png"
 // import { IStep } from '../../../types/approvalflowTypes';
-import { getRpfApprovalFlowsByIdAsync } from "../../../services/flowService";
 import { getUserCredentials } from "../../../utils/common";
 import StepIndicator from "./rfp_approve-reject_right_component/StepIndicator";
 import StepCard from "./rfp_approve-reject_right_component/StepCard";
@@ -24,10 +23,11 @@ import Modal from "../../basic_components/Modal";
 import RfpDecisionForm from "../../../pages/rfp_decision_form/RfpDecisionForm";
 import { Button, Select } from "antd";
 import ViewTable from "../../basic_components/ViewTable";
+import { loadRfpApprovalSteps } from "../../../features/rfpApproval/loadRfpApprovalSteps";
 
 interface IRfpDetailRight {
   rfpDetails: any;
-  trigger: () => void;
+  trigger: () => void | Promise<void>;
 }
 
 // Collapsible Bid Split section under Vendor Proposals
@@ -87,36 +87,39 @@ const RfpAwardflow: React.FC<IRfpDetailRight> = ({ rfpDetails, trigger }) => {
   const [selectedProposals, setSelectedProposals] = useState<any[]>([]);
   const [enableSelect, setEnableSelect] = useState<boolean>(false);
   const [hasDecisionPaper, setHasDecisionPaper] = useState<boolean>(false);
+  const [workflowMessage, setWorkflowMessage] = useState("");
 
   const setupRfpProposalApproveReject = async () => {
     try {
-      const response: any[] = await getRpfApprovalFlowsByIdAsync(
-        rfpDetails?.id,
-        "rfpaward"
+      const result = await loadRfpApprovalSteps(
+        Number(rfpDetails?.id),
+        "rfpaward",
+        String(getUserCredentials().userId ?? ""),
       );
-      const formatedSteps = response.map((item: any, i) => ({
-        ...item,
-        current:
-          getUserCredentials().userId == item.approverId &&
-          (i == 0 || response[i - 1].status == 1),
-        status:
-          item.status == 0
-            ? "pending"
-            : item.status == 1
-              ? "approved"
-              : "rejected",
-        photo: item.photo || "", // Add photo property with default empty string
-      }));
-      setStepsList(formatedSteps);
-      if (
-        rfpDetails?.status == 9 ||
-        rfpDetails?.status == 10 ||
-        rfpDetails?.status == 6
-      ) {
+      setStepsList(result.steps);
+      setWorkflowMessage(
+        result.usedCachedDefinition
+          ? "The backend workflow could not be refreshed. Showing the cached approval workflow."
+          : result.steps.length === 0
+            ? "No approval workflow is configured for this RFP."
+            : "",
+      );
+    } catch (error) {
+      console.error("Error loading RFP award approval workflow:", error);
+      setStepsList([]);
+      setWorkflowMessage("Unable to load the approval workflow and no cached workflow is available.");
+    }
+
+    if (
+      rfpDetails?.status == 9 ||
+      rfpDetails?.status == 10 ||
+      rfpDetails?.status == 6
+    ) {
+      try {
         const evaluationReports = await getAllEvaluationReportsAsync(
           Number(rfpDetails?.id || "0")
         );
-        const evalutionDocumentMapped = evaluationReports.map((d: any) => ({
+        const evalutionDocumentMapped = (evaluationReports || []).map((d: any) => ({
           documentUrl: d.filePath,
           documentName: d.fileTitle,
         }));
@@ -138,9 +141,9 @@ const RfpAwardflow: React.FC<IRfpDetailRight> = ({ rfpDetails, trigger }) => {
         } else {
           setHasDecisionPaper(false);
         }
+      } catch (error) {
+        console.error("Error loading RFP award prerequisites:", error);
       }
-    } catch (error) {
-      console.error("Error setting up RFP proposal approve/reject:", error);
     }
   };
 
@@ -248,6 +251,11 @@ const RfpAwardflow: React.FC<IRfpDetailRight> = ({ rfpDetails, trigger }) => {
                 <span className="pl-[8px]">Approval for Award</span>
               </span>
             </div>
+            {workflowMessage && (
+              <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800">
+                {workflowMessage}
+              </div>
+            )}
             {/* Readiness banner */}
             {!(hasDecisionPaper && evaluationDocuments.length > 0 && selectedProposals.length > 0) && (
               <div className="border border-yellow-300 bg-yellow-50 text-yellow-800 rounded-lg p-3 mb-3 text-sm">
@@ -383,45 +391,25 @@ const RfpAwardflow: React.FC<IRfpDetailRight> = ({ rfpDetails, trigger }) => {
               <>
                 <div className="w-full">
                   {(hasDecisionPaper && evaluationDocuments.length > 0 && selectedProposals.length > 0 ? stepsList : []).map((step, index) => {
-                    // Find the index of the current step
-                    // Find the latest step with currentUser that comes after stepCurrent
-                    let currentIndex = -1;
-                    for (let i = 0; i < stepsList?.length; i++) {
-                      if (stepsList[i].current) {
-                        currentIndex = i;
-                      }
-                    }
-
-                    // Show all steps up to (and including) the currentIndex in StepCard
-                    if (index <= currentIndex) {
+                    if (step.current || step.status !== "pending") {
                       return (
                         <StepCard
                           proposalId={decissionPaper.vendorRfpProposalId ?? 0}
                           flowType="rfpaward"
-                          key={index}
+                          key={step.id ?? index}
                           step={step || []}
-                          trigger={() => {
-                            setupRfpProposalApproveReject();
+                          trigger={async () => {
+                            await setupRfpProposalApproveReject();
+                            trigger();
                           }}
                         />
                       );
                     }
 
                     // Show future steps in a plain div
-                    return (rfpDetails.status == 1 || rfpDetails.status == 2) &&
-                      rfpDetails.createdBy == getUserCredentials().userId ? (
-                      <StepCard
-                        proposalId={decissionPaper.vendorRfpProposalId ?? 0}
-                        flowType="rfpaward"
-                        key={index}
-                        step={step || []}
-                        trigger={() => {
-                          setupRfpProposalApproveReject();
-                        }}
-                      />
-                    ) : (
+                    return (
                       <div
-                        key={index}
+                        key={step.id ?? index}
                         className="text-gray-500 mb-4 bg-white px-2 py-2 rounded-md flex-col items-center justify-center"
                       >
                         {step.approverRole}{" "}

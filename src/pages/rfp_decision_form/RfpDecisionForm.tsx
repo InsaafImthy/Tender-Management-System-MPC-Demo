@@ -91,7 +91,7 @@ export default function RfpDecisionForm({ type, rfpIdFromParent }: RfpDecisionFo
                 i++;
             });
 
-            await createOrUpdateRfpDecisionPaperAsync(formFile);
+            await createOrUpdateRfpDecisionPaperAsync(formFile, type === "create");
             // Send payload to API here
             // await api.saveDecisionPaper(payload)
             message.success("Decision paper saved (check console for payload)");
